@@ -7,10 +7,12 @@
 </head>
 <body> 	
 
+<div id="show" />
+
+<script src="<: $c.uri_for('/static') :>/js/jquery.js"></script>
 <script src="<: $c.uri_for('/static') :>/js/Three.js"></script>
 <script src="<: $c.uri_for('/static') :>/js/Detector.js"></script>
 <script src="<: $c.uri_for('/static') :>/js/RequestAnimationFrame.js"></script>
-
 <script>
 
     if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
@@ -23,16 +25,20 @@
 	init();
     	animate();
     }
-
+    function save_image () {
+		var img_canvas = $('#show').find('canvas');
+		var img = img_canvas[0].toDataURL("image/png");
+		$('#show').append( '<img src="'+img+'"/>' );
+	}
     function init() {
 
         scene = new THREE.Scene();
 
         camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 1000;
+        camera.position.z = 300;
         scene.add( camera );
 
-        geometry = new THREE.CubeGeometry( 200, 200, 200 );
+        geometry = new THREE.SphereGeometry( 20, 10, 10 );
         material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
 
         mesh = new THREE.Mesh( geometry, material );
@@ -41,9 +47,10 @@
         renderer = new THREE.CanvasRenderer();
         renderer.setSize( window.innerWidth, window.innerHeight );
 
-        document.body.appendChild( renderer.domElement );
+	$('#show').append( renderer.domElement );
 
     }
+
 
     function animate() {
 
@@ -55,7 +62,7 @@
 
     function render() {
 
-        mesh.rotation.x += 0.01;
+        mesh.translateX(  1 );
         mesh.rotation.y += 0.02;
 
         renderer.render( scene, camera );
@@ -65,6 +72,9 @@
     start();
 </script>
 
+<div style="position:fixed; top:5px; left:5px;">
+<input type="button" value="Save Image" id="save_image" onclick="save_image();" />
+</div>
 
 </body>
 
