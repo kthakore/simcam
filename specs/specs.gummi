@@ -1,0 +1,4 @@
+version=0.6.0
+typesetter=pdflatex
+steps=texpdf
+root=C:\Users\Kartik\Dropbox\Masters\simcam\specs\software_specs.tex

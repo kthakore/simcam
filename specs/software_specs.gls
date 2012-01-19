@@ -1,0 +1,24 @@
+\glossarysection[\glossarytoctitle]{\glossarytitle}\glossarypreamble
+\begin{theglossary}\glossaryheader
+\glsgroupheading{A}\relax \glsresetentrylist %
+\glossaryentryfield{app}{\glsnamefont{Application Server}}{An web service provider that responds to requests from the \glsname {webb}}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{5}}}\glsgroupskip
+\glsgroupheading{H}\relax \glsresetentrylist %
+\glossaryentryfield{HTML5}{\glsnamefont{HTML5}}{HTML5: Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{4\delimN 5}}}\glsgroupskip
+\glsgroupheading{J}\relax \glsresetentrylist %
+\glossaryentryfield{Javascript}{\glsnamefont{Javascript}}{A cross platform scripting language that runs on \glsname {webb}}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{4\delimN 5}}}\glsgroupskip
+\glsgroupheading{P}\relax \glsresetentrylist %
+\glossaryentryfield{pcm}{\glsnamefont{Pinhole Camera Model}}{The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Prespective Model. It is a common camera model used in computer vision}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{2}}}\glsgroupskip
+\glsgroupheading{V}\relax \glsresetentrylist %
+\glossaryentryfield{VR}{\glsnamefont{VR}}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{1}}}\glsgroupskip
+\glsgroupheading{W}\relax \glsresetentrylist %
+\glossaryentryfield{webb}{\glsnamefont{Web Browser}}{A cross platform software package to view HTTP provided content from service providers}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{4\delimN 5}\delimN 
+		\setentrycounter{page}\glsnumberformat{10}}}%
+\glossaryentryfield{WebGL}{\glsnamefont{WebGL}}{WebGL: A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{4}}}%
+\end{theglossary}\glossarypostamble

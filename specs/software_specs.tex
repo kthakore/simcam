@@ -1,10 +1,19 @@
 \documentclass[11pt]{report}
+\listfiles
+
+\usepackage[colorlinks]{hyperref}
+ \usepackage{glossaries} % acronym will go in main glossary
+ %\usepackage[acronym]{glossaries} % make a separate list of acronyms
+
+\makeglossaries
 \title{Draft Specifications\\Camera Calibration Simulation Environment}
 \author{Kartik Thakore BESc\\
 		kthakore@uwo.ca\\
 		BioMedical Engineering - University of Western Ontario}
 \date{}
 \begin{document}
+\bibliographystyle{IEEE}
+\nocite{*}
 
 \maketitle
 
@@ -13,9 +22,12 @@
 A core component of Medical Imaging application is the use of computer vision. Camera calibration is a common task required for computer vision. Camera calibration can be a difficult task for researchers without prior graphics background. Cameras have been model in extensive literature that model, and thus can be simulated. A virtual environment would provide a activity based learning approach for camera calibration. 
      
 \section{Overview}
+
+\newacronym[\glsshortpluralkey=VR]{VR}{VR}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}
+
      
 \begin{enumerate}
-\item A virtual reality (VR) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
+\item A virtual reality (\gls{VR}) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
 \item Camera calibration of a simple camera system, performed with prior training in a virtual reality environment, will yield insignificantly different capture camera parameters with real world camera system. 
 . Research Design
 \end{enumerate}
@@ -26,7 +38,11 @@ As a first step software specifications will be developed based on interviews wi
 
 Medical Imaging tasks such as image fusion, registration, feature tracking, etc. are built on the understanding of the mathematical concepts of vision systems. Computer vision is an increasing component of image-guided interventions. Moreover it is often difficult for researchers not from a computer vision background to learn quickly. Virtual environments that simulate computer vision systems would both hasten the learning curve and also act as a prototyping environment for new applications of video-based technology in image-guided interventions. 
 
-Mathematically, vision systems can be represented as matrices that perform operations on a spatial field. Cameras in medical imaging essentially transform three-dimensional content to two-dimensional planes (projection model). Thus, locations in 2D images correspond to the position and orientation of objects in the real world.
+\newglossaryentry{pcm}{name={Pinhole Camera Model},
+description={The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Prespective Model. It is a common camera model used in computer vision}}
+
+
+Mathematically, vision systems can be represented as matrices that perform operations on a spatial field. Cameras in medical imaging essentially transform three-dimensional content to two-dimensional planes (\gls{pcm} \cite{CV}). Thus, locations in 2D images correspond to the position and orientation of objects in the real world.
 
 To be able to capture the position and orientation of objects, a transformation matrix is required from the 2D images. This transformation matrix is acquired by performing camera calibration. Calibration involves acquiring images of known objects with known positions and orientations in the real space. Next, feature points are selected on the 2D image. The selection of feature points are done either manually or using libraries such as OpenCV. The correspondence sets up the transformation between the real world coordinate system and the image coordinates.
 
@@ -42,7 +58,8 @@ A key challenge faced by graduate students in areas such as image-assisted surge
 
 Once the software system is developed, System Integration Testing (SIT) will be performed. Additionally, validation will be performed with User Acceptance Testing (UAT) of a selected group of volunteers. 
 
-The implementation will depend essentially on prior work done in Dr. Peters lab with image-guided surgery. Additional resources will be leverage in Image processing and computer vision from Dr. Ladak’s work. Specifically projects work done in calibration of camera systems for medical applications will be analyzed to develop specifications for the simulator ( “Fusion of Stereoscopic Video and Ultrasound for Laparoscopic Partial Nephrectomy “ -C. Carling ). Further work will consider application areas such as robotic-assisted surgery (Dr. Patel), Medical Imaging, etc. 
+The implementation will depend essentially on prior work done in Dr. Peters lab with image-guided surgery. Additional resources will be leverage in Image processing and computer vision from Dr. Ladak's work. Specifically projects that depend heavily on calibration of camera systems for medical applications have analyzed to develop specifications for the simulator \cite{CC}. 
+ 
 
 \section{Relevance}
 
@@ -58,25 +75,31 @@ The scope of this project is primarily to create a virtual environment that can 
 \item Implement a VR environment that simulates camera calibration within user specified scenes. Develop an online tool that can be accessed by a wide audience in the medical imaging field.
 \end{enumerate}
 
-\section{Definitions, Acronyms, Abbreviations}
-
-\begin{description}
-\item[ Camera Parameters: ]
-\item[ Geometry: ]
-\item[ Geometry Pipeline: ]
-\item[ JavaScript: ]
-\item[ Vision System: ]
-\item[ WebGL: ]
-\item[ UDP: ]
-\item[ HTTP: ]
-
-\end{description} 
-
 \section{Technical Overview}
 
 \subsection{User Interface}
 
+\newglossaryentry{webb}{name={Web Browser},
+description={A cross platform software package to view HTTP provided content from service providers}}
+
+\newglossaryentry{Javascript}{name={Javascript},
+description={A cross platform scripting language that runs on \glsname{webb}}}
+
+\newacronym[\glsshortpluralkey=HTML5]{HTML5}{HTML5}{HTML5: Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}
+\newacronym[\glsshortpluralkey=WebGL]{WebGL}{WebGL}{WebGL: A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}
+
+One of the initial aim of this project was to provide a easily distributed user interface. A web interface is a proven technology in providing distributed interfaces. The user interface provided by this system will be designed on a \glsname{HTML5}/\glsname{WebGL} project that will work over pre-specified \glsname{webb}. \glsname{WebGL} sits on top of \glsname{HTML5}'s canvas feature and will provide 3D rendering capabilities on enabled \glsname{webb}. Most user demographics are familiar with using a \glsname{webb}, which makes this a viable option. 
+
+\glsname{WebGL} will be written in the \glsname{Javascript} language that is a platform provided by most mordern \glsname{webb}. 
+
+An alternative option involves creating custom distribution and front end software ( similar to a \glsname{webb} ). This is not feasible with the time frame for a Masters project. 
+
 \subsection{Application Server}
+
+\newglossaryentry{app}{name={Application Server},
+description={An web service provider that responds to requests from the \glsname{webb}}}
+
+An \glsname{app} will be built to provide the \glsname{Javascript} and \glsname{HTML5} documents to the \glsname{webb}. Additionally, the server will utilize middleware platforms that help to scale (ensure the \glsname{app} responds to varying amounts of requests from multiple \glsname{webb}s).
 
 \subsubsection{HTTP Server}
 
@@ -154,5 +177,9 @@ Who the users are? Identify a need for a user to focus on during development
 \section{Validation}
 
 \chapter{Next Steps}
+
+\printglossaries
+
+\bibliography{software_specs}{}
 
 \end{document}
