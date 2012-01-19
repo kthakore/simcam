@@ -1,4 +1,4 @@
-\documentclass[11pt]{book}
+\documentclass[11pt]{report}
 \title{Draft Specifications\\Camera Calibration Simulation Environment}
 \author{Kartik Thakore BESc\\
 		kthakore@uwo.ca\\
@@ -9,12 +9,54 @@
 \maketitle
 
 \chapter{Introduction}
-
+  
 A core component of Medical Imaging application is the use of computer vision. Camera calibration is a common task required for computer vision. Camera calibration can be a difficult task for researchers without prior graphics background. Cameras have been model in extensive literature that model, and thus can be simulated. A virtual environment would provide a activity based learning approach for camera calibration. 
+     
+\section{Overview}
+     
+\begin{enumerate}
+\item A virtual reality (VR) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
+\item Camera calibration of a simple camera system, performed with prior training in a virtual reality environment, will yield insignificantly different capture camera parameters with real world camera system. 
+. Research Design
+\end{enumerate}
 
+As a first step software specifications will be developed based on interviews with graduate supervisors. The following are preliminary specifications that will need to be updated in an iterative fashion. 
+
+\section{Background and Significance}
+
+Medical Imaging tasks such as image fusion, registration, feature tracking, etc. are built on the understanding of the mathematical concepts of vision systems. Computer vision is an increasing component of image-guided interventions. Moreover it is often difficult for researchers not from a computer vision background to learn quickly. Virtual environments that simulate computer vision systems would both hasten the learning curve and also act as a prototyping environment for new applications of video-based technology in image-guided interventions. 
+
+Mathematically, vision systems can be represented as matrices that perform operations on a spatial field. Cameras in medical imaging essentially transform three-dimensional content to two-dimensional planes (projection model). Thus, locations in 2D images correspond to the position and orientation of objects in the real world.
+
+To be able to capture the position and orientation of objects, a transformation matrix is required from the 2D images. This transformation matrix is acquired by performing camera calibration. Calibration involves acquiring images of known objects with known positions and orientations in the real space. Next, feature points are selected on the 2D image. The selection of feature points are done either manually or using libraries such as OpenCV. The correspondence sets up the transformation between the real world coordinate system and the image coordinates.
+
+Simulation of this process can begin by modeling the camera using the perspective projection model. The model can be represented in matrix notation as:
+
+\begin{equation} s * p = A * [R|t] * P  \end{equation}
+ 
+where  \[A\] is defined as the intrinsic matrix, \[s\] represents the arbitrary scale factor, \[p\] are the 2D image coordinates, \[P\] are the corresponding 3D world coordinates, and finally \[[R|t]\] are the extrinsic parameters.
+
+The intrinsic matrix can be calculated from camera dependent parameters such as focal length and CCD pixel. Additionally, the extrinsic parameters are user defined such that rotation and translation are selected by the user. Finally, the \[P\] world coordinates are simply defined by the user and the scene that will rendered in the virtual reality environment. 
+
+A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robarts Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and 
+
+Once the software system is developed, System Integration Testing (SIT) will be performed. Additionally, validation will be performed with User Acceptance Testing (UAT) of a selected group of volunteers. 
+
+The implementation will depend essentially on prior work done in Dr. Peters lab with image-guided surgery. Additional resources will be leverage in Image processing and computer vision from Dr. Ladak’s work. Specifically projects work done in calibration of camera systems for medical applications will be analyzed to develop specifications for the simulator ( “Fusion of Stereoscopic Video and Ultrasound for Laparoscopic Partial Nephrectomy “ -C. Carling ). Further work will consider application areas such as robotic-assisted surgery (Dr. Patel), Medical Imaging, etc. 
+
+\section{Relevance}
+
+Camera calibration is a difficult task and a widely recurrent task at Robart's Research Institute in Medical Imaging. Additional camera calibration is a means to an end in most projects and not the focus. The essential tasks involved for performing a camera calibration are similar across projects with potential for standardization and collaboration. In Dr. Peters' laboratory, a considerable amount of effort is placed in camera calibration in several research projects. Each project involves isolated or loosely collaborated work on camera calibration. No software currently exists to help with training of camera collaboration. 
+
+Selecting a camera is crucial to a medical imaging application. A virtual environment may help to explore and compare various camera systems based on parameters provided by manufacturers. Allowing researchers to objectively try systems rather then purchasing each system and performing manual calibration. This will facilitate prototyping and will be a boon for researchers in  gaining an intuitive understanding into the critical factors of camera calibration and the impact on their application. 
 
 \section{Scope}
 The scope of this project is primarily to create a virtual environment that can reasonably simulate common cameras used in medical applications. The system will be able to create cameras given parameters that can be used to view a scene and run camera calibration tests on. Once calibrated, the system will allow the user to capture virtual images. 
+ 
+\begin{enumerate}
+\item Develop a VR environment that can calculate transformation matrices based on given locations, poses, and camera parameters.  
+\item Implement a VR environment that simulates camera calibration within user specified scenes. Develop an online tool that can be accessed by a wide audience in the medical imaging field.
+\end{enumerate}
 
 \section{Definitions, Acronyms, Abbreviations}
 
@@ -30,17 +72,16 @@ The scope of this project is primarily to create a virtual environment that can 
 
 \end{description} 
 
-\section{Overview}
+\section{Technical Overview}
 
-The system overview defines the structure of the requirements and the various components:
+\subsection{User Interface}
 
- 
+\subsection{Application Server}
 
-\subsection{Description}
+\subsubsection{HTTP Server}
 
--> Components 
+\subsubsection{OpenCV Server}
 
--> User Experience 
 
 
 \subsection{Users and Use Cases} 
@@ -48,16 +89,22 @@ The system overview defines the structure of the requirements and the various co
 Who the users are? Identify a need for a user to focus on during development 
 
 
-\subsubsection{Use Case 1: Training}
+\subsubsection{Use Case 1: Camera Calibration}
 
-\subsubsection{Use Case 2: Simulation} 
+\subsubsection{Use Case 2: Accuracy Modeling and Testing} 
+
+\subsubsection{Use Case 3: Comparing Camera Systems} 
+
+\subsubsection{Use Case 4: Simulating Distortion } 
+
+\subsubsection{Use Case 5: Visulizating Distortion and Accuracy}
  
  
 \subsection{Technical Environment}
 
 \subsubsection{Web Technologies}
 
-\subsubsection{Haptics Integration} 
+\subsubsection{Haptics Integration}
  
 \subsection{Constraints}
 
