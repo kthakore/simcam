@@ -11,6 +11,7 @@
 		kthakore@uwo.ca\\
 		BioMedical Engineering - University of Western Ontario}
 \date{}
+\usepackage{graphicx}
 \begin{document}
 \bibliographystyle{IEEE}
 \nocite{*}
@@ -27,7 +28,7 @@ A core component of Medical Imaging application is the use of computer vision. C
 
      
 \begin{enumerate}
-\item A virtual reality (\gls{VR}) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
+\item A virtual reality (\glsname{VR}) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
 \item Camera calibration of a simple camera system, performed with prior training in a virtual reality environment, will yield insignificantly different capture camera parameters with real world camera system. 
 . Research Design
 \end{enumerate}
@@ -54,9 +55,15 @@ where  \[A\] is defined as the intrinsic matrix, \[s\] represents the arbitrary 
 
 The intrinsic matrix can be calculated from camera dependent parameters such as focal length and CCD pixel. Additionally, the extrinsic parameters are user defined such that rotation and translation are selected by the user. Finally, the \[P\] world coordinates are simply defined by the user and the scene that will rendered in the virtual reality environment. 
 
-A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robarts Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and 
+A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robarts Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and prototyping. 
 
-Once the software system is developed, System Integration Testing (SIT) will be performed. Additionally, validation will be performed with User Acceptance Testing (UAT) of a selected group of volunteers. 
+\newglossaryentry{SIT}{name={SIT},
+description={System Integration Testing, test the overall system via, given inputs and expect outputs}}
+
+\newglossaryentry{UAT}{name={UAT},
+description={User Acceptance Testing, tests the system to ensure the user experience and expectations are met}}
+
+Once the software system is developed, System Integration Testing (\glsname{SIT}) will be performed. Additionally, validation will be performed with User Acceptance Testing (\glsname{UAT}) of a selected group of volunteers. 
 
 The implementation will depend essentially on prior work done in Dr. Peters lab with image-guided surgery. Additional resources will be leverage in Image processing and computer vision from Dr. Ladak's work. Specifically projects that depend heavily on calibration of camera systems for medical applications have analyzed to develop specifications for the simulator \cite{CC}. 
  
@@ -71,8 +78,8 @@ Selecting a camera is crucial to a medical imaging application. A virtual enviro
 The scope of this project is primarily to create a virtual environment that can reasonably simulate common cameras used in medical applications. The system will be able to create cameras given parameters that can be used to view a scene and run camera calibration tests on. Once calibrated, the system will allow the user to capture virtual images. 
  
 \begin{enumerate}
-\item Develop a VR environment that can calculate transformation matrices based on given locations, poses, and camera parameters.  
-\item Implement a VR environment that simulates camera calibration within user specified scenes. Develop an online tool that can be accessed by a wide audience in the medical imaging field.
+\item Develop a \glsname{VR} environment that can calculate transformation matrices based on given locations, poses, and camera parameters.  
+\item Implement a \glsname{VR} environment that simulates camera calibration within user specified scenes. Develop an online tool that can be accessed by a wide audience in the medical imaging field.
 \end{enumerate}
 
 \section{Technical Overview}
@@ -85,8 +92,8 @@ description={A cross platform software package to view HTTP provided content fro
 \newglossaryentry{Javascript}{name={Javascript},
 description={A cross platform scripting language that runs on \glsname{webb}}}
 
-\newacronym[\glsshortpluralkey=HTML5]{HTML5}{HTML5}{HTML5: Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}
-\newacronym[\glsshortpluralkey=WebGL]{WebGL}{WebGL}{WebGL: A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}
+\newglossaryentry{HTML5}{name={HTML5}, description={Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}}
+\newglossaryentry{WebGL}{name={WebGL}, description={A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}}
 
 One of the initial aim of this project was to provide a easily distributed user interface. A web interface is a proven technology in providing distributed interfaces. The user interface provided by this system will be designed on a \glsname{HTML5}/\glsname{WebGL} project that will work over pre-specified \glsname{webb}. \glsname{WebGL} sits on top of \glsname{HTML5}'s canvas feature and will provide 3D rendering capabilities on enabled \glsname{webb}. Most user demographics are familiar with using a \glsname{webb}, which makes this a viable option. 
 
@@ -103,14 +110,30 @@ An \glsname{app} will be built to provide the \glsname{Javascript} and \glsname{
 
 \subsubsection{HTTP Server}
 
+\newglossaryentry{HTTP}{name={HTTP}, description={ HyperText Transport Protocol defines the protocol of transporting documents to a web client}}
+
+The \glsname{HTTP} Server will be reponsible for responding to requests sent by \glsname{webb} clients. The key requirement required of the \glsname{HTTP} Server is to scale reasonably with an increase in demands. Most of the computational expense will be done on the \glsname{webb} client, due to the way \glsname{WebGL} works. Therefore a scalable \glsname{HTTP} Server will ensure that the response for the \glsname{WebGL} and \glsname{HTML5} documents are provided in a timely manner. For this reason the Nginx \glsname{HTTP} Server and a Starman/PSGI middleware server will be used.
+
+\subsubsection{Dispatch/Controller}
+
+\newglossaryentry{OpenCV}{name={OpenCV}, description={A software library that has a camera calibration component.}}
+
+The user will be using the system to do camera calibration that will require a interface between the frontend and \glsname{OpenCV} features. A controller will be used to define to protocol by which the frontend will communicated with the \glsname{OpenCV} Server. 
+
 \subsubsection{OpenCV Server}
 
+This server will provide the \glsname{app} with \glsname{OpenCV} features such as camera calibration and re-projection of calibration grids.
 
+\subsection{Users} 
 
-\subsection{Users and Use Cases} 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.25]{images/UserOverview.png}
+\caption{Users}
+\label{uo}
+\end{figure}
 
-Who the users are? Identify a need for a user to focus on during development 
-
+\subsection{Use Cases}
 
 \subsubsection{Use Case 1: Camera Calibration}
 
@@ -120,7 +143,7 @@ Who the users are? Identify a need for a user to focus on during development
 
 \subsubsection{Use Case 4: Simulating Distortion } 
 
-\subsubsection{Use Case 5: Visulizating Distortion and Accuracy}
+\subsubsection{Use Case 5: Visualization Distortion and Accuracy}
  
  
 \subsection{Technical Environment}

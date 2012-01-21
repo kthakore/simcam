@@ -1,0 +1,9 @@
+*.aux
+*.glg
+*.glo
+*.ist
+*.log
+*.out
+*.pdf
+*.zargo~
+

@@ -5,4 +5,6 @@ Makefile
 blib/
 pm_to_blib
 t/view_HTML.t
+*.zargo~ 
+*.swp
 
