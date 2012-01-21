@@ -18,6 +18,10 @@
 
 \maketitle
 
+\tableofcontents
+
+\newpage 
+
 \chapter{Introduction}
   
 A core component of Medical Imaging application is the use of computer vision. Camera calibration is a common task required for computer vision. Camera calibration can be a difficult task for researchers without prior graphics background. Cameras have been model in extensive literature that model, and thus can be simulated. A virtual environment would provide a activity based learning approach for camera calibration. 
@@ -124,16 +128,28 @@ The user will be using the system to do camera calibration that will require a i
 
 This server will provide the \glsname{app} with \glsname{OpenCV} features such as camera calibration and re-projection of calibration grids.
 
-\subsection{Users} 
+\chapter{User Specifications}
+
+This chapter defines the user of this system and their specifications. Defining the user ensure that the system can be designed with a \glsname{UAT} goal in mind. 
 
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.25]{images/UserOverview.png}
 \caption{Users}
-\label{uo}
+\label{fig:uo}
 \end{figure}
 
-\subsection{Use Cases}
+\section{Users} 
+
+The system user is a generalization of several other users as depicted in the use case diagram \ref{fig:uo}. 
+
+\subsection{Student}
+
+\subsubsection{Researcher}
+
+\subsection{Trainer}
+
+\section{Use Cases}
 
 \subsubsection{Use Case 1: Camera Calibration}
 
@@ -162,7 +178,7 @@ This server will provide the \glsname{app} with \glsname{OpenCV} features such a
 
 \subsubsection{Security} 
  
-\subsection{Assumptions and Dependencies}
+\section{Assumptions and Dependencies}
 
 \chapter{System Requirement Specifications}
 
