@@ -6,17 +6,53 @@
  %\usepackage[acronym]{glossaries} % make a separate list of acronyms
 
 \makeglossaries
-\title{Draft Specifications\\Camera Calibration Simulation Environment}
-\author{Kartik Thakore BESc\\
-		kthakore@uwo.ca\\
-		BioMedical Engineering - University of Western Ontario}
-\date{}
 \usepackage{graphicx}
+\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{5}
 \begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+
+
+% Upper part of the page
+\includegraphics[scale=1.0]{images/logo.png}
+
+\textsc{\LARGE University of Western Ontario}\\[1.5cm]
+
+\textsc{\Large Software Specifications: Camera Simulation Environment}\\[0.5cm]
+
+
+% Title
+{ \huge \bfseries Version 0.01}\\[0.4cm]
+
+% Author and supervisor
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Kartik \textsc{Thakore} \\
+kthakore@uwo.ca 
+\end{flushleft}
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisors:} \\
+Dr.~Hanif \textsc{Ladak}\\
+Dr.~Terry \textsc{Peters} 
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+% Bottom of the page
+{\large \today}
+
+\end{center}
+
+\end{titlepage}
 \bibliographystyle{IEEE}
 \nocite{*}
-
-\maketitle
 
 \tableofcontents
 
@@ -141,26 +177,69 @@ This chapter defines the user of this system and their specifications. Defining 
 
 \section{Users} 
 
-The system user is a generalization of several other users as depicted in the use case diagram \ref{fig:uo}. 
+The system user is a generalization of several other users as depicted in the use case diagram \ref{fig:uo}.  
 
 \subsection{Student}
 
+The student user is the primary user of the system. This system is essentially made to facilitate the understanding of the student user. Student users are defined as any user that needs to learn and work with camera transformation.  
+
 \subsubsection{Researcher}
+
+The student user can also be extended as a researcher who needs a deeper understanding of camera calibration for a research project. These project involve camera calibration as a critical component in the implementation. 
 
 \subsection{Trainer}
 
+Another user that may use the system is the trainer. Trainer users use the system as a guide for students and researcher. The direct requirements of the trainer user needs to be captured at a later date.
+
 \section{Use Cases}
 
-\subsubsection{Use Case 1: Camera Calibration}
+Use Cases define the process the system will take to meet the needs of the users. Each use case is written in a list format showing what the user will see and react with during the specific portion of the system. 
 
-\subsubsection{Use Case 2: Accuracy Modeling and Testing} 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.15]{images/AllUserCases.png}
+\caption{Generic User Cases}
+\label{fig:uco}
+\end{figure}
 
-\subsubsection{Use Case 3: Comparing Camera Systems} 
+\subsubsection{Create Camera}
 
-\subsubsection{Use Case 4: Simulating Distortion } 
+\subsubsection{Camera Calibration}
 
-\subsubsection{Use Case 5: Visualization Distortion and Accuracy}
+As descriped in\ref{fig:uco}, users can perform the camera calibration procedure as defined in chapter two of \cite{CC}. 
+
+The steps involved are: 
+
+\begin{enumerate}
+\item Making A Camera
+\item Second
+\item Third
+\item Last
+\end{enumerate}
+
+\subsubsection{Training} 
+
+\subsubsection{Comparing Camera Systems} 
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.15]{images/CompareCameras.png}
+\caption{Generic User Cases}
+\label{fig:uco}
+\end{figure}
+
+\subsubsection{Simulating Distortion } 
+
+\subsubsection{Training}
  
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.15]{images/Training.png}
+\caption{Generic Training User Cases}
+\label{fig:uco}
+\end{figure}
+
+
  
 \subsection{Technical Environment}
 
@@ -202,18 +281,6 @@ The system user is a generalization of several other users as depicted in the us
 	\item Camera Parameters 
 \end{enumerate}
 \end{enumerate}
-
-\chapter{Design}
-
-\section{Analysis}
-
-\section{Implementation}
-
-\chapter{Testing and Validation}
-
-\section{Testing}
-
-\section{Validation}
 
 \chapter{Next Steps}
 
