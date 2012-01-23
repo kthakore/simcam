@@ -66,7 +66,7 @@ Dr.~Terry \textsc{Peters}
 
 \chapter{Introduction}
   
-A core component of Medical Imaging application is the use of computer vision. Camera calibration is a common task required for computer vision. Camera calibration can be a difficult task for researchers without prior graphics background. Cameras have been model in extensive literature that model, and thus can be simulated. A virtual environment would provide a activity based learning approach for camera calibration. 
+A core component of Medical Imaging application is the use of computer vision. Camera calibration is a common task required for computer vision. Camera calibration can be a difficult task for researchers without prior graphics background. Cameras have been modeled extensively in literature, and thus can be simulated. A virtual environment provides an activity based learning approach for camera calibration. 
      
 \section{Overview}
 
@@ -79,7 +79,7 @@ A core component of Medical Imaging application is the use of computer vision. C
 
 \section{Background and Significance}
 
-Medical Imaging tasks such as image fusion, registration, feature tracking, etc. are built on the understanding of the mathematical concepts of vision systems. Computer vision is an increasing component of image-guided interventions. Moreover it is often difficult for researchers not from a computer vision background to learn quickly. Virtual environments that simulate computer vision systems would both hasten the learning curve and also act as a prototyping environment for new applications of video-based technology in image-guided interventions. 
+Medical Imaging tasks such as image fusion, registration, feature tracking, etc. are built on the understanding of the mathematical concepts of vision systems. Computer vision is an increasing component of image-guided interventions. Moreover it is often difficult for researchers not from a computer vision background to learn quickly. Virtual environments that simulate computer vision systems will both hasten the learning curve and also act as a prototyping environment for new applications of video-based technology in image-guided interventions. 
 
 \newglossaryentry{pcm}{name={Pinhole Camera Model},
 description={The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Perspective Model. It is a common camera model used in computer vision}}
@@ -100,12 +100,12 @@ The intrinsic matrix can be calculated from camera dependent parameters such as 
 A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robart's Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and prototyping. 
 
 \newglossaryentry{SIT}{name={SIT},
-description={System Integration Testing, test the overall system via, given inputs and expect outputs}}
+description={SIT: System Integration Testing, tests the overall system via, given inputs and expected outputs}}
 
 \newglossaryentry{UAT}{name={UAT},
-description={User Acceptance Testing, tests the system to ensure the user experience and expectations are met}}
+description={UAT: User Acceptance Testing, tests the system to ensure the user experience and expectations are met}}
 
-Once the prototype software system is developed, System Integration Testing (\glsname{SIT}) will be performed. Additionally, validation will be performed with User Acceptance Testing (\glsname{UAT}) of a selected group of volunteers. This will aid in narrowing down the causes for difficulty with understanding camera calibration. 
+Once the prototype software system is developed, System Integration Testing (\glsname{SIT}) will be performed. Validation will be performed with User Acceptance Testing (\glsname{UAT}) of a selected group of volunteers. This will aid in narrowing down the causes for difficulty with understanding camera calibration. 
 
 \section{Relevance}
 
@@ -135,34 +135,38 @@ description={A cross platform software package to view HTTP provided content fro
 description={A cross platform scripting language that runs on the client side}}
 
 \newglossaryentry{HTML5}{name={HTML5}, description={Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}}
-\newglossaryentry{WebGL}{name={WebGL}, description={A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}}
+\newglossaryentry{WebGL}{name={WebGL}, description={A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser}}
 
-One of the initial aim of this project was to provide a easily distributed user interface. A web interface is a proven technology in providing distributed interfaces. The user interface provided by this system will be designed on a \glsname{HTML5}/\glsname{WebGL} project that will work over pre-specified \glsname{webb}. \glsname{WebGL} sits on top of \glsname{HTML5}'s canvas feature and will provide 3D rendering capabilities on enabled \glsname{webb}. Most user demographics are familiar with using a \glsname{webb}, which makes this a viable option. 
+One of the initial aims of this project was to provide a easily distributed user interface. A web interface is a proven technology in providing distributed interfaces. The user interface provided by this system will be designed on a \glsname{HTML5}/\glsname{WebGL} project that will work over pre-specified \glsname{webb}. \glsname{WebGL} sits on top of \glsname{HTML5}'s canvas feature and will provide 3D rendering capabilities on enabled \glsname{webb}. Most user demographics are familiar with using a \glsname{webb}, which makes this an ideal option. 
 
 \glsname{WebGL} will be written in the \glsname{Javascript} language that is a platform provided by most modern \glsname{webb}. 
 
-An alternative option involves creating custom distribution and front end software ( similar to a \glsname{webb} ). This is not feasible with the time frame for a Masters project. 
+The \glsname{webb} is also very portable compared to other solutions, as most modern computer systems come with one installed. The need to have a \glsname{WebGL} enabled \glsname{webb} may hinder the proliferation of the system. However most new versions of \glsname{webb} are coming with \glsname{WebGL} enabled and it is a emerging trend.
+
+The \glsname{webb} finally also comes at no additional cost to the user.  
+
+An alternative option involves creating custom distribution and front end software ( similar to a \glsname{webb} ). This is not feasible with the time frame for a Masters project.  
 
 \subsection{Application Server}
 
 \newglossaryentry{app}{name={Application Server},
-description={An web service provider that responds to requests from the client}}
+description={A web service provider that responds to requests from the client}}
 
-An \glsname{app} will be built to provide the \glsname{Javascript} and \glsname{HTML5} documents to the \glsname{webb}. Additionally, the server will utilize middleware platforms that help to scale (ensure the \glsname{app} responds to varying amounts of requests from multiple \glsname{webb}s).
+An \glsname{app} will be built to provide the \glsname{Javascript} and \glsname{HTML5} documents to the \glsname{webb}. Additionally, the server will utilize middleware platforms that help to scale (ensures the \glsname{app} responds to requests from multiple \glsname{webb}s).
 
 \subsubsection{HTTP Server}
 
 \newglossaryentry{HTTP}{name={HTTP}, description={ HyperText Transport Protocol defines the protocol of transporting documents to a web client}}
 
-The \glsname{HTTP} Server will be responsible for responding to requests sent by \glsname{webb} clients. The key requirement required of the \glsname{HTTP} Server is to scale reasonably with an increase in demands. Most of the computational expense will be done on the \glsname{webb} client, due to the way \glsname{WebGL} works. Therefore a scalable \glsname{HTTP} Server will ensure that the response for the \glsname{WebGL} and \glsname{HTML5} documents are provided in a timely manner. For this reason the Nginx \glsname{HTTP} Server and a Starman/PSGI middleware server will be used.
+The \glsname{HTTP} Server will be responsible for responding to requests sent by \glsname{webb} clients. The key requirement required of the \glsname{HTTP} Server is to scale reasonably with an increase in demands. Most of the computational expense will be done on the \glsname{webb} client, due to the way \glsname{WebGL} works. A scalable \glsname{HTTP} Server will ensure that the response for the \glsname{WebGL} and \glsname{HTML5} documents are provided in a timely manner. For this reason the Nginx \glsname{HTTP} Server and a Starman/PSGI middleware server will be used.
 
 A middleware server allows multiple \glsname{app} to be initiated and used in parallel for times of load. This facilitates the reliability and scalability of the system. 
 
 \subsubsection{Dispatch/Controller}
 
-\newglossaryentry{OpenCV}{name={OpenCV}, description={A software library that has a camera calibration component.}}
+\newglossaryentry{OpenCV}{name={OpenCV}, description={A software library that has a camera calibration component}}
 
-The user will be using the system to do camera calibration that will require a interface between the frontend and \glsname{OpenCV} features. A controller will be used to define to protocol by which the frontend will communicated with the \glsname{OpenCV} Server. 
+The user will be using the system to do camera calibration that will require a interface between the frontend and \glsname{OpenCV} features. A controller will be used to define to protocol by which the frontend will communicate with the \glsname{OpenCV} Server. 
 
 \subsubsection{OpenCV Server}
 
@@ -193,7 +197,7 @@ The student user can also be extended as a researcher who needs a deeper underst
 
 \subsection{Trainer}
 
-Another user that may use the system is the trainer. Trainer users use the system as a guide for students and researcher. The direct requirements of the trainer user needs to be captured at a later date.
+Another user that may use the system is the trainer. Trainer users use the system as a guide for students and researchers. The direct requirements of the trainer user needs to be captured at a later date.
 
 \section{Use Cases}
 
@@ -282,18 +286,85 @@ There are no specific requirements for the user interface as of yet. However a g
 
 The interface overview can be broken down into two sections. The canvas and the options menu. All 'work' related with either camera calibration will be visualized in the canvas section of the interface. All inputs will be captured in the dialogs section of the interface. Finally any additional outputs will be show via the dialogs sections also.
 
-\section{Calibration}
+\subsubsection{Canvas}
 
-\subsection{Interface}
+The canvas will be a \glsname{WebGL} environment which which visualize the 3D state of the client. 
 
-\section{Training}
+\section{Data Models}
 
-The Trainer user can create a training session. A training session can consist of setting specific cameras, grids, and distortions. The trainer can then send a training plan to a student. 
-The trainer will then review training. 
- 
-\subsection{Interface}
-\subsection{Session}
+The data models of the system are software constructs that the client holds, containing groups of related data. The models may or may not be sent to the \glsname{app} for storage. 
 
+\subsection{Storage}
+
+Models will be stored as a JSON (Javascript Object Notation) within the \glsname{Javascript} cache of the client. Client side storage will be temporary and non persistent per user session.
+
+\subsection{Known Models}
+
+The current known models are:
+
+\subsubsection{Camera}
+
+Attributes include:
+
+\begin{enumerate}
+\item name: human readable content to allow comparison.
+\item measurements: measured values as described in the use case \ref{fig:guc}
+\item calibration session: status of the current calibration procedure. Including the extrinsic, intrinsic and distortion values.  
+\end{enumerate}
+
+\subsubsection{Calibration Session}
+
+Attributes include:
+\begin{enumerate}
+\item name: human readable content to allow comparison.
+\item steps: predetermine step in calibration. This will be a generic template, until various procedures are designed by a Trainer.
+\item matrices: extrinsic, intrinsic and distortion values 
+\item coordinates system: coordinate systems associated with this calibration 
+\end{enumerate}
+
+\subsubsection{Training Session}
+
+Attributes include: 
+\begin{enumerate}
+\item camera: camera to work with (specified by Trainer) 
+\item student: name of the student currently working on the calibration, including email.
+\item calibration feedback: comments of the student and difficulty  
+\item trainer: email of the trainer 
+\end{enumerate}
+
+\subsubsection{Student Feedback}
+
+Attributes include: 
+\begin{enumerate}
+\item difficulty: rating 
+\item description: written comments 
+\end{enumerate}
+
+\section{Functional Requirements}
+
+\subsection{Create Camera}
+
+User will complete the Camera data model described earlier. 
+
+\subsection{Calibration}
+
+User will select a calibration grid and pose it 6 times within the 3D canvas. 
+User will use an \ref{OpenCV} interface to retrieve distortion parameters.
+User will analyse and derive the extrinsice and intrinsic values of the parameters. 
+
+\subsection{Accuracy Modeling}
+
+User will adjust distortion levels and reproject the selected calibration grids to selected poses. System will calculate difference between points on the actual and reporjected grid. 
+The accuracy can also be taken with placing points within the viewing range of each camera and calculating difference between ideal (no distortions) and changing distortions. 
+
+User can also perform accuracy modeling between two cameras to decide which one to pick.
+
+\subsection{Training} 
+
+During planing the Trainer user will select student emails, and decide steps duration (changes in data models). The steps are create such that as models are changed (such as values confirmed for extrinsic matrix) as training steps. 
+The Trainer user can then send a hyper text link via email to the student. The Student user will go to the link and follow the training steps, and filling out difficulty and written feed back. 
+
+The Trainer can then review each step and then work with the Student to eliminate learning problems within identified difficult areas.  
 
 \section{Constraints}
 
