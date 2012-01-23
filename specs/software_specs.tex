@@ -70,17 +70,16 @@ A core component of Medical Imaging application is the use of computer vision. C
 \begin{enumerate}
 \item A virtual reality (\glsname{VR}) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
 \item Camera calibration of a simple camera system, performed with prior training in a virtual reality environment, will yield insignificantly different capture camera parameters with real world camera system. 
-. Research Design
 \end{enumerate}
 
-As a first step software specifications will be developed based on interviews with graduate supervisors. The following are preliminary specifications that will need to be updated in an iterative fashion. 
+As a first step software specifications will be developed based on interviews with graduate supervisors. The preliminary specifications will need to be updated in an iterative fashion. 
 
 \section{Background and Significance}
 
 Medical Imaging tasks such as image fusion, registration, feature tracking, etc. are built on the understanding of the mathematical concepts of vision systems. Computer vision is an increasing component of image-guided interventions. Moreover it is often difficult for researchers not from a computer vision background to learn quickly. Virtual environments that simulate computer vision systems would both hasten the learning curve and also act as a prototyping environment for new applications of video-based technology in image-guided interventions. 
 
 \newglossaryentry{pcm}{name={Pinhole Camera Model},
-description={The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Prespective Model. It is a common camera model used in computer vision}}
+description={The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Perspective Model. It is a common camera model used in computer vision}}
 
 
 Mathematically, vision systems can be represented as matrices that perform operations on a spatial field. Cameras in medical imaging essentially transform three-dimensional content to two-dimensional planes (\gls{pcm} \cite{CV}). Thus, locations in 2D images correspond to the position and orientation of objects in the real world.
@@ -199,67 +198,53 @@ Use Cases define the process the system will take to meet the needs of the users
 \centering
 \includegraphics[scale=0.15]{images/AllUserCases.png}
 \caption{Generic User Cases}
-\label{fig:uco}
+\label{fig:guc}
 \end{figure}
-
-\subsubsection{Create Camera}
 
 \subsubsection{Camera Calibration}
 
-As descriped in\ref{fig:uco}, users can perform the camera calibration procedure as defined in chapter two of \cite{CC}. 
+As described in \ref{fig:guc}, users can perform the camera calibration procedure as defined in Chapter 2 of \cite{CC}. 
 
-The steps involved are: 
-
-\begin{enumerate}
-\item Making A Camera
-\item Second
-\item Third
-\item Last
-\end{enumerate}
-
-\subsubsection{Training} 
 
 \subsubsection{Comparing Camera Systems} 
 
-\begin{figure}[htp]
-\centering
-\includegraphics[scale=0.15]{images/CompareCameras.png}
-\caption{Generic User Cases}
-\label{fig:uco}
-\end{figure}
+    \begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.15]{images/CompareCameras.png}
+    \caption{Researcher Use Cases}
+    \label{fig:ucc}
+    \end{figure}
 
-\subsubsection{Simulating Distortion } 
+    The Researcher user can perform calibration on two cameras and compare their accuracy models, to decided if they are suitable for their application. This use case is depicted in figure \ref{fig:ucc}.
 
 \subsubsection{Training}
- 
-\begin{figure}[htp]
-\centering
-\includegraphics[scale=0.15]{images/Training.png}
-\caption{Generic Training User Cases}
-\label{fig:uco}
-\end{figure}
 
+    \begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.15]{images/Training.png}
+    \caption{Generic Training User Cases}
+    \label{fig:uco}
+    \end{figure}
 
- 
-\subsection{Technical Environment}
+    Training involves two users. The Trainer can create a training session with a specified calibration procedure (camera, distortions, grid ... etc). Then the Trainer can send this session to a Student. 
 
-\subsubsection{Web Technologies}
+    The Student will follow the Training Session and work towards a specified goal by the Trainer. The Student can also leave their feedback on completion that the Trainer can review, as described on \ref{fig:uco}
 
-\subsubsection{Haptics Integration}
- 
-\subsection{Constraints}
+    The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, extrinsic and intrinsic values to the trainer. Additionally the student can record the difficulty level of the steps involved in 
 
-\subsubsection{Reliability}
-
-\subsubsection{Scalability}
-
-\subsubsection{Performance}
-
-\subsubsection{Security} 
- 
-\section{Assumptions and Dependencies}
 
 \chapter{System Requirement Specifications}
+
+\section{Calibration}
+\subsection{Interface}
+
+\section{Training}
+
+The Trainer user can create a training session. A training session can consist of setting specific cameras, grids, and distortions. The trainer can then send a training plan to a student. 
+The trainer will then review training. 
+ 
+\subsection{Interface}
+\subsection{Session}
 
 \section{External Interface Requirements}
 
@@ -270,6 +255,16 @@ The steps involved are:
 \subsubsection{High Level Interface}
 
 \subsection{Graphical User Interface}
+
+\section{Constraints}
+
+\subsection{Reliability}
+
+\subsection{Scalability}
+
+\subsection{Performance}
+
+\subsection{Security} 
 
 
 \section{Functional Requirements}
@@ -283,6 +278,9 @@ The steps involved are:
 \end{enumerate}
 
 \chapter{Next Steps}
+
+
+\listoffigures 
 
 \printglossaries
 

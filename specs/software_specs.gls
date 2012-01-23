@@ -15,7 +15,7 @@
 \glossaryentryfield{OpenCV}{\glsnamefont{OpenCV}}{A software library that has a camera calibration component.}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{7}}}\glsgroupskip
 \glsgroupheading{P}\relax \glsresetentrylist %
-\glossaryentryfield{pcm}{\glsnamefont{Pinhole Camera Model}}{The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Prespective Model. It is a common camera model used in computer vision}{\relax }{\glossaryentrynumbers{\relax 
+\glossaryentryfield{pcm}{\glsnamefont{Pinhole Camera Model}}{The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Perspective Model. It is a common camera model used in computer vision}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{4}}}\glsgroupskip
 \glsgroupheading{S}\relax \glsresetentrylist %
 \glossaryentryfield{SIT}{\glsnamefont{SIT}}{System Integration Testing, test the overall system via, given inputs and expect outputs}{\relax }{\glossaryentrynumbers{\relax 
@@ -31,7 +31,7 @@
 \glsgroupheading{W}\relax \glsresetentrylist %
 \glossaryentryfield{webb}{\glsnamefont{Web Browser}}{A cross platform software package to view HTTP provided content from service providers}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{6\delimN 7}\delimN 
-		\setentrycounter{page}\glsnumberformat{14}}}%
+		\setentrycounter{page}\glsnumberformat{16}}}%
 \glossaryentryfield{WebGL}{\glsnamefont{WebGL}}{A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{6\delimN 7}}}%
 \end{theglossary}\glossarypostamble
