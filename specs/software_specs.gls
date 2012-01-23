@@ -2,22 +2,25 @@
 \begin{theglossary}\glossaryheader
 \glsgroupheading{A}\relax \glsresetentrylist %
 \glossaryentryfield{app}{\glsnamefont{Application Server}}{A web service provider that responds to requests from the client}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter{page}\glsnumberformat{7}\delimN 
-		\setentrycounter{page}\glsnumberformat{13}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{7\delimN 8}\delimN 
+		\setentrycounter{page}\glsnumberformat{14}}}\glsgroupskip
+\glsgroupheading{F}\relax \glsresetentrylist %
+\glossaryentryfield{Frustum}{\glsnamefont{Frustum}}{Viewing volume of a camera}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{15}}}\glsgroupskip
 \glsgroupheading{H}\relax \glsresetentrylist %
 \glossaryentryfield{HTML5}{\glsnamefont{HTML5}}{Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{7}\delimN 
-		\setentrycounter{page}\glsnumberformat{12}}}%
+		\setentrycounter{page}\glsnumberformat{13}}}%
 \glossaryentryfield{HTTP}{\glsnamefont{HTTP}}{HyperText Transport Protocol defines the protocol of transporting documents to a web client}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{7}}}\glsgroupskip
 \glsgroupheading{J}\relax \glsresetentrylist %
 \glossaryentryfield{Javascript}{\glsnamefont{Javascript}}{A cross platform scripting language that runs on the client side}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{7}\delimN 
-		\setentrycounter{page}\glsnumberformat{13}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{14}}}\glsgroupskip
 \glsgroupheading{O}\relax \glsresetentrylist %
 \glossaryentryfield{OpenCV}{\glsnamefont{OpenCV}}{A software library that has a camera calibration component}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter{page}\glsnumberformat{7}\delimN 
-		\setentrycounter{page}\glsnumberformat{10}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{7\delimN 8}\delimN 
+		\setentrycounter{page}\glsnumberformat{11}}}\glsgroupskip
 \glsgroupheading{P}\relax \glsresetentrylist %
 \glossaryentryfield{pcm}{\glsnamefont{Pinhole Camera Model}}{The pinhole camera model defines a camera as a mathematical relation between the coordinates of a 3D point, projected onto an image plane. This is also called the Perspective Model. It is a common camera model used in computer vision}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{5}}}\glsgroupskip
@@ -25,20 +28,20 @@
 \glossaryentryfield{SIT}{\glsnamefont{SIT}}{SIT: System Integration Testing, tests the overall system via, given inputs and expected outputs}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{6}}}%
 \glossaryentryfield{SRS}{\glsnamefont{SRS}}{Software/System Requirement Specifications}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter{page}\glsnumberformat{12}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{13}}}\glsgroupskip
 \glsgroupheading{U}\relax \glsresetentrylist %
 \glossaryentryfield{UAT}{\glsnamefont{UAT}}{UAT: User Acceptance Testing, tests the system to ensure the user experience and expectations are met}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{6}\delimN 
-		\setentrycounter{page}\glsnumberformat{8}\delimN 
-		\setentrycounter{page}\glsnumberformat{14}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{9}\delimN 
+		\setentrycounter{page}\glsnumberformat{16}}}\glsgroupskip
 \glsgroupheading{V}\relax \glsresetentrylist %
 \glossaryentryfield{VR}{\glsnamefont{VR}}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{5\delimR 7}\delimN 
-		\setentrycounter{page}\glsnumberformat{10}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{11}}}\glsgroupskip
 \glsgroupheading{W}\relax \glsresetentrylist %
 \glossaryentryfield{webb}{\glsnamefont{Web Browser}}{A cross platform software package to view HTTP provided content from service providers}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{7}}}%
 \glossaryentryfield{WebGL}{\glsnamefont{WebGL}}{A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{7}\delimN 
-		\setentrycounter{page}\glsnumberformat{13}}}%
+		\setentrycounter{page}\glsnumberformat{14}}}%
 \end{theglossary}\glossarypostamble

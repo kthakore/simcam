@@ -4,15 +4,15 @@ The style file: IEEE.bst
 Database file #1: software_specs.bib
 You've used 2 entries,
             1821 wiz_defined-function locations,
-            469 strings with 4087 characters,
-and the built_in function-call counts, 356 in all, are:
-= -- 31
+            467 strings with 3801 characters,
+and the built_in function-call counts, 338 in all, are:
+= -- 27
 > -- 12
 < -- 0
 + -- 5
 - -- 3
-* -- 18
-:= -- 64
+* -- 16
+:= -- 60
 add.period$ -- 2
 call.type$ -- 2
 change.case$ -- 0
@@ -21,13 +21,13 @@ cite$ -- 2
 duplicate$ -- 20
 empty$ -- 39
 format.name$ -- 3
-if$ -- 81
+if$ -- 77
 int.to.chr$ -- 0
 int.to.str$ -- 2
 missing$ -- 4
-newline$ -- 15
+newline$ -- 13
 num.names$ -- 2
-pop$ -- 10
+pop$ -- 12
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
@@ -42,4 +42,4 @@ type$ -- 0
 warning$ -- 0
 while$ -- 2
 width$ -- 3
-write$ -- 28
+write$ -- 24

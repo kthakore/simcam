@@ -224,7 +224,8 @@ The first step involves creating a camera by with specified measurements. Users 
 \label{fig:grid}
 \end{figure}
 
-Using the camera the User can then select an origin point and place calibration grids \ref{fig:grid} within the \glsname{VR}. Then by saving these images and analyzed for lens distortion (provided by \glsname{OpenCV}). 
+Using the camera the User can then select an origin point and place calibration grids \ref{fig:grid} within the \glsname{VR}. The user then capture the placement of the calibration grids as images.
+The images are analyzed for lens distortion (provided by \glsname{OpenCV}). 
 
 
 \begin{figure}[htp]
@@ -234,32 +235,35 @@ Using the camera the User can then select an origin point and place calibration 
 \label{fig:coord}
 \end{figure}
 
-Next the user can then select a real world point, which is used to convey the final transform between the calibrated transforms and the real world transforms for their applications (depicted by \( T_{R->S} \) in \ref{fig:coord} ). Finally by adjusting the lens distortion parameters the user can compare the accuracy at certain points between two sets of distortion parameters.  
+\subsubsection{Constructing Transforms}
+The user can apply the camera calibration by mapping the calibrated camera's origin point to a real world coordiate system ( this can be performed by a mouse or a haptics arm ). 
+This transforms between the calibrated transforms and the real world application (depicted by \( T_{R->S} \) in \ref{fig:coord} ). Finally by adjusting the lens distortion parameters the user can compare the accuracy at real world points between sets of distortion parameters.  
+
 \subsubsection{Comparing Camera Systems} 
 
-    \begin{figure}[htp]
-    \centering
-    \includegraphics[scale=0.15]{images/CompareCameras.png}
-    \caption{Researcher Use Cases}
-    \label{fig:ucc}
-    \end{figure}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.15]{images/CompareCameras.png}
+\caption{Researcher Use Cases}
+\label{fig:ucc}
+\end{figure}
 
-    The Researcher user can perform calibration on two cameras and compare their accuracy models, to decided if they are suitable for their application. This use case is depicted in figure \ref{fig:ucc}.
+The Researcher user can perform calibration on two cameras and compare their accuracy models, to decided if they are suitable for their application. This use case is depicted in figure \ref{fig:ucc}.
 
 \subsubsection{Training}
 
-    \begin{figure}[htp]
-    \centering
-    \includegraphics[scale=0.45]{images/Training.png}
-    \caption{Generic Training User Cases}
-    \label{fig:uco}
-    \end{figure}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{images/Training.png}
+\caption{Generic Training User Cases}
+\label{fig:uco}
+\end{figure}
 
-    Training involves two users. The Trainer can create a training session with a specified calibration procedure (camera, distortions, grid ... etc). Then the Trainer can send this session to a Student. 
+Training involves two users. The Trainer can create a training session with a specified calibration procedure (camera, distortions, grid ... etc). Then the Trainer can send this session to a Student. 
 
-    The Student will follow the Training Session and work towards a specified goal by the Trainer. The Student can also leave their feedback on completion that the Trainer can review, as described on \ref{fig:uco}
+The Student will follow the Training Session and work towards a specified goal by the Trainer. The Student can also leave their feedback on completion that the Trainer can review, as described on \ref{fig:uco}
 
-    The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, extrinsic and intrinsic values to the trainer. Additionally the student can record the difficulty level of the steps of camera calibration. This feedback can be reviewed by the trainer.  
+The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, extrinsic and intrinsic values to the trainer. Additionally the student can record the difficulty level of the steps of camera calibration. This feedback can be reviewed by the trainer.  
 
 
 \chapter{System Requirement Specifications}
@@ -267,7 +271,7 @@ Next the user can then select a real world point, which is used to convey the fi
 \newglossaryentry{SRS}{name={SRS}, description={Software/System Requirement Specifications}}
 
 
-The follow System Requirement Specifications (\glsname{SRS}) serve to outline a set of deliverables or goals for the prototyping period of analysis, design and implementation. These specifications are defined here to distill down the amount of uncertainty by picking standards were applicable. The initial round of testing on the prototype will help to clarify, extend and solidify the next iteration of specifications. This document is meant to modified and iterated.  
+The follow System Requirement Specifications (\glsname{SRS}) serve to outline a set of deliverables or goals for the prototyping period of analysis, design, and implementation. The preliminary specifications are defined here to provide a starting point for prototyping. The initial round of testing on the prototype will help to clarify, extend and solidify the next iteration of specifications. This document is meant to modified and iterated.  
 
 \section{User Interface} 
 
@@ -275,16 +279,16 @@ The user interface will be designed with standard \glsname{HTML5} provided compo
 
 \subsection{Interface Overview}
 
-There are no specific requirements for the user interface as of yet. However a general understanding of the screens has been captured as described in \ref{fig:is}. 
+There are no specific requirements for the user interface as of yet; however a general understanding of the screens has been captured as described in \ref{fig:is}. 
 
-    \begin{figure}[htp]
-    \centering
-    \includegraphics[scale=0.45]{images/interface_screen.png}
-    \caption{Interface Overview}
-    \label{fig:is}
-    \end{figure}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{images/interface_screen.png}
+\caption{Interface Overview}
+\label{fig:is}
+\end{figure}
 
-The interface overview can be broken down into two sections. The canvas and the options menu. All 'work' related with either camera calibration will be visualized in the canvas section of the interface. All inputs will be captured in the dialogs section of the interface. Finally any additional outputs will be show via the dialogs sections also.
+The interface overview can be broken down into two sections. The canvas and the options menu. All 'work' related with camera calibration will be visualized in the canvas section of the interface. All inputs will be captured in the dialogs section of the interface. Any additional outputs will be show via the dialogs sections also.
 
 \subsubsection{Canvas}
 
@@ -349,22 +353,34 @@ User will complete the Camera data model described earlier.
 \subsection{Calibration}
 
 User will select a calibration grid and pose it 6 times within the 3D canvas. 
-User will use an \ref{OpenCV} interface to retrieve distortion parameters.
-User will analyse and derive the extrinsice and intrinsic values of the parameters. 
+User will use an \glsname{OpenCV} interface to retrieve distortion parameters.
+User will analyse and derive the extrinsic and intrinsic values of the parameters. 
 
 \subsection{Accuracy Modeling}
 
-User will adjust distortion levels and reproject the selected calibration grids to selected poses. System will calculate difference between points on the actual and reporjected grid. 
-The accuracy can also be taken with placing points within the viewing range of each camera and calculating difference between ideal (no distortions) and changing distortions. 
+\newglossaryentry{Frustum}{name={Frustum}, description={Viewing volume of a camera}}
 
-User can also perform accuracy modeling between two cameras to decide which one to pick.
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.50]{images/accuracy_vizulization.png}
+\caption{Visualising the accuracy model within the frustum of a Camera }
+\label{fig:av}
+\end{figure}
+
+
+User will adjust distortion project and project the selected calibration grids to selected poses. System will calculate difference between points on the actual and projected grid. 
+The accuracy can also be taken with placing points within the viewing range (\glsname{Frustum}) of each camera and calculating difference between ideal (no distortions) and changing distortions. 
+
+User can also perform accuracy modeling between two cameras to decide which one to pick. The accuracy will be visualized to show areas of acceptable accuracy that the user picks. A potential visualization concept is depicted in the figure \ref{fig:av}. 
+
 
 \subsection{Training} 
 
-During planing the Trainer user will select student emails, and decide steps duration (changes in data models). The steps are create such that as models are changed (such as values confirmed for extrinsic matrix) as training steps. 
-The Trainer user can then send a hyper text link via email to the student. The Student user will go to the link and follow the training steps, and filling out difficulty and written feed back. 
+The Trainer will provide a student's email, and decide on steps for training on (changes in data models). The steps are created to watch for changes in the data models(such as values confirmed for extrinsic matrix). These are essentially steps that can be watched and associated with student's tasks within the larger activity of camera calibration. 
 
-The Trainer can then review each step and then work with the Student to eliminate learning problems within identified difficult areas.  
+The trainer can then send a hyper text link via email to the student. The student  will go to the link and follow the training steps while providing the feedback. The feedback will collect the student's difficulty and provide a report to the trainer. 
+
+The trainer can then review each step and then work with the Student to eliminate learning problems within identified difficult areas.  
 
 \section{Constraints}
 
@@ -383,6 +399,7 @@ Performance constraints are lax, as this is a prototype and performance profiles
 \subsection{Security} 
 
 Currently there are no security constraints known. 
+
 
 \bibliography{software_specs}{}
 
