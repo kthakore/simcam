@@ -6,4 +6,6 @@
 *.out
 *.pdf
 *.zargo~
+*.lof
+*.toc
 

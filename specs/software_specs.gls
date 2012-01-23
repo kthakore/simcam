@@ -5,7 +5,8 @@
 		\setentrycounter{page}\glsnumberformat{6}}}\glsgroupskip
 \glsgroupheading{H}\relax \glsresetentrylist %
 \glossaryentryfield{HTML5}{\glsnamefont{HTML5}}{Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter{page}\glsnumberformat{6}}}%
+		\setentrycounter{page}\glsnumberformat{6}\delimN 
+		\setentrycounter{page}\glsnumberformat{11}}}%
 \glossaryentryfield{HTTP}{\glsnamefont{HTTP}}{HyperText Transport Protocol defines the protocol of transporting documents to a web client}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{6}}}\glsgroupskip
 \glsgroupheading{J}\relax \glsresetentrylist %
@@ -20,12 +21,14 @@
 		\setentrycounter{page}\glsnumberformat{4}}}\glsgroupskip
 \glsgroupheading{S}\relax \glsresetentrylist %
 \glossaryentryfield{SIT}{\glsnamefont{SIT}}{System Integration Testing, test the overall system via, given inputs and expect outputs}{\relax }{\glossaryentrynumbers{\relax 
-		\setentrycounter{page}\glsnumberformat{5}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{5}}}%
+\glossaryentryfield{SRS}{\glsnamefont{SRS}}{Software/System Requirement Specifications}{\relax }{\glossaryentrynumbers{\relax 
+		\setentrycounter{page}\glsnumberformat{11}}}\glsgroupskip
 \glsgroupheading{U}\relax \glsresetentrylist %
 \glossaryentryfield{UAT}{\glsnamefont{UAT}}{User Acceptance Testing, tests the system to ensure the user experience and expectations are met}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{5}\delimN 
 		\setentrycounter{page}\glsnumberformat{7}\delimN 
-		\setentrycounter{page}\glsnumberformat{11}}}\glsgroupskip
+		\setentrycounter{page}\glsnumberformat{12}}}\glsgroupskip
 \glsgroupheading{V}\relax \glsresetentrylist %
 \glossaryentryfield{VR}{\glsnamefont{VR}}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}{\relax }{\glossaryentrynumbers{\relax 
 		\setentrycounter{page}\glsnumberformat{4\delimR 6}\delimN 
