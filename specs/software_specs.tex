@@ -1,6 +1,7 @@
 \documentclass[11pt]{report}
 \listfiles
 
+\usepackage[margin=2.5cm]{geometry}
 \usepackage[colorlinks]{hyperref}
  \usepackage{glossaries} % acronym will go in main glossary
  %\usepackage[acronym]{glossaries} % make a separate list of acronyms
@@ -56,6 +57,11 @@ Dr.~Terry \textsc{Peters}
 
 \tableofcontents
 
+\listoffigures 
+
+\printglossaries
+
+
 \newpage 
 
 \chapter{Introduction}
@@ -65,14 +71,11 @@ A core component of Medical Imaging application is the use of computer vision. C
 \section{Overview}
 
 \newacronym[\glsshortpluralkey=VR]{VR}{VR}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}
-
      
 \begin{enumerate}
 \item A virtual reality (\glsname{VR}) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
 \item Camera calibration of a simple camera system, performed with prior training in a virtual reality environment, will yield insignificantly different capture camera parameters with real world camera system. 
 \end{enumerate}
-
-As a first step software specifications will be developed based on interviews with graduate supervisors. The preliminary specifications will need to be updated in an iterative fashion. 
 
 \section{Background and Significance}
 
@@ -90,11 +93,11 @@ Simulation of this process can begin by modeling the camera using the perspectiv
 
 \begin{equation} s * p = A * [R|t] * P  \end{equation}
  
-where  \[A\] is defined as the intrinsic matrix, \[s\] represents the arbitrary scale factor, \[p\] are the 2D image coordinates, \[P\] are the corresponding 3D world coordinates, and finally \[[R|t]\] are the extrinsic parameters.
+where  \(A\) is defined as the intrinsic matrix, \(s\) represents the arbitrary scale factor, \(p\) are the 2D image coordinates, \(P\) are the corresponding 3D world coordinates, and finally \((R|t)\) are the extrinsic parameters.
 
-The intrinsic matrix can be calculated from camera dependent parameters such as focal length and CCD pixel. Additionally, the extrinsic parameters are user defined such that rotation and translation are selected by the user. Finally, the \[P\] world coordinates are simply defined by the user and the scene that will rendered in the virtual reality environment. 
+The intrinsic matrix can be calculated from camera dependent parameters such as focal length and CCD pixel. Additionally, the extrinsic parameters are user defined such that rotation and translation are selected by the user. Finally, the \(P\) world coordinates are simply defined by the user and the scene that will rendered in the virtual reality environment. 
 
-A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robarts Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and prototyping. 
+A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robart's Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and prototyping. 
 
 \newglossaryentry{SIT}{name={SIT},
 description={System Integration Testing, test the overall system via, given inputs and expect outputs}}
@@ -102,10 +105,7 @@ description={System Integration Testing, test the overall system via, given inpu
 \newglossaryentry{UAT}{name={UAT},
 description={User Acceptance Testing, tests the system to ensure the user experience and expectations are met}}
 
-Once the software system is developed, System Integration Testing (\glsname{SIT}) will be performed. Additionally, validation will be performed with User Acceptance Testing (\glsname{UAT}) of a selected group of volunteers. 
-
-The implementation will depend essentially on prior work done in Dr. Peters lab with image-guided surgery. Additional resources will be leverage in Image processing and computer vision from Dr. Ladak's work. Specifically projects that depend heavily on calibration of camera systems for medical applications have analyzed to develop specifications for the simulator \cite{CC}. 
- 
+Once the prototype software system is developed, System Integration Testing (\glsname{SIT}) will be performed. Additionally, validation will be performed with User Acceptance Testing (\glsname{UAT}) of a selected group of volunteers. This will aid in narrowing down the causes for difficulty with understanding camera calibration. 
 
 \section{Relevance}
 
@@ -121,6 +121,9 @@ The scope of this project is primarily to create a virtual environment that can 
 \item Implement a \glsname{VR} environment that simulates camera calibration within user specified scenes. Develop an online tool that can be accessed by a wide audience in the medical imaging field.
 \end{enumerate}
 
+\subsection{Pilot Scope}
+The scope of this pilot is to explore and define more deeply the problems with camera calibration, and a possible solution.  
+
 \section{Technical Overview}
 
 \subsection{User Interface}
@@ -129,21 +132,21 @@ The scope of this project is primarily to create a virtual environment that can 
 description={A cross platform software package to view HTTP provided content from service providers}}
 
 \newglossaryentry{Javascript}{name={Javascript},
-description={A cross platform scripting language that runs on \glsname{webb}}}
+description={A cross platform scripting language that runs on the client side}}
 
 \newglossaryentry{HTML5}{name={HTML5}, description={Is the fifth version of the Hypertext Markup Language that provides many new features such as canvas and web sockets}}
 \newglossaryentry{WebGL}{name={WebGL}, description={A web technology being developed by the Khronos Group to bring accelerated graphics to the web browser, on a canvas}}
 
 One of the initial aim of this project was to provide a easily distributed user interface. A web interface is a proven technology in providing distributed interfaces. The user interface provided by this system will be designed on a \glsname{HTML5}/\glsname{WebGL} project that will work over pre-specified \glsname{webb}. \glsname{WebGL} sits on top of \glsname{HTML5}'s canvas feature and will provide 3D rendering capabilities on enabled \glsname{webb}. Most user demographics are familiar with using a \glsname{webb}, which makes this a viable option. 
 
-\glsname{WebGL} will be written in the \glsname{Javascript} language that is a platform provided by most mordern \glsname{webb}. 
+\glsname{WebGL} will be written in the \glsname{Javascript} language that is a platform provided by most modern \glsname{webb}. 
 
 An alternative option involves creating custom distribution and front end software ( similar to a \glsname{webb} ). This is not feasible with the time frame for a Masters project. 
 
 \subsection{Application Server}
 
 \newglossaryentry{app}{name={Application Server},
-description={An web service provider that responds to requests from the \glsname{webb}}}
+description={An web service provider that responds to requests from the client}}
 
 An \glsname{app} will be built to provide the \glsname{Javascript} and \glsname{HTML5} documents to the \glsname{webb}. Additionally, the server will utilize middleware platforms that help to scale (ensure the \glsname{app} responds to varying amounts of requests from multiple \glsname{webb}s).
 
@@ -151,7 +154,9 @@ An \glsname{app} will be built to provide the \glsname{Javascript} and \glsname{
 
 \newglossaryentry{HTTP}{name={HTTP}, description={ HyperText Transport Protocol defines the protocol of transporting documents to a web client}}
 
-The \glsname{HTTP} Server will be reponsible for responding to requests sent by \glsname{webb} clients. The key requirement required of the \glsname{HTTP} Server is to scale reasonably with an increase in demands. Most of the computational expense will be done on the \glsname{webb} client, due to the way \glsname{WebGL} works. Therefore a scalable \glsname{HTTP} Server will ensure that the response for the \glsname{WebGL} and \glsname{HTML5} documents are provided in a timely manner. For this reason the Nginx \glsname{HTTP} Server and a Starman/PSGI middleware server will be used.
+The \glsname{HTTP} Server will be responsible for responding to requests sent by \glsname{webb} clients. The key requirement required of the \glsname{HTTP} Server is to scale reasonably with an increase in demands. Most of the computational expense will be done on the \glsname{webb} client, due to the way \glsname{WebGL} works. Therefore a scalable \glsname{HTTP} Server will ensure that the response for the \glsname{WebGL} and \glsname{HTML5} documents are provided in a timely manner. For this reason the Nginx \glsname{HTTP} Server and a Starman/PSGI middleware server will be used.
+
+A middleware server allows multiple \glsname{app} to be initiated and used in parallel for times of load. This facilitates the reliability and scalability of the system. 
 
 \subsubsection{Dispatch/Controller}
 
@@ -193,19 +198,39 @@ Another user that may use the system is the trainer. Trainer users use the syste
 \section{Use Cases}
 
 Use Cases define the process the system will take to meet the needs of the users. Each use case is written in a list format showing what the user will see and react with during the specific portion of the system. 
+\subsubsection{Camera Calibration}
 
 \begin{figure}[htp]
 \centering
-\includegraphics[scale=0.15]{images/AllUserCases.png}
+\includegraphics[scale=0.40]{images/AllUserCases.png}
 \caption{Generic User Cases}
 \label{fig:guc}
 \end{figure}
 
-\subsubsection{Camera Calibration}
 
-As described in \ref{fig:guc}, users can perform the camera calibration procedure as defined in Chapter 2 of \cite{CC}. 
+As described in \ref{fig:guc}, users can perform the camera calibration procedure as defined in Chapter 2 of \cite{CC}. All users of the system can perform a camera calibration procedure. 
+
+The first step involves creating a camera by with specified measurements. Users in future versions may select existing cameras that have been validated and stored on the system. 
 
 
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{images/board.png}
+\caption{Calibration Grid --\cite{CC}}
+\label{fig:grid}
+\end{figure}
+
+Using the camera the User can then select an origin point and place calibration grids \ref{fig:grid} within the \glsname{VR}. Then by saving these images and analyzed for lens distortion (provided by \glsname{OpenCV}). 
+
+
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{images/Coordinates.png}
+\caption{Transformations involved during Calibration --\cite{CC}}
+\label{fig:coord}
+\end{figure}
+
+Next the user can then select a real world point, which is used to convey the final transform between the calibrated transforms and the real world transforms for their applications (depicted by \( T_{R->S} \) in \ref{fig:coord} ). Finally by adjusting the lens distortion parameters the user can compare the accuracy at certain points between two sets of distortion parameters.  
 \subsubsection{Comparing Camera Systems} 
 
     \begin{figure}[htp]
@@ -221,7 +246,7 @@ As described in \ref{fig:guc}, users can perform the camera calibration procedur
 
     \begin{figure}[htp]
     \centering
-    \includegraphics[scale=0.15]{images/Training.png}
+    \includegraphics[scale=0.45]{images/Training.png}
     \caption{Generic Training User Cases}
     \label{fig:uco}
     \end{figure}
@@ -230,12 +255,13 @@ As described in \ref{fig:guc}, users can perform the camera calibration procedur
 
     The Student will follow the Training Session and work towards a specified goal by the Trainer. The Student can also leave their feedback on completion that the Trainer can review, as described on \ref{fig:uco}
 
-    The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, extrinsic and intrinsic values to the trainer. Additionally the student can record the difficulty level of the steps involved in 
+    The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, extrinsic and intrinsic values to the trainer. Additionally the student can record the difficulty level of the steps of camera calibration. This feedback can be reviewed by the trainer.  
 
 
 \chapter{System Requirement Specifications}
 
 \section{Calibration}
+
 \subsection{Interface}
 
 \section{Training}
@@ -246,43 +272,24 @@ The trainer will then review training.
 \subsection{Interface}
 \subsection{Session}
 
-\section{External Interface Requirements}
-
-\subsection{Intact Robotics Haptics Arm}
-
-\subsubsection{UDP Communications}
-
-\subsubsection{High Level Interface}
-
-\subsection{Graphical User Interface}
 
 \section{Constraints}
 
 \subsection{Reliability}
 
+Reliability constraints are the same as expected of other web tools available. Industry standards of scalability are deployed into the system. Further testing will need to be performed to ensure expected reliability. This will be performed in \glsname{UAT}.  
+
 \subsection{Scalability}
+
+Scalability constraints are the same as expected of other web tools available. Industry standards of scalability are deployed into the system. 
 
 \subsection{Performance}
 
+Performance constraints are lax, as this is a prototype and performance profiles are not available. 
+
 \subsection{Security} 
 
-
-\section{Functional Requirements}
-
-\begin{enumerate}
-\item Simulation
-\begin{enumerate}
-	\item Camera Model
-	\item Camera Parameters 
-\end{enumerate}
-\end{enumerate}
-
-\chapter{Next Steps}
-
-
-\listoffigures 
-
-\printglossaries
+Currently there are no security constraints known. 
 
 \bibliography{software_specs}{}
 
