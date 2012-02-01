@@ -71,9 +71,14 @@ A core component of Medical Imaging application is the use of computer vision. C
 \section{Overview}
 
 \newacronym[\glsshortpluralkey=VR]{VR}{VR}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}
-     
+
+\newglossaryentry{extrinsic}{name={extrinsic},
+description={Parameters of a camera that define the coordinte system transformations from 3D world coordinates to 3D camera coordinates. Two matrices are provided \(R\) and \(T\) }}
+  \newglossaryentry{intrinsic}{name={intrinsic},
+description={A single matrix that contains 5 parameters. The parameters incorporate focal length, image format and principal point. }}
+  
 \begin{enumerate}
-\item A virtual reality (\glsname{VR}) environment that simulates extrinsic and intrinsic parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
+\item A virtual reality (\glsname{VR}) environment that simulates \glsname{extrinsic} and \glsname{intrinsic} parameters of a camera will provide a sufficient model to allow training on transformation matrices involved with camera calibration.
 \item Camera calibration of a simple camera system, performed with prior training in a virtual reality environment, will yield insignificantly different capture camera parameters with real world camera system. 
 \end{enumerate}
 
@@ -91,11 +96,11 @@ To be able to capture the position and orientation of objects, a transformation 
 
 Simulation of this process can begin by modeling the camera using the perspective projection model. The model can be represented in matrix notation as:
 
-\begin{equation} s * p = A * [R|t] * P  \end{equation}
+\begin{equation} s * \mathbf{p} = \mathbf{A} * [\mathbf{R}|\mathbf{t}] * \mathbf{P}  \end{equation}
  
-where  \(A\) is defined as the intrinsic matrix, \(s\) represents the arbitrary scale factor, \(p\) are the 2D image coordinates, \(P\) are the corresponding 3D world coordinates, and finally \((R|t)\) are the extrinsic parameters.
+where  \(A\) is defined as the \glsname{intrinsic} matrix, \(s\) represents the arbitrary scale factor, \(p\) are the 2D image coordinates, \(P\) are the corresponding 3D world coordinates, and finally \((R|t)\) are the \glsname{extrinsic} parameters.
 
-The intrinsic matrix can be calculated from camera dependent parameters such as focal length and CCD pixel. Additionally, the extrinsic parameters are user defined such that rotation and translation are selected by the user. Finally, the \(P\) world coordinates are simply defined by the user and the scene that will rendered in the virtual reality environment. 
+The \glsname{intrinsic} matrix can be calculated from camera dependent parameters such as focal length and CCD pixel. Additionally, the \glsname{extrinsic} parameters are user defined such that rotation and translation are selected by the user. Finally, the \(P\) world coordinates are simply defined by the user and the scene that will rendered in the virtual reality environment. 
 
 A key challenge faced by graduate students in areas such as image-assisted surgery is in learning the calibration process and understanding the sensitivity of the calibration results on estimated parameters. Indeed, experience at the Robart's Research Institute indicates that students can take several months to learn about camera calibration. Simulation will allow for applications such as training and prototyping. 
 
@@ -263,7 +268,7 @@ Training involves two users. The Trainer can create a training session with a sp
 
 The Student will follow the Training Session and work towards a specified goal by the Trainer. The Student can also leave their feedback on completion that the Trainer can review, as described on \ref{fig:uco}
 
-The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, extrinsic and intrinsic values to the trainer. Additionally the student can record the difficulty level of the steps of camera calibration. This feedback can be reviewed by the trainer.  
+The Student completes the training session by finishing camera calibration and sending back the camera distortion parameters, \glsname{extrinsic} and \glsname{intrinsic} values to the trainer. Additionally the student can record the difficulty level of the steps of camera calibration. This feedback can be reviewed by the trainer.  
 
 
 \chapter{System Requirement Specifications}
@@ -313,7 +318,7 @@ Attributes include:
 \begin{enumerate}
 \item name: human readable content to allow comparison.
 \item measurements: measured values as described in the use case \ref{fig:guc}
-\item calibration session: status of the current calibration procedure. Including the extrinsic, intrinsic and distortion values.  
+\item calibration session: status of the current calibration procedure. Including the \glsname{extrinsic}, \glsname{intrinsic} and distortion values.  
 \end{enumerate}
 
 \subsubsection{Calibration Session}
@@ -322,7 +327,7 @@ Attributes include:
 \begin{enumerate}
 \item name: human readable content to allow comparison.
 \item steps: predetermine step in calibration. This will be a generic template, until various procedures are designed by a Trainer.
-\item matrices: extrinsic, intrinsic and distortion values 
+\item matrices: \glsname{extrinsic}, \glsname{intrinsic} and distortion values 
 \item coordinates system: coordinate systems associated with this calibration 
 \end{enumerate}
 
@@ -354,7 +359,7 @@ User will complete the Camera data model described earlier.
 
 User will select a calibration grid and pose it 6 times within the 3D canvas. 
 User will use an \glsname{OpenCV} interface to retrieve distortion parameters.
-User will analyse and derive the extrinsic and intrinsic values of the parameters. 
+User will analyse and derive the \glsname{extrinsic} and \glsname{intrinsic} values of the parameters. 
 
 \subsection{Accuracy Modeling}
 
@@ -376,7 +381,7 @@ User can also perform accuracy modeling between two cameras to decide which one 
 
 \subsection{Training} 
 
-The Trainer will provide a student's email, and decide on steps for training on (changes in data models). The steps are created to watch for changes in the data models(such as values confirmed for extrinsic matrix). These are essentially steps that can be watched and associated with student's tasks within the larger activity of camera calibration. 
+The Trainer will provide a student's email, and decide on steps for training on (changes in data models). The steps are created to watch for changes in the data models(such as values confirmed for \glsname{extrinsic} matrix). These are essentially steps that can be watched and associated with student's tasks within the larger activity of camera calibration. 
 
 The trainer can then send a hyper text link via email to the student. The student  will go to the link and follow the training steps while providing the feedback. The feedback will collect the student's difficulty and provide a report to the trainer. 
 
