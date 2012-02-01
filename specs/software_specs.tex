@@ -26,7 +26,7 @@
 
 
 % Title
-{ \huge \bfseries Version 0.01}\\[0.4cm]
+{ \huge \bfseries Version 0.02}\\[0.4cm]
 
 % Author and supervisor
 \begin{minipage}{0.4\textwidth}
@@ -61,8 +61,20 @@ Dr.~Terry \textsc{Peters}
 
 \printglossaries
 
-
 \newpage 
+
+\chapter{Revisions}
+\begin{center}
+\begin{tabular}{| l | c | l | p{9cm} |}
+\hline
+Date & Version & Author & Description \\ 
+\hline
+January 22 2012 & 0.01 & Kartik Thakore & Initial Specifications Document \\
+\hline
+Feburary 1 2012 & 0.02 & Karitk Thakore & Incorporating Dr. Ladak's Changes \\
+\hline
+\end{tabular}
+\end{center}
 
 \chapter{Introduction}
   
@@ -127,7 +139,7 @@ The scope of this project is primarily to create a virtual environment that can 
 \end{enumerate}
 
 \subsection{Pilot Scope}
-The scope of this pilot is to explore and define more deeply the problems with camera calibration, and a possible solution.  
+The scope of this pilot is to explore and define (from the prespective of a new researcher) more deeply the problems with camera calibration, and a possible solution.  
 
 \section{Technical Overview}
 
@@ -229,7 +241,7 @@ The first step involves creating a camera by with specified measurements. Users 
 \label{fig:grid}
 \end{figure}
 
-Using the camera the User can then select an origin point and place calibration grids \ref{fig:grid} within the \glsname{VR}. The user then capture the placement of the calibration grids as images.
+Using the camera the User can then select an origin point and place calibration grids ( shown in figure \ref{fig:grid} ) within the \glsname{VR}. The user then capture the placement of the calibration grids as images.
 The images are analyzed for lens distortion (provided by \glsname{OpenCV}). 
 
 
@@ -241,7 +253,8 @@ The images are analyzed for lens distortion (provided by \glsname{OpenCV}).
 \end{figure}
 
 \subsubsection{Constructing Transforms}
-The user can apply the camera calibration by mapping the calibrated camera's origin point to a real world coordiate system ( this can be performed by a mouse or a haptics arm ). 
+The user can apply the camera calibration by mapping the calibrated camera's origin point to a real world coordinate system.  Further analysis of the use case is required to decide between a haptic arm or mouse solution.
+
 This transforms between the calibrated transforms and the real world application (depicted by \( T_{R->S} \) in \ref{fig:coord} ). Finally by adjusting the lens distortion parameters the user can compare the accuracy at real world points between sets of distortion parameters.  
 
 \subsubsection{Comparing Camera Systems} 
