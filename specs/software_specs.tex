@@ -1,13 +1,23 @@
 \documentclass[11pt]{report}
 \listfiles
 
+\usepackage[pdftex,colorlinks=true]{hyperref}
+\usepackage{multicol}
+\usepackage{multido}
+
+\ifx\pdftexversion\undefined
+  \usepackage[dvips]{graphicx}
+\else
+  \usepackage[pdftex]{graphicx}
+   \DeclareGraphicsRule{*}{mps}{*}{}
+\fi
+
+
 \usepackage[margin=2.5cm]{geometry}
-\usepackage[colorlinks]{hyperref}
  \usepackage{glossaries} % acronym will go in main glossary
  %\usepackage[acronym]{glossaries} % make a separate list of acronyms
 
 \makeglossaries
-\usepackage{graphicx}
 \setcounter{secnumdepth}{5}
 \setcounter{tocdepth}{5}
 \begin{document}
@@ -85,7 +95,7 @@ A core component of Medical Imaging application is the use of computer vision. C
 \newacronym[\glsshortpluralkey=VR]{VR}{VR}{Virtual Reality: is a simulated environment that is implemented to provide a simulated experience of a real world process or activity}
 
 \newglossaryentry{extrinsic}{name={extrinsic},
-description={Parameters of a camera that define the coordinte system transformations from 3D world coordinates to 3D camera coordinates. Two matrices are provided \(R\) and \(T\) }}
+description={Parameters of a camera that define the coordinate system transformations from 3D world coordinates to 3D camera coordinates. Two matrices are provided \(R\) and \(T\) }}
   \newglossaryentry{intrinsic}{name={intrinsic},
 description={A single matrix that contains 5 parameters. The parameters incorporate focal length, image format and principal point. }}
   
@@ -139,7 +149,7 @@ The scope of this project is primarily to create a virtual environment that can 
 \end{enumerate}
 
 \subsection{Pilot Scope}
-The scope of this pilot is to explore and define (from the prespective of a new researcher) more deeply the problems with camera calibration, and a possible solution.  
+The scope of this pilot is to explore and define (from the perspective of a new researcher) more deeply the problems with camera calibration, and a possible solution.  
 
 \section{Technical Overview}
 
@@ -195,7 +205,7 @@ This chapter defines the user of this system and their specifications. Defining 
 
 \begin{figure}[htp]
 \centering
-\includegraphics[scale=0.25]{images/UserOverview.png}
+\includegraphics[scale=1.0]{figs/users.1}
 \caption{Users}
 \label{fig:uo}
 \end{figure}
