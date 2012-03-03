@@ -1,81 +1,55 @@
-<html>
-<head>  
-	<title>SimCam: Simulation Medical Vision Systems</title>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		
+		<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="description" content="Voxelent " />
+		<meta name="author" content="Kartik Thakore" />
+		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
+		<link href='css/voxelent.css' type='text/css' rel='stylesheet' />
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/jquery.js'></script>
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/jquery-ui.js'></script>
 
-
-
-</head>
-<body> 	
-
-<div id="show" />
-
-<script src="<: $c.uri_for('/static') :>/js/jquery.js"></script>
-<script src="<: $c.uri_for('/static') :>/js/Three.js"></script>
-<script src="<: $c.uri_for('/static') :>/js/Detector.js"></script>
-<script src="<: $c.uri_for('/static') :>/js/RequestAnimationFrame.js"></script>
-<script>
-
-    if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
-
-    
-    var camera, scene, renderer,
-    geometry, material, mesh;
-
-    function start() {
-	init();
-    	animate();
-    }
-    function save_image () {
-		var img_canvas = $('#show').find('canvas');
-		var img = img_canvas[0].toDataURL("image/png");
-		$('#show').append( '<img src="'+img+'"/>' );
-	}
-    function init() {
-
-        scene = new THREE.Scene();
-
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 300;
-        scene.add( camera );
-
-        geometry = new THREE.SphereGeometry( 20, 10, 10 );
-        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
-
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
-
-        renderer = new THREE.CanvasRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-
-	$('#show').append( renderer.domElement );
-
-    }
-
-
-    function animate() {
-
-        // Include examples/js/RequestAnimationFrame.js for cross-browser compatibility.
-        requestAnimationFrame( animate );
-        render();
-
-    }
-
-    function render() {
-
-        mesh.translateX(  1 );
-        mesh.rotation.y += 0.02;
-
-        renderer.render( scene, camera );
-
-    }
-
-    start();
-</script>
-
-<div style="position:fixed; top:5px; left:5px;">
-<input type="button" value="Save Image" id="save_image" onclick="save_image();" />
-</div>
-
-</body>
-
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/voxelent_v0.87.js'></script>
+		<title>Voxelent: Demo Hello</title>
+        
+        
+        <script type='text/javascript'>
+	    
+	    
+        function Hello_3D_World(){
+			var view = vxl.api.setup('view-1');
+            vxl.api.load('cone2.json');
+            vxl.c.view.start();
+            view.cameraman.getActiveCamera().setPosition([0,3,15]);
+        }
+        
+        
+        
+        </script>
+        
+	</head>
+	<body onload='Hello_3D_World()'>
+		<table>
+			<tr>
+				<td>
+				<div class="col-width clearfix header-inner"><img src=
+					"css/img/voxelent.png" />
+					<div class="shadow"></div>
+				</div><div class="header-shadow"></div>
+                </td>
+			</tr>
+			<tr>
+				<td>
+				<canvas id = 'view-1' width='1200' height='500'>
+					<p>
+						Your browser does not support WebGL :-(
+					</p>
+				</canvas>
+                </td>
+			</tr>
+		</table>
+	</body>
 </html>
