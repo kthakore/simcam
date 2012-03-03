@@ -10,4 +10,4 @@ seminar.pdf:
 	rubber -d seminar.tex 
 
 clean:
-	git clean -nf
+	git clean -xf
