@@ -30,6 +30,14 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 }
 
+=head2 prototype
+
+
+=cut
+sub prototype :Path('prototype') :Args(0) {
+   my ( $self, $c ) = @_;
+
+}
 =head2 default
 
 Standard 404 error page
