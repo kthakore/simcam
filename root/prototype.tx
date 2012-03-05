@@ -28,6 +28,15 @@
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/webgl/Texture.js'></script>
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/webgl/WebGLApp.js'></script>
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/webgl/Picker.js'></script>
+
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/base64.js'></script>
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/canvas2image.js'></script>
+        <script type='text/javascript'>
+          
+            var current_canvas_render;
+
+        </script>
+
 		<script id="shader-vs" type="x-shader/x-vertex">
 			attribute vec3 aVertexPosition;
 			attribute vec3 aVertexNormal;
@@ -216,6 +225,9 @@
                 gl.uniform1i(Program.uOffscreen, showPickingImage);
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 draw();
+                //Current data 
+                current_canvas_render = document.getElementById("canvas-element-id").toDataURL();;
+
             }
 
             function hitProperty(ob) {
@@ -436,8 +448,8 @@
 
                     $('#capture-img').click(function() {
                         console.log('Capturing image');
-                        var canvas = document.getElementById("canvas-element-id");
-                        console.log( canvas.toDataURL() );
+                        $('body').append( $('<img src="'+current_canvas_render+'" />')  );
+                        
                     });
 
                     $('#reset-btn').click(function() {
