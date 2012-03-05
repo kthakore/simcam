@@ -38,6 +38,18 @@ sub prototype :Path('prototype') :Args(0) {
    my ( $self, $c ) = @_;
 
 }
+
+
+sub calibrate :Path('calibrarte') :Args(0) {
+    my( $self, $c ) = @_;
+
+    my $uri = $c->params('64uri');
+
+    
+    
+
+}
+
 =head2 default
 
 Standard 404 error page
