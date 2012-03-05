@@ -419,7 +419,7 @@
                                  -->
                                 
                                 </td> 
-								<td><a id="reset-btn" />Reset Scene</a></td>
+								<td><a id="capture-img">Capture Image</a><a id="reset-btn" />Reset Scene</a></td>
 							</tr>
 						</table></td>
 					</tr>
@@ -427,11 +427,15 @@
 			</tr>
 </table>
 				<script>
-                    $('#show-picking-btn, #reset-btn').button();
+                    $('#show-picking-btn, #reset-btn, #capture-img').button();
 
                     $('#show-picking-btn').click(function() {
                         showPickingImage = !showPickingImage
 
+                    });
+
+                    $('#capture-img').click(function() {
+                        console.log('Capturing image');
                     });
 
                     $('#reset-btn').click(function() {
