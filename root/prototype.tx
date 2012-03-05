@@ -202,7 +202,7 @@
                 Scene.addObject(Floor);
                 Scene.loadObject('static/voxdata/models/texCube.json', 'cube', {
                     position : [1, 2, 7],
-                    scale : [4, 4, 4],
+                    scale : [2, 2, 1],
                     ambient : [0.4, 0.4, 0.4, 1.0]
                 });
             }
@@ -242,7 +242,7 @@
                     names += ob.alias + ' ';
                 }
                 render();
-                alert('You picked: ' + names);
+                console.log('You picked: ' + names);
             }
 
             function movePickedObjects(interactor, dx, dy) {
@@ -395,12 +395,8 @@
 	<body onload='runVoxApp()'>
 		<table>
 			<tr>
-				<td>
-				<div class="col-width clearfix header-inner"><img src=
-					"css/img/voxelent.png" />
-					<div class="shadow"></div>
-				</div><div class="header-shadow"></div></td>
-			</tr>
+				<td></td>
+		    </tr>
 			<tr>
 				<td>
 				<canvas id = 'canvas-element-id' width='1200' height='500'>
@@ -417,15 +413,19 @@
 						<table id='coloring-table'>
 							<tr>
 								<td>
-								<input type="checkbox" id="show-picking-btn" />
-								<label for="show-picking-btn">Show Picking Image</label></td>
+								<!--
+                                 <input type="checkbox" id="show-picking-btn" />
+								 <label for="show-picking-btn">Show Picking Image</label> 
+                                 -->
+                                
+                                </td> 
 								<td><a id="reset-btn" />Reset Scene</a></td>
 							</tr>
 						</table></td>
 					</tr>
 				</table></td>
 			</tr>
-			<table>
+</table>
 				<script>
                     $('#show-picking-btn, #reset-btn').button();
 
