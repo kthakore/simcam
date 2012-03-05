@@ -436,6 +436,8 @@
 
                     $('#capture-img').click(function() {
                         console.log('Capturing image');
+                        var canvas = document.getElementById("canvas-element-id");
+                        console.log( canvas.toDataURL() );
                     });
 
                     $('#reset-btn').click(function() {
