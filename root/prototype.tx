@@ -225,7 +225,7 @@
                 gl.uniform1i(Program.uOffscreen, showPickingImage);
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 draw();
-                //Current data 
+                //Current data ready  
                 current_canvas_render = document.getElementById("canvas-element-id").toDataURL();;
 
             }
@@ -437,6 +437,8 @@
 					</tr>
 				</table></td>
 			</tr>
+            <tr id="images">
+            </tr>
 </table>
 				<script>
                     $('#show-picking-btn, #reset-btn, #capture-img').button();
@@ -448,7 +450,7 @@
 
                     $('#capture-img').click(function() {
                         console.log('Capturing image');
-                        $('body').append( $('<img src="'+current_canvas_render+'" />')  );
+                        $('#images').append( $('<img width="300px" src="'+current_canvas_render+'" />')  );
                         
                     });
 
