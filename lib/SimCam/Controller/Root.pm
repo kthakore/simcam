@@ -1,6 +1,9 @@
 package SimCam::Controller::Root;
 use Moose;
 use namespace::autoclean;
+use MIME::Base64;
+use File::Slurp;
+use JSON;
 
 BEGIN { extends 'Catalyst::Controller' }
 
@@ -39,13 +42,40 @@ sub prototype :Path('prototype') :Args(0) {
 
 }
 
-
-sub calibrate :Path('calibrarte') :Args(0) {
+my $images; 
+sub capture_images :Path('capture_images') :Args(0) {
     my( $self, $c ) = @_;
 
-    my $uri = $c->params('64uri');
+    my $uri = $c->req->param('uri');
+
+    $uri =~ s/(^.+?,)//; 
+
+    if( $1 )
+    {
+
+        my $d = decode_base64($uri);
+        my $file_name = "".localtime; 
+        my $file_loc = '/tmp/'.$file_name.'.png';
+        write_file( $file_loc , $d );
 
     
+        if( $#{$images}> 0 ) { $images = [] ; }
+
+        push @{$c->stash->{'images'}}, $file_loc; 
+ 
+        my $reply = { mssg => "Made '.$file_loc.'", images => $images };
+
+        $c->response->body( encode_json( $reply ) );
+
+        warn encode_json $reply;
+           
+
+
+    }
+    else
+    {
+       $c->response->body('{ "mssg": "Didn\'t work for '.$1.': '.$uri.'"}' );
+    }
     
 
 }

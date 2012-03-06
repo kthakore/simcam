@@ -29,8 +29,8 @@
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/webgl/WebGLApp.js'></script>
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/webgl/Picker.js'></script>
 
-		<script type='text/javascript' src='<: $c.uri_for('/static') :>/base64.js'></script>
-		<script type='text/javascript' src='<: $c.uri_for('/static') :>/canvas2image.js'></script>
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/base64.js'></script>
+		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/canvas2image.js'></script>
         <script type='text/javascript'>
           
             var current_canvas_render;
@@ -225,8 +225,6 @@
                 gl.uniform1i(Program.uOffscreen, showPickingImage);
                 gl.bindFramebuffer(gl.FRAMEBUFFER, null);
                 draw();
-                //Current data ready  
-                current_canvas_render = document.getElementById("canvas-element-id").toDataURL();;
 
             }
 
@@ -254,7 +252,21 @@
                     names += ob.alias + ' ';
                 }
                 render();
-                console.log('You picked: ' + names);
+                //Current data ready  
+                current_canvas_render = document.getElementById("canvas-element-id").toDataURL();;
+
+                 $('#images').append( $('<img width="300px" src="'+current_canvas_render+'" />')  );
+                        $.ajax({
+                            type: 'POST',
+                            url: '<: $c.uri_for('/capture_images'); :>',
+                            data : { "uri" : current_canvas_render},
+                            dataType : "json",
+                            success : function(data) {
+                                console.log(data);
+                            }
+                        });
+                        
+
             }
 
             function movePickedObjects(interactor, dx, dy) {
@@ -449,18 +461,25 @@
                     });
 
                     $('#capture-img').click(function() {
-                        console.log('Capturing image');
-                        $('#images').append( $('<img width="300px" src="'+current_canvas_render+'" />')  );
+                        $.ajax({
+                            type: 'POST',
+                            url: '<: $c.uri_for('/calibrate'); :>',
+                            data : { "uri" : current_canvas_render},
+                            dataType : "json",
+                            success : function(data) {
+                                console.log(data.missg);
+                            }
+                        });
                         
                     });
 
                     $('#reset-btn').click(function() {
 
-                        Scene.getObject('cube').position = [1, 2, 7];
+                        //Scene.getObject('cube').position = [1, 2, 7];
 
                         camera.goHome();
-                        camera.setElevation(-40);
-                        camera.setAzimuth(-30);
+                        //camera.setElevation(-40);
+                        //camera.setAzimuth(-30);
                         showPickingImage = false;
                     });
 

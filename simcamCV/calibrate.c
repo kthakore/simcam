@@ -33,7 +33,11 @@ int main(int argc, char * argv[])
 	int successes = 0;
 	int step, frame = 0;
 
-	IplImage *image = cvLoadImage( "img.png" );
+	
+    IplImage *image = cvLoadImage( "/tmp/2.png" );
+
+//	  IplImage *image = cvQueryFrame( capture ); // Get next image
+
 	IplImage *gray_image = cvCreateImage( cvGetSize( image ), 8, 1 );
 
 	// Capture Corner views loop until we've got n_boards
@@ -46,7 +50,7 @@ int main(int argc, char * argv[])
 			int found = cvFindChessboardCorners( image, board_sz, corners,
 				&corner_count, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS );
             
-             printf("Got %d\n", found );
+             printf("Got successes: %d at corner_count: %d\n", successes, corner_count );
 
 			// Get subpixel accuracy on those corners
 			cvCvtColor( image, gray_image, CV_BGR2GRAY );
@@ -83,7 +87,7 @@ int main(int argc, char * argv[])
 		if( c == 27 )
 			return 0;
 
-	    image = cvLoadImage( "img.png" );
+	    image = cvLoadImage( "/tmp/2.png" );
 		//image = cvQueryFrame( capture ); // Get next image
 	} // End collection while loop
 
@@ -122,8 +126,6 @@ int main(int argc, char * argv[])
 	// Save the intrinsics and distortions
 	cvSave( "Intrinsics.xml", intrinsic_matrix );
 	cvSave( "Distortion.xml", distortion_coeffs );
-
-  /*
 	// Example of loading these matrices back in
 	CvMat *intrinsic = (CvMat*)cvLoad( "Intrinsics.xml" );
 	CvMat *distortion = (CvMat*)cvLoad( "Distortion.xml" );
@@ -155,6 +157,6 @@ int main(int argc, char * argv[])
 			break;
 		image = cvQueryFrame( capture );
 	}
-*/
+
 	return 0;
 }
