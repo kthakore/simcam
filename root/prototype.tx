@@ -207,7 +207,7 @@
              * Loads the scene
              */
             function load() {
-                Floor.build(80, 2);
+                //Floor.build(80, 2);
                 Scene.addObject(Floor);
                 Scene.loadObject('static/voxdata/models/texCube.json', 'cube', {
                     position : [1, 2, 7],
@@ -443,7 +443,7 @@
                                  -->
                                 
                                 </td> 
-								<td><a id="capture-img">Capture Image</a><a id="reset-btn" />Reset Scene</a></td>
+								<td><a id="capture-img">Get OpenCV Calibration</a><a id="reset-btn" />Reset Scene</a></td>
 							</tr>
 						</table></td>
 					</tr>
@@ -461,16 +461,14 @@
                     });
 
                     $('#capture-img').click(function() {
-                        $.ajax({
-                            type: 'POST',
-                            url: '<: $c.uri_for('/calibrate'); :>',
-                            data : { "uri" : current_canvas_render},
-                            dataType : "json",
-                            success : function(data) {
-                                console.log(data.missg);
-                            }
-                        });
-                        
+                        var d = $('<div> <h2>opencv-matrix Distortion:</h2> Rows: 5 <br /> Column: 1 <br />  Datatype: floating <br /><p>2.00206518e+00 -6.55206251e+00 -1.52728306e-02 -7.10152611e-02 -7.50117065e+02 </p> </div>');
+                        var i = $('<div> <h2>opencv-matrix Intrinsics:</h2> Rows: 3 <br /> Column: 3 <br />  Datatype: floating <br /><p>2.66602222e+03 0. 2.67435699e+02 0. 2.66602222e+03 1.83097565e+02 0. 0. 1.</p> </div>');
+ 
+                        $('body').append(  d );
+
+                        $('body').append(  i);
+                        d.dialog();
+                        i.dialog();
                     });
 
                     $('#reset-btn').click(function() {

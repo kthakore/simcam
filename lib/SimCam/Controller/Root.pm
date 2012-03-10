@@ -42,7 +42,6 @@ sub prototype :Path('prototype') :Args(0) {
 
 }
 
-my $images; 
 sub capture_images :Path('capture_images') :Args(0) {
     my( $self, $c ) = @_;
 
@@ -54,22 +53,16 @@ sub capture_images :Path('capture_images') :Args(0) {
     {
 
         my $d = decode_base64($uri);
-        my $file_name = "".localtime; 
+        my $file_name = time; 
         my $file_loc = '/tmp/'.$file_name.'.png';
         write_file( $file_loc , $d );
 
-    
-        if( $#{$images}> 0 ) { $images = [] ; }
 
-        push @{$c->stash->{'images'}}, $file_loc; 
+        push @{$c->session->{'images'}}, $file_loc; 
  
-        my $reply = { mssg => "Made '.$file_loc.'", images => $images };
+        my $reply = { mssg => "Made '.$file_loc.'", images => $c->session->{'images'} };
 
         $c->response->body( encode_json( $reply ) );
-
-        warn encode_json $reply;
-           
-
 
     }
     else

@@ -32,11 +32,16 @@ int main(int argc, char * argv[])
 	int corner_count;
 	int successes = 0;
 	int step, frame = 0;
+ 
+    int total = argc - 1; 
+    int start = 1;
+  
+    const char* loc = argv[start] ;
 
+    printf( "\n Total: %d, loc %s \n", total, loc );
 	
-    IplImage *image = cvLoadImage( "/tmp/2.png" );
+    IplImage *image = cvLoadImage( loc );
 
-//	  IplImage *image = cvQueryFrame( capture ); // Get next image
 
 	IplImage *gray_image = cvCreateImage( cvGetSize( image ), 8, 1 );
 
@@ -45,16 +50,17 @@ int main(int argc, char * argv[])
 
 	while( successes < n_boards ){
 		// Skp every board_dt frames to allow user to move chessboard
-		if( frame++ % board_dt == 0 ){
+//		if( frame++ % board_dt == 0 ){
 			// Find chessboard corners:
 			int found = cvFindChessboardCorners( image, board_sz, corners,
 				&corner_count, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS );
             
-             printf("Got successes: %d at corner_count: %d\n", successes, corner_count );
+             printf("Got successes: %d \ncorner_count: %d\n found: %d", successes, corner_count, found );
+
 
 			// Get subpixel accuracy on those corners
 			cvCvtColor( image, gray_image, CV_BGR2GRAY );
-			cvFindCornerSubPix( gray_image, corners, corner_count, cvSize( 11, 11 ), 
+ 			cvFindCornerSubPix( gray_image, corners, corner_count, cvSize( 11, 11 ), 
 				cvSize( -1, -1 ), cvTermCriteria( CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 30, 0.1 ));
 
 			// Draw it
@@ -74,7 +80,7 @@ int main(int argc, char * argv[])
 				CV_MAT_ELEM( *point_counts, int, successes, 0 ) = board_n;
 				successes++;
 			}
-		} 
+//		} 
 
 		// Handle pause/unpause and ESC
 		int c = cvWaitKey( 15 );
@@ -86,9 +92,21 @@ int main(int argc, char * argv[])
 		}
 		if( c == 27 )
 			return 0;
+ 
+    if( start < total )
+    {
+        start++; 
+    }
+    else if ( start == total )
+    {
+        start = 1;
+      //  return -1;
+    }
 
-	    image = cvLoadImage( "/tmp/2.png" );
-		//image = cvQueryFrame( capture ); // Get next image
+    loc = argv[start] ;
+
+    printf( "\n Total: %d, start %d, loc %s \n", total, start, loc );
+	    image = cvLoadImage( loc );
 	} // End collection while loop
 
 	// Allocate matrices according to how many chessboards found
