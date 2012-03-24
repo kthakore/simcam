@@ -11,4 +11,4 @@ software_specs.pdf:
 	rubber -d software_specs.tex 
 
 clean:
-	git clean -nf
+	git clean -fd

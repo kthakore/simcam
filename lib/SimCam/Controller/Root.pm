@@ -41,6 +41,10 @@ sub prototype :Path('prototype') :Args(0) {
    my ( $self, $c ) = @_;
 
 }
+sub curve :Path('curve') :Args(0) {
+   my ( $self, $c ) = @_;
+
+}
 
 sub capture_images :Path('capture_images') :Args(0) {
     my( $self, $c ) = @_;

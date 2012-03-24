@@ -40,8 +40,8 @@ int main(int argc, char * argv[])
 
     printf( "\n Total: %d, loc %s \n", total, loc );
 	
-    IplImage *image = cvLoadImage( loc );
-
+//    IplImage *image = cvLoadImage( loc );
+    IplImage *image = cvQueryFrame(capture);
 
 	IplImage *gray_image = cvCreateImage( cvGetSize( image ), 8, 1 );
 
@@ -106,7 +106,8 @@ int main(int argc, char * argv[])
     loc = argv[start] ;
 
     printf( "\n Total: %d, start %d, loc %s \n", total, start, loc );
-	    image = cvLoadImage( loc );
+//	    image = cvLoadImage( loc );
+    image = cvQueryFrame( capture);
 	} // End collection while loop
 
 	// Allocate matrices according to how many chessboards found
