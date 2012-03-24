@@ -38,42 +38,128 @@
         </script>
 
 		<script id="shader-vs" type="x-shader/x-vertex">
-    uniform mat4 u_modelViewProjMatrix;
-    uniform mat4 u_normalMatrix;
-    uniform vec3 lightDir;
- 
-    attribute vec3 vNormal;
-    attribute vec4 vTexCoord;
-    attribute vec4 vPosition;
- 
-    varying float v_Dot;
-    varying vec2 v_texCoord;
- 
-    void main()
-    {
-        gl_Position = u_modelViewProjMatrix * vPosition;
-        v_texCoord = vTexCoord.st;
-        vec4 transNormal = u_normalMatrix * vec4(vNormal, 1);
-        v_Dot = max(dot(transNormal.xyz, lightDir), 0.0);
-    }
+			attribute vec3 aVertexPosition;
+			attribute vec3 aVertexNormal;
+			attribute vec4 aVertexColor;
+			attribute vec2 aVertexTextureCoords;
+
+			uniform mat4 uMVMatrix;
+			uniform mat4 uPMatrix;
+			uniform mat4 uNMatrix;
+			uniform vec3 uLightPosition;
+			uniform vec4 uMaterialDiffuse;
+			uniform bool uWireframe;
+			uniform bool uUseVertexColor;
+			uniform bool uUseTextures;
+
+			varying vec3 vNormal;
+			varying vec3 vLightRay;
+			varying vec3 vEyeVec;
+			varying vec4 vFinalColor;
+			varying vec2 vTextureCoord;
+
+			void main(void) {
+
+			vFinalColor = uMaterialDiffuse;
+			vTextureCoord = vec2(0.0);
+
+			if (uUseVertexColor){
+			vFinalColor = aVertexColor;
+			}
+
+			if (uUseTextures){
+			vTextureCoord = aVertexTextureCoords;
+			}
+
+			vec4 vertex = uMVMatrix * vec4(aVertexPosition, 1.0);
+			vNormal = vec3(uNMatrix * vec4(aVertexNormal, 1.0));
+			vec4 light = vec4(uLightPosition,1.0);
+			vLightRay = vertex.xyz-light.xyz;
+			vEyeVec = -vec3(vertex.xyz);
+
+			vec4 pos = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+
+            float l = length(vEyeVec);
+            vec4 la = vec4(vEyeVec, 1.0) - pos;
+            vec4 c = pos - dot( pos, normalize(-la)) * normalize(-la) ;
+
+            c = length(c) * 0.01 * normalize(c);
+
+            vec4 dir2 = normalize(c-la);
+            dir2 = (dir2 * l );           
+            pos = vec4( dir2.x , dir2.y, dir2.z , pos.w);
+            gl_Position = pos;
+
+			}
 		</script>
 		<script id="shader-fs" type="x-shader/x-fragment">
+			#ifdef GL_ES
+			precision highp float;
+			#endif
 
- 
-    uniform sampler2D sampler2d;
- 
-    varying float v_Dot;
-    varying vec2 v_texCoord;
- 
-    void main()
-    {
-        vec2 texCoord = vec2(v_texCoord.s, 1.0 - v_texCoord.t);
-        vec4 color = texture2D(sampler2d, texCoord);
-        color += vec4(0.1, 0.1, 0.1, 1);
-        gl_FragColor = vec4(color.xyz * v_Dot, color.a);
-    }
+			uniform bool uWireframe;
+			uniform bool uUseTextures;
 
-			</script>
+			uniform vec4 uLightAmbient;
+			uniform vec4 uLightDiffuse;
+			uniform vec4 uMaterialAmbient;
+			uniform vec4 uMaterialDiffuse;
+			uniform bool uOffscreen;
+
+			uniform sampler2D uSampler;
+
+			varying vec3 vNormal;
+			varying vec3 vLightRay;
+			varying vec3 vEyeVec;
+			varying vec4 vFinalColor;
+			varying vec2 vTextureCoord;
+
+			void main(void)
+			{
+			if(uOffscreen){
+			gl_FragColor = uMaterialDiffuse;
+			return;
+			}
+
+			if(uWireframe){
+			gl_FragColor = vFinalColor;
+			}
+			else{
+			//ambient term
+			vec4 Ia = uLightAmbient * uMaterialAmbient;
+
+			//diffuse term
+			vec3 L = normalize(vLightRay);
+			vec3 N = normalize(vNormal);
+			float lambertTerm = max(dot(N,-L),0.33);
+			vec4 Id = uLightDiffuse * uMaterialDiffuse * lambertTerm;
+
+			//specular term
+			vec3 E = normalize(vEyeVec);
+			vec3 R = reflect(L, N);
+			float specular = pow( max(dot(R, E), 0.5), 50.0);
+			vec4 Is = vec4(0.5) * specular;
+
+			//result
+			vec4 finalColor = Ia + Id + Is;
+
+			if (uMaterialDiffuse.a != 1.0) {
+			finalColor.a = uMaterialDiffuse.a;
+			}
+			else {
+			finalColor.a = 1.0;
+			}
+
+			if (uUseTextures){
+			gl_FragColor =  finalColor * texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+			}
+			else{
+			gl_FragColor = finalColor;
+			}
+			}
+
+			}
+		</script>
 		<script id='code-js' type="text/javascript">
             var camera = null;
             var interactor = null;
@@ -126,6 +212,7 @@
                 gl.uniform4fv(Program.uLightAmbient, [0.0, 0.0, 0.0, 1.0]);
                 gl.uniform4fv(Program.uLightDiffuse, [1.0, 1.0, 1.0, 1.0]);
                 gl.uniform1f(Program.uAlpha, 1.0);
+                console.log( gl );
             }
 
             /**
@@ -348,7 +435,7 @@
 		    </tr>
 			<tr>
 				<td>
-				<canvas id = 'canvas-element-id' width='1200' height='500'>
+				<canvas id = 'canvas-element-id' width='640' height='480'>
 					<p>
 						Your browser does not support WebGL :-(
 					</p>

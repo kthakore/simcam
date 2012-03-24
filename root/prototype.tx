@@ -78,16 +78,6 @@
 			vEyeVec = -vec3(vertex.xyz);
 
 			vec4 pos = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-
-            float l = length(vEyeVec);
-            vec4 la = vec4(vEyeVec, 1.0) - pos;
-            vec4 c = pos - dot( pos, normalize(-la)) * normalize(-la) ;
-
-            c = length(c) * 0.01 * normalize(c);
-
-            vec4 dir2 = normalize(c-la);
-            dir2 = (dir2 * l );           
-            pos = vec4( dir2.x , dir2.y, dir2.z , pos.w);
             gl_Position = pos;
 
 			}
