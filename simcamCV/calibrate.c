@@ -12,8 +12,8 @@ int board_h;
 
 int main(int argc, char * argv[])
 {
-	board_w = 5; // Board width in squares
-	board_h = 3; // Board height 
+	board_w = 8; // Board width in squares
+	board_h = 5; // Board height 
 	n_boards = 1; // Number of boards
 	int board_n = board_w * board_h;
 	CvSize board_sz = cvSize( board_w, board_h );
@@ -40,8 +40,8 @@ int main(int argc, char * argv[])
 
     printf( "\n Total: %d, loc %s \n", total, loc );
 	
-//    IplImage *image = cvLoadImage( loc );
-    IplImage *image = cvQueryFrame(capture);
+    IplImage *image = cvLoadImage( loc );
+    //IplImage *image = cvQueryFrame(capture);
 
 	IplImage *gray_image = cvCreateImage( cvGetSize( image ), 8, 1 );
 
@@ -66,6 +66,7 @@ int main(int argc, char * argv[])
 			// Draw it
 			cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
 			cvShowImage( "Calibration", image );
+            cvSaveImage( "/tmp/grid_save.png", image);
 
 			// If we got a good board, add it to our data
 			if( corner_count == board_n ){
@@ -106,8 +107,8 @@ int main(int argc, char * argv[])
     loc = argv[start] ;
 
     printf( "\n Total: %d, start %d, loc %s \n", total, start, loc );
-//	    image = cvLoadImage( loc );
-    image = cvQueryFrame( capture);
+	    image = cvLoadImage( loc );
+    //image = cvQueryFrame( capture);
 	} // End collection while loop
 
 	// Allocate matrices according to how many chessboards found

@@ -2,81 +2,93 @@
 <head>  
 	<title>SimCam: Simulation Medical Vision Systems</title>
 
-
-
-</head>
-<body> 	
-
-<div id="show" />
-
 <script src="<: $c.uri_for('/static') :>/js/jquery.js"></script>
 <script src="<: $c.uri_for('/static') :>/js/Three.js"></script>
 <script src="<: $c.uri_for('/static') :>/js/Detector.js"></script>
 <script src="<: $c.uri_for('/static') :>/js/RequestAnimationFrame.js"></script>
+
+</head>
+<body> 	
+
 <script>
 
-    if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+  if( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-    
-    var camera, scene, renderer,
-    geometry, material, mesh;
+  var SCREEN_WIDTH = window.innerWidth;
+  var SCREEN_HEIGHT = window.innerHeight;
+  var FLOOR = 0;
 
-    function start() {
-	init();
-    	animate();
-    }
-    function save_image () {
-		var img_canvas = $('#show').find('canvas');
-		var img = img_canvas[0].toDataURL("image/png");
-        console.log( img_canvas );
-		$('#show').append( '<img src="'+img+'"/>' );
-	}
-    function init() {
+  var container, camera, scene, webglRenderer, zmesh, geometry;
+  var mouseX = 0, mouseY = 0;
 
-        scene = new THREE.Scene();
+  var windowHalfX = window.innerWidth / 2;
+  var windowHalfY = window.innerHeight / 2;
 
-        camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 300;
-        scene.add( camera );
+ document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
-        geometry = new THREE.SphereGeometry( 20, 10, 10 );
-        material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+init();
+animate();
 
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
+function init() {
+  container = document.createElement( 'div' );
+  document.body.appendChild( container );
+            
+  // camera
+  camera = new THREE.PerspectiveCamera( 75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
+  camera.position.z = 20;
+  camera.position.y = 2;
+            
+  // scene
+  scene = new THREE.Scene();
 
-        renderer = new THREE.CanvasRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
+  // lights
+  var ambient = new THREE.AmbientLight( 0xffffff );
+  scene.add( ambient );
+            
+  // more lights
+  var directionalLight = new THREE.DirectionalLight( 0xffeedd );
+  directionalLight.position.set( 0, -70, 100 ).normalize();
+  scene.add( directionalLight );
 
-	$('#show').append( renderer.domElement );
+// renderer
+webglRenderer = new THREE.WebGLRenderer();
+webglRenderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+webglRenderer.domElement.style.position = "relative";
+container.appendChild( webglRenderer.domElement );
 
-    }
+var loader = new THREE.JSONLoader(),
+callbackModel   = function( geometry ) { createScene( geometry,  90, FLOOR, -50, 105 ) };
+loader.load( { model: "static/js/GRID.js", callback: callbackModel } ); 
 
 
-    function animate() {
+}
+function createScene( geometry, x, y, z, b ) {
+  zmesh = new THREE.Mesh( geometry, new THREE.MeshFaceMaterial() );
+  zmesh.position.set( 0, 16, 0 );
+  zmesh.scale.set( 1, 1, 1 );
+  scene.add( zmesh );
+}
 
-        // Include examples/js/RequestAnimationFrame.js for cross-browser compatibility.
-        requestAnimationFrame( animate );
-        render();
+function onDocumentMouseMove(event) {
+  mouseX = ( event.clientX - windowHalfX );
+  mouseY = ( event.clientY - windowHalfY );
+}
 
-    }
+function animate() {
+  requestAnimationFrame( animate );
+  render();
+}
 
-    function render() {
-
-        mesh.translateX(  1 );
-        mesh.rotation.y += 0.02;
-
-        renderer.render( scene, camera );
-
-    }
-
-    start();
+function render() {
+  zmesh.rotation.set(-mouseY/500 + 1, -mouseX/200, 0);
+  webglRenderer.render( scene, camera );
+}
 </script>
 
-<div style="position:fixed; top:5px; left:5px;">
-<input type="button" value="Save Image" id="save_image" onclick="save_image();" />
-</div>
+
 
 </body>
 
 </html>
+
+
