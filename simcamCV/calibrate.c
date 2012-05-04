@@ -12,9 +12,20 @@ int board_h;
 
 int main(int argc, char * argv[])
 {
+	int corner_count;
+	int successes = 0;
+	int step, frame = 0;
+ 
+    int total = argc - 1; 
+    int start = 1;
+  
+    const char* loc = argv[start] ;
+
+    printf( "\n Total: %d, loc %s \n", total, loc );
+	
 	board_w = 8; // Board width in squares
 	board_h = 5; // Board height 
-	n_boards = 1; // Number of boards
+	n_boards = total; // Number of boards
 	int board_n = board_w * board_h;
 	CvSize board_sz = cvSize( board_w, board_h );
 	CvCapture* capture = cvCreateCameraCapture( 0 );
@@ -29,17 +40,7 @@ int main(int argc, char * argv[])
 	CvMat* distortion_coeffs	= cvCreateMat( 5, 1, CV_32FC1 );
 
 	CvPoint2D32f* corners = new CvPoint2D32f[ board_n ];
-	int corner_count;
-	int successes = 0;
-	int step, frame = 0;
- 
-    int total = argc - 1; 
-    int start = 1;
-  
-    const char* loc = argv[start] ;
 
-    printf( "\n Total: %d, loc %s \n", total, loc );
-	
     IplImage *image = cvLoadImage( loc );
     //IplImage *image = cvQueryFrame(capture);
 
@@ -48,7 +49,7 @@ int main(int argc, char * argv[])
 	// Capture Corner views loop until we've got n_boards
 	// succesful captures (all corners on the board are found)
 
-	while( successes < n_boards ){
+	while( start < total ){
 		// Skp every board_dt frames to allow user to move chessboard
 //		if( frame++ % board_dt == 0 ){
 			// Find chessboard corners:
@@ -146,7 +147,7 @@ int main(int argc, char * argv[])
 	// Save the intrinsics and distortions
 	cvSave( "Intrinsics.xml", intrinsic_matrix );
 	cvSave( "Distortion.xml", distortion_coeffs );
-	// Example of loading these matrices back in
+/*	// Example of loading these matrices back in
 	CvMat *intrinsic = (CvMat*)cvLoad( "Intrinsics.xml" );
 	CvMat *distortion = (CvMat*)cvLoad( "Distortion.xml" );
 
@@ -177,6 +178,7 @@ int main(int argc, char * argv[])
 			break;
 		image = cvQueryFrame( capture );
 	}
+*/
 
 	return 0;
 }
