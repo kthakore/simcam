@@ -214,7 +214,17 @@
                 Scene.loadObject('static/voxdata/models/texCube.json', 'cube', {
                     position : [1, 2, 7],
                     scale : [2, 2, 1],
+                    rotation : [0,0,0],
                     ambient : [0.4, 0.4, 0.4, 1.0]
+                }, function(){
+                    $('.loc').each( function( i, l ) { 
+                                          var p = Scene.getObject('cube').position; 
+                                          $(l).val( p[i] ); 
+                                                      } );
+                    $('.rot').each( function( i, l ) { 
+                                          var p = Scene.getObject('cube').rotation; 
+                                          $(l).val( p[i] ); 
+                                                      } );
                 });
             }
 
@@ -335,6 +345,9 @@
                         transforms.push();
                         if(object.alias != 'floor') {
                             mat4.translate(transforms.mvMatrix, object.position);
+                            mat4.rotateX(transforms.mvMatrix, object.rotation[0]);
+                            mat4.rotateY( transforms.mvMatrix, object.rotation[1]); 
+                            mat4.rotateZ( transforms.mvMatrix, object.rotation[2]);
                             mat4.scale(transforms.mvMatrix, object.scale);
                         }
                         transforms.setMatrixUniforms();
@@ -399,6 +412,8 @@
                         gl.bindBuffer(gl.ARRAY_BUFFER, null);
                         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
                     }
+
+
                 } catch(err) {
                     alert(err);
                     console.error(err.description);
@@ -414,15 +429,14 @@
                 app.configureGLHook = configure;
                 app.loadSceneHook = load;
                 app.drawSceneHook = render;
+               
                 app.run();
+
             }
 		</script>
 	</head>
 	<body onload='runVoxApp()'>
 		<table>
-			<tr>
-				<td></td>
-		    </tr>
 			<tr>
 				<td>
 				<canvas id = 'canvas-element-id' width='640' height='480'>
@@ -437,14 +451,14 @@
 					<tr>
 						<td>
 						<table id='coloring-table'>
+                            <tr>       
+                                <table>
+                                <tr> <td>Location</td><td>(<input size="3" class="loc" />, <input size="3" class="loc" />, <input size="3" class="loc" />) </td> </tr>
+                                <tr> <td>Rotation</td><td>(<input size="3" class="rot" />, <input size="3" class="rot" />, <input size="3" class="rot" />) </td> </tr>
+
+                                </table>
+                            </tr>
 							<tr>
-								<td>
-								<!--
-                                 <input type="checkbox" id="show-picking-btn" />
-								 <label for="show-picking-btn">Show Picking Image</label> 
-                                 -->
-                                
-                                </td> 
 								<td><a id="capture-img">Get OpenCV Calibration</a><a id="reset-btn" />Reset Scene</a></td>
 							</tr>
 						</table></td>
@@ -482,7 +496,6 @@
                         //camera.setAzimuth(-30);
                         showPickingImage = false;
                     });
-
 				</script>
 	</body>
 </html>
