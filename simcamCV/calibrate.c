@@ -67,7 +67,8 @@ int main(int argc, char * argv[])
 			// Draw it
 			cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
 			cvShowImage( "Calibration", image );
-            cvSaveImage( "/tmp/grid_save.png", image);
+            if( found )
+            {            cvSaveImage( "/tmp/grid_save.png", image);   }
 
 			// If we got a good board, add it to our data
 			if( corner_count == board_n ){
@@ -145,8 +146,8 @@ int main(int argc, char * argv[])
 		intrinsic_matrix, distortion_coeffs, NULL, NULL, CV_CALIB_FIX_ASPECT_RATIO ); 
 
 	// Save the intrinsics and distortions
-	cvSave( "Intrinsics.xml", intrinsic_matrix );
-	cvSave( "Distortion.xml", distortion_coeffs );
+	cvSave( "/tmp/Intrinsics.xml", intrinsic_matrix );
+	cvSave( "/tmp/Distortion.xml", distortion_coeffs );
 /*	// Example of loading these matrices back in
 	CvMat *intrinsic = (CvMat*)cvLoad( "Intrinsics.xml" );
 	CvMat *distortion = (CvMat*)cvLoad( "Distortion.xml" );
@@ -180,5 +181,5 @@ int main(int argc, char * argv[])
 	}
 */
 
-	return 0;
+	return 1;
 }

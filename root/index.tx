@@ -449,7 +449,7 @@
                                 </table>
                             </tr>
 							<tr>
-								<td><a id="capture-img">Get OpenCV Calibration</a><a id="reset-btn" />Reset Scene</a></td>
+								<td><a id="capture-img">Check for Grid</a><a id="reset-btn">Reset Scene</a><a id="get-calib">Get Calibration</a></td>
 							</tr>
 						</table>
                       </td>
@@ -472,34 +472,60 @@
             </tr>
 </table>
 				<script>
-                    $('#show-picking-btn, #reset-btn, #capture-img').button();
+                    $('#show-picking-btn, #reset-btn, #capture-img, #get-calib').button();
 
                     $('#show-picking-btn').click(function() {
                         showPickingImage = !showPickingImage
 
                     });
 
-                    $('#capture-img').click(function() {
-                        var d = $('<div> <h2>opencv-matrix Distortion:</h2> Rows: 5 <br /> Column: 1 <br />  Datatype: floating <br /><p>2.00206518e+00 -6.55206251e+00 -1.52728306e-02 -7.10152611e-02 -7.50117065e+02 </p> </div>');
-                        var i = $('<div> <h2>opencv-matrix Intrinsics:</h2> Rows: 3 <br /> Column: 3 <br />  Datatype: floating <br /><p>2.66602222e+03 0. 2.67435699e+02 0. 2.66602222e+03 1.83097565e+02 0. 0. 1.</p> </div>');
- 
-                       // $('body').append(  d );
+                    $('#get-calib').click( function() {
+                     $.ajax({
+                                type: 'GET',
+                                url: '<: $c.uri_for('/calibrate'); :>',
+                                dataType : "json",
+                                success : function(data) {
+                                          console.log(data);
+                             var d = $('<div> <h2>opencv-matrix Distortion:</h2> Rows: 5 <br /> Column: 1 <br />  Datatype: floating <br /><p class="data"> </p> </div>');
+                             var i = $('<div> <h2>opencv-matrix Intrinsics:</h2> Rows: 3 <br /> Column: 3 <br />  Datatype: floating <br /><p class="data"> </p> </div>');
+                             $(data.distortion).each( function(i, e) {
+                                              d.find('.data').append( e+ ' ' );
+                                        });                    
 
-                        //$('body').append(  i);
-                        //d.dialog();
-                       // i.dialog();
-                    //Current data ready  
-//                    var current_canvas_render = document.getElementById("canvas-element-id").toDataURL();
+                            $(data.intrinsics).each( function(o, e ) {
+                                if( !(o % 3) ){ i.find('.data').append('<br />'); }
+
+                                i.find('.data').append(e+' ');
+                            });
             
+                             $('body').append(  d );
+
+                            $('body').append(  i);
+                            d.dialog();
+                            i.dialog();
+                            
+                                }, error : function(r,res, e) { alert( r.responseText );}
+                            });
+        
+
+                    });
+
+                    $('#capture-img').click(function() {
+           
                     var a =  $('#images').find('tbody').append( $('<tr><td></td><td><img width="300px" src="'+current_canvas_render+'" /><td><td></td></tr>')  );
-                    console.log( a );
                             $.ajax({
                                 type: 'POST',
                                 url: '<: $c.uri_for('/capture_images'); :>',
                                 data : { "uri" : current_canvas_render},
                                 dataType : "json",
                                 success : function(data) {
-                                    console.log(data);
+                                    var tr = $('#images').find('td');
+                                   if( data.found) 
+                                    {
+                                      var td =  tr[ tr.length - 1 ];
+                                        $(td).append('<img src="'+data.found+'" width="300px" />');
+                                    }
+                            
                                 }
                             });
                           
