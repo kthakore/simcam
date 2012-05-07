@@ -66,6 +66,8 @@ sub capture_images :Path('capture_images') :Args(0) {
  
         my $reply = { mssg => "Made '.$file_loc.'", images => $c->session->{'images'} };
 
+        
+
         $c->response->body( encode_json( $reply ) );
 
     }
