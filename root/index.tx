@@ -512,7 +512,7 @@
 
                     $('#capture-img').click(function() {
            
-                    var a =  $('#images').find('tbody').append( $('<tr><td></td><td><img width="300px" src="'+current_canvas_render+'" /><td><td></td></tr>')  );
+                    var a =  $('#images').find('tbody').append( $('<tr><td></td><td><td><td></td></tr>')  );
                             $.ajax({
                                 type: 'POST',
                                 url: '<: $c.uri_for('/capture_images'); :>',
@@ -522,8 +522,14 @@
                                     var tr = $('#images').find('td');
                                    if( data.found) 
                                     {
+                                      var tds = tr[ tr.length - 2 ];
+                                        $(tds).append('<img width="300px" src="'+current_canvas_render+'" />');
                                       var td =  tr[ tr.length - 1 ];
                                         $(td).append('<img src="'+data.found+'" width="300px" />');
+                                    }
+                                    else
+                                    {
+                                        alert('OpenCV couldnt find checkboard pattern');
                                     }
                             
                                 }
