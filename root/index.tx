@@ -12,6 +12,10 @@
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/jquery.js'></script>
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/jquery-ui.js'></script>
 		<title>SimCam: Prototype</title>
+
+        <style type="text/css" >
+        .wrap td { border: 1px solid black; }
+        </style>
         
         <!-- MATH Libraries //-->
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/math/glMatrix-0.9.5.min.js'></script>
@@ -426,6 +430,24 @@
 		</script>
 	</head>
 	<body onload='runVoxApp()'>
+                <div id="calib" style="float: right">
+                    <div id="Distortion">
+                        <h1>Current Distortion Parameters</h1>
+                        <table class="wrap">
+                          <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                     <div id="Intrinsics">
+                        <h1>Current Intrinsics Parameters</h1>
+                        <table class="wrap" >
+                          <tr><td></td><td></td><td></td></tr>
+                          <tr><td></td><td></td><td></td></tr>
+                          <tr><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                    
+                </div>
+
 		<table>
 			<tr>
 				<td>
@@ -485,25 +507,12 @@
                                 url: '<: $c.uri_for('/calibrate'); :>',
                                 dataType : "json",
                                 success : function(data) {
-                                          console.log(data);
-                             var d = $('<div> <h2>opencv-matrix Distortion:</h2> Rows: 5 <br /> Column: 1 <br />  Datatype: floating <br /><p class="data"> </p> </div>');
-                             var i = $('<div> <h2>opencv-matrix Intrinsics:</h2> Rows: 3 <br /> Column: 3 <br />  Datatype: floating <br /><p class="data"> </p> </div>');
-                             $(data.distortion).each( function(i, e) {
-                                              d.find('.data').append( e+ ' ' );
-                                        });                    
-
-                            $(data.intrinsics).each( function(o, e ) {
-                                if( !(o % 3) ){ i.find('.data').append('<br />'); }
-
-                                i.find('.data').append(e+' ');
-                            });
-            
-                             $('body').append(  d );
-
-                            $('body').append(  i);
-                            d.dialog();
-                            i.dialog();
-                            
+                                $('#Distortion').find('td').each( function( i, e ) {
+                                           $(e).html( data.distortion[i] );
+                                    });
+                                 $('#Intrinsics').find('td').each( function( i, e ) {
+                                           $(e).html( data.intrinsics[i] );
+                                    });                          
                                 }, error : function(r,res, e) { alert( r.responseText );}
                             });
         
@@ -512,13 +521,13 @@
 
                     $('#capture-img').click(function() {
            
-                    var a =  $('#images').find('tbody').append( $('<tr><td></td><td><td><td></td></tr>')  );
                             $.ajax({
                                 type: 'POST',
                                 url: '<: $c.uri_for('/capture_images'); :>',
                                 data : { "uri" : current_canvas_render},
                                 dataType : "json",
                                 success : function(data) {
+                                var a =  $('#images').find('tbody').append( $('<tr><td></td><td><td><td></td></tr>')  );
                                     var tr = $('#images').find('td');
                                    if( data.found) 
                                     {
