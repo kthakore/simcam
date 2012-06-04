@@ -1,10 +1,4 @@
-MYMETA.json
-MYMETA.yml
-Makefile.old
-Makefile
-blib/
-pm_to_blib
-t/view_HTML.t
-*.zargo~ 
-*.swp
-
+*.xml
+calibrate
+check
+*_found.png
