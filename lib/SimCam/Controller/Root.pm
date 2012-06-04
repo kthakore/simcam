@@ -35,6 +35,12 @@ sub index :Path :Args(0) {
     my ( $self, $c ) = @_;
 }
 
+sub create_camera :Path('create_camera') :Args(0) {
+    my ( $self, $c ) = @_;
+
+
+}
+
 =head2 prototype
 
 
@@ -120,9 +126,11 @@ sub capture_images :Path('capture_images') :Args(0) {
      
         if( $found )
         {
-            system 'mv', '/tmp/found.png', 'root/static/images/'.$file_name.'_found.png';
+          
+            my $base64 = 'data:image/png;base64,';
+             open(my $FILE, '/tmp/found.png') or die "$!";while (read($FILE, my $buf, 60*57)) { $base64 .= encode_base64($buf);}
 
-            $reply->{found} = 'static/images/'.$file_name.'_found.png';
+            $reply->{found} = $base64;
             push @{$c->session->{'checked_images'}}, $file_loc; 
 
             $reply->{total_found} = $c->session->{'checked_images'};
