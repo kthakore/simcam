@@ -1,0 +1,88 @@
+<html lang="en">
+    <head> 
+        <meta charset="utf-8">
+          <title>SimCam</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="SimCam">
+        <meta name="author" content="Kartik Thakore">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+
+    </head>
+
+  <body>
+    
+    <div class="navbar navbar-fixed-top center">
+        <div class="navbar-inner" >
+            <div class="container-fluid" >   
+                <a class="brand" href="#">SIMCAM</a>
+
+                <ul class="nav pull-right">
+                  <li><a href="#camera">CAMERA</a></li>
+                  <li><a href="#calibration">CALIBRATION</a></li>
+                  <li><a href="#results">RESULTS</a></li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+
+    <div class="container-fluid">
+<header class="jumbotron subhead" id="overview">
+  <h1>SimCam</h1>
+  <p class="lead">Simulate and learn camera calibration.</p>
+</header> 
+       <div class="row-fluid" >
+            <div class="span10 well" >
+				<canvas id="canvas-element-id" width="640" height="480">
+					<p>
+						Your browser does not support WebGL :-(
+					</p>
+				</canvas>
+             </div>
+            <div class="span2  well"> </div>
+       </div>
+    </div>
+
+    <!-- Templates -->
+        <script type="text/template" id="main-template">
+        
+        </script>
+   
+    <!-- Javascript -->
+        <script type="text/javascript" src="js/jquery.min.js">     </script>
+        <script type="text/javascript" src="js/underscore-min.js"> </script>
+        <script type="text/javascript" src="js/backbone-min.js">   </script>
+        <script type="text/javascript" src="js/bootstrap.min.js">  </script>
+
+    <!-- Application -->
+        <script type="text/javascript">
+                var app_router = Backbone.Router.extend({
+                    routes: {
+                        "camera" :      "camera",
+                        "calibration" : "calibration",
+                        "results" :     "results"
+                    },
+                    camera : function() {  },
+                    calibration : function() { },
+                    results : function() { } 
+
+                });
+               var router = new app_router();
+            Backbone.history.start();
+        </script>
+
+    <!-- Javascript -->
+        <script type="text/javascript"> 
+            $( function()
+                {
+
+                }
+             );
+        </script>
+  </body>
+</html>
