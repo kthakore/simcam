@@ -31,33 +31,44 @@
         </div>
     </div> 
 
-    <div class="container-fluid">
-<header class="jumbotron subhead" id="overview">
-  <h1>SimCam</h1>
-  <p class="lead">Simulate and learn camera calibration.</p>
-</header> 
-       <div class="row-fluid" >
-            <div class="span10 well" >
-				<canvas id="canvas-element-id" width="640" height="480">
+    <div class="container" id="main_container">
+    <header class="jumbotron subhead" id="overview">
+      <h1>SimCam</h1>
+
+      <p class="lead">Camera calibration and simulation application.</p>
+
+    </header> 
+       <div class="row" >
+            <div class="span10" id="content" >
+        <canvas id="canvas-element-id" width="640" height="480" class="well">
 					<p>
 						Your browser does not support WebGL :-(
 					</p>
-				</canvas>
+		</canvas>
+
              </div>
-            <div class="span2  well"> </div>
+            <div class="span2" id="sidebar" > 
+                <h2 class="" >Sidebar</h2>
+            <ul class="well sidemenu nav nav-pills nav-stacked">
+                <li><a href="#" id="check_grid">Check</a> </li>
+                <li><a href="#" id="get_calib">Get Calibration</a> </li>
+                <li><a href="#" id="reset">Reset</a> </li>
+            </ul>
        </div>
     </div>
 
     <!-- Templates -->
-        <script type="text/template" id="main-template">
-        
+        <script type="text/template" id="canvas-template">
         </script>
    
     <!-- Javascript -->
-        <script type="text/javascript" src="js/jquery.min.js">     </script>
-        <script type="text/javascript" src="js/underscore-min.js"> </script>
-        <script type="text/javascript" src="js/backbone-min.js">   </script>
-        <script type="text/javascript" src="js/bootstrap.min.js">  </script>
+        <script type="text/javascript" src="js/jquery.min.js">        </script>
+        <script type="text/javascript" src="js/underscore-min.js">    </script>
+        <script type="text/javascript" src="js/backbone-min.js">      </script>
+        <script type="text/javascript" src="js/bootstrap.min.js">     </script>
+        <script type="text/javascript" src="js/highcharts.js">        </script>
+        <script type="text/javascript" src="js/modules/exporting.js"> </script>
+
 
     <!-- Application -->
         <script type="text/javascript">
@@ -67,20 +78,48 @@
                         "calibration" : "calibration",
                         "results" :     "results"
                     },
-                    camera : function() {  },
-                    calibration : function() { },
-                    results : function() { } 
+                    initialize: function(o) {
+                        this.app = o.app;
+                    },
+                    camera : function() {  
+                        
+                    },
+                    calibration : function() { 
+                    },
+                    results : function() { 
+                    } 
 
                 });
-               var router = new app_router();
-            Backbone.history.start();
+               var simcam = Backbone.View.extend({ 
+                        el: $('#main_container'),
+                        initialize: function() {
+                            
+                        },
+                        events : {
+                        'click #get_calib' : 'get_calib',
+                        'click #check_grid' : 'check',
+                        'click #reset' : 'reset'
+    
+                        },
+                        get_calib : function() { 
+                            console.log('calib');
+                        },
+                        check : function() {
+
+                        },
+                        reset : function () {
+                        }
+                        
+                    });
         </script>
 
     <!-- Javascript -->
         <script type="text/javascript"> 
+            var app;
             $( function()
                 {
-
+                    app = new simcam();
+                  
                 }
              );
         </script>

@@ -1,22 +1,123 @@
-<!DOCTYPE html>
 <html lang="en">
-	<head>
-		
-		<head>
-		<meta charset="utf-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-		<meta name="description" content="SimCam Prototype 1.0" />
-		<meta name="author" content="Kartik Thakore" />
-		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
-        <link href='<: $c.uri_for('/static') :>/css/smoothness/jquery-ui-1.8.16.custom.css' type='text/css' rel='stylesheet' />
-		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/jquery.js'></script>
-		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/jquery-ui.js'></script>
-		<title>SimCam: Prototype</title>
+    <head> 
+        <meta charset="utf-8">
+          <title>SimCam</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="SimCam">
+        <meta name="author" content="Kartik Thakore">
+        <link href="<: $c.uri_for('/static') :>/css/bootstrap.min.css" rel="stylesheet">
+        <link href="<: $c.uri_for('/static') :>/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
 
-        <style type="text/css" >
-        .wrap td { border: 1px solid black; }
-        </style>
-        
+    </head>
+
+  <body>
+    
+    <div class="navbar navbar-fixed-top center">
+        <div class="navbar-inner" >
+            <div class="container-fluid" >   
+                <a class="brand" href="#">SIMCAM</a>
+
+                <ul class="nav pull-right">
+                  <li><a href="#camera">CAMERA</a></li>
+                  <li><a href="#calibration">CALIBRATION</a></li>
+                  <li><a href="#results">RESULTS</a></li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+
+    <div class="container" id="main_container">
+    <header class="jumbotron subhead" id="overview">
+      <h1>SimCam</h1>
+
+      <p class="lead">Camera calibration and simulation application.</p>
+
+    </header> 
+       <div class="row" >
+            <div class="span7" id="content" >
+        <canvas id="canvas-element-id" width="640" height="480" class="well">
+					<p>
+						Your browser does not support WebGL :-(
+					</p>
+		</canvas>
+
+             </div>
+            <div class="span2" id="sidebar" > 
+                <h2 class="" >Sidebar</h2>
+            <ul class="well sidemenu nav nav-pills nav-stacked">
+                <li><a href="#" id="check_grid">Check</a> </li>
+                <li><a href="#" id="get_calib">Get Calibration</a> </li>
+                <li><a href="#" id="reset">Reset</a> </li>
+            </ul>
+                
+
+       </div>
+       <div class="row">
+            <div class="span10">
+              <h2>Calibration Graph</h2>
+              <div id="g_container" style="min-width: 400px; height: auto; margin: 0 auto"> 
+                <p>Need more calibration points</p>
+              </div>
+            </div>
+       </div>
+       <div class="row">
+            <div class="span8" >
+            <h2>Current Calibration</h2>
+                <div id="calib" >
+                    <div id="Distortion">
+                        <h4>Current Distortion Parameters</h4>
+                        <table class="table table-striped table-bordered table-condensed">
+                          <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                     <div id="Intrinsics">
+                        <h4>Current Intrinsics Parameters</h4>
+                        <table class="table table-striped table-bordered table-condensed" >
+                          <tr><td></td><td></td><td></td></tr>
+                          <tr><td></td><td></td><td></td></tr>
+                          <tr><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                    
+                </div>
+
+            </div>
+            <div class="span4" >
+             <h2>Checked Images</h2>
+               <table class="table table-striped table-bordered table-condensed" id="images">
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Grid Found Image</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
+ 
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Templates -->
+        <script type="text/template" id="canvas-template">
+        </script>
+   
+    <!-- Javascript -->
+        <script type="text/javascript" src="<: $c.uri_for('/static') :>/js/jquery.min.js">        </script>
+        <script type="text/javascript" src="<: $c.uri_for('/static') :>/js/underscore-min.js">    </script>
+        <script type="text/javascript" src="<: $c.uri_for('/static') :>/js/backbone-min.js">      </script>
+        <script type="text/javascript" src="<: $c.uri_for('/static') :>/js/bootstrap.min.js">     </script>
+        <script type="text/javascript" src="<: $c.uri_for('/static') :>/js/highcharts.js">        </script>
+        <script type="text/javascript" src="<: $c.uri_for('/static') :>/js/modules/exporting.js"> </script>
+
+      
         <!-- MATH Libraries //-->
 		<script type='text/javascript' src='<: $c.uri_for('/static') :>/js/math/glMatrix-0.9.5.min.js'></script>
 		<!-- WEBGL Libraries //-->
@@ -428,99 +529,96 @@
 
             }
 		</script>
-	</head>
-	<body onload='runVoxApp()'>
-                <div id="calib" style="float: right">
-                    <div id="Distortion">
-                        <h1>Current Distortion Parameters</h1>
-                        <table class="wrap">
-                          <tr><td></td><td></td><td></td><td></td><td></td></tr>
-                        </table>
-                    </div>
-                     <div id="Intrinsics">
-                        <h1>Current Intrinsics Parameters</h1>
-                        <table class="wrap" >
-                          <tr><td></td><td></td><td></td></tr>
-                          <tr><td></td><td></td><td></td></tr>
-                          <tr><td></td><td></td><td></td></tr>
-                        </table>
-                    </div>
-                    
-                </div>
 
-		<table>
-			<tr>
-				<td>
-				<canvas id="canvas-element-id" width="640" height="480">
-					<p>
-						Your browser does not support WebGL :-(
-					</p>
-				</canvas></td>
-			</tr>
-			<tr>
-				<td>
-				<table style='padding=0px'>
-					<tr>
-						<td>
-						<table id='coloring-table'>
-                            <tr>       
-                                <table>
-                                <tr> <td>Location</td><td>(<input size="3" class="loc" />, <input size="3" class="loc" />, <input size="3" class="loc" />) </td> </tr>
-                                <tr> <td>Rotation</td><td>(<input size="3" class="rot" />, <input size="3" class="rot" />, <input size="3" class="rot" />) </td> </tr>
+    <!-- Application -->
+        <script type="text/javascript">
+                var app_router = Backbone.Router.extend({
+                    routes: {
+                        "camera" :      "camera",
+                        "calibration" : "calibration",
+                        "results" :     "results"
+                    },
+                    initialize: function(o) {
+                        this.app = o.app;
+                    },
+                    camera : function() {  
+                        
+                    },
+                    calibration : function() { 
+                    },
+                    results : function() { 
+                    } 
 
-                                </table>
-                            </tr>
-							<tr>
-								<td><a id="capture-img">Check for Grid</a><a id="reset-btn">Reset Scene</a><a id="get-calib">Get Calibration</a></td>
-							</tr>
-						</table>
-                      </td>
-					</tr>
-				</table>
-                </td>
-			</tr>
-            <tr>
-               <table id="images">
-                <thead>
-                <tr>
-                    <td>Image Id</td>
-                    <td>Image</td>
-                    <td>CV_D</td>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-                </table>
-            </tr>
-</table>
-				<script>
-                    $('#show-picking-btn, #reset-btn, #capture-img, #get-calib').button();
+                });
+               var simcam = Backbone.View.extend({ 
+                        el: $('#main_container'),
+                        initialize: function() {
+                            this.router = new app_router({ app : this } );
+                            runVoxApp();
+                            Backbone.history.start();
+                            this.graph ={ 'count' : 0, 
+                                          'series' : [ 
+                                                        {name : 'd1', data: [] },
+                                                        {name : 'd2', data: [] },
+                                                        {name : 'd3', data: [] },
+                                                        {name : 'd4', data: [] },
+                                                        {name : 'd5', data: [] },
+                                                        {name : 'i1', data: [] },
+                                                        {name : 'i2', data: [] },
+                                                        {name : 'i3', data: [] },
+                                                        {name : 'i4', data: [] },
+                                                        {name : 'i5', data: [] },
+                                                        {name : 'i6', data: [] },
+                                                        {name : 'i7', data: [] },
+                                                        {name : 'i8', data: [] },
+                                                        {name : 'i9', data: [] },
 
-                    $('#show-picking-btn').click(function() {
-                        showPickingImage = !showPickingImage
-
-                    });
-
-                    $('#get-calib').click( function() {
-                     $.ajax({
+                                                 
+                                                                  ],
+                                           'min' : [0, 0], 'max' : [0,0] };
+                        },
+                        events : {
+                        'click #get_calib' : 'get_calib',
+                        'click #check_grid' : 'check',
+                        'click #reset' : 'reset'
+    
+                        },
+                        get_calib : function() { 
+                           var that = this; 
+                          $.ajax({
                                 type: 'GET',
                                 url: '<: $c.uri_for('/calibrate'); :>',
                                 dataType : "json",
                                 success : function(data) {
+                                    var offset = 0;
+
                                 $('#Distortion').find('td').each( function( i, e ) {
-                                           $(e).html( data.distortion[i] );
-                                    });
+                                            var dd =  parseFloat(data.distortion[i]);
+                                           $(e).html( dd );
+                                            that.graph.series[offset].data.push( dd * Math.random());
+                                             offset++;
+                                                                           });
+                                    
                                  $('#Intrinsics').find('td').each( function( i, e ) {
-                                           $(e).html( data.intrinsics[i] );
-                                    });                          
+                                        var di =  parseFloat(data.intrinsics[i]);
+                                           $(e).html(di );
+
+                                            $(that.graph.series[offset].data).push( di * Math.random());
+                                             offset++;                                     });
+
+                                         if( that.graph.count++ >= 1 )
+                                        {
+                                            that.render_graphs();
+                                        }
+
                                 }, error : function(r,res, e) { alert( r.responseText );}
                             });
         
 
-                    });
 
-                    $('#capture-img').click(function() {
-           
+                        },
+                        check : function() {
+    
                             $.ajax({
                                 type: 'POST',
                                 url: '<: $c.uri_for('/capture_images'); :>',
@@ -528,12 +626,12 @@
                                 dataType : "json",
                                 success : function(data) {
                                 var a =  $('#images').find('tbody').append( $('<tr><td></td><td><td><td></td></tr>')  );
-                                    var tr = $('#images').find('td');
+                                    var tr = a.find('td');
                                    if( data.found) 
                                     {
-                                      var tds = tr[ tr.length - 2 ];
+                                      var tds = tr[ 0 ];
                                         $(tds).append('<img width="300px" src="'+current_canvas_render+'" />');
-                                      var td =  tr[ tr.length - 1 ];
+                                      var td =  tr[ 1 ];
                                         $(td).append('<img src="'+data.found+'" width="300px" />');
                                     }
                                     else
@@ -543,19 +641,84 @@
                             
                                 }
                             });
-                          
-                    });
-
-                    $('#reset-btn').click(function() {
-
+        
+                        },
+                        reset : function () {
                         //Scene.getObject('cube').position = [1, 2, 7];
 
                         camera.goHome();
                         //camera.setElevation(-40);
                         //camera.setAzimuth(-30);
                         showPickingImage = false;
+
+                        },
+                        render_graphs : function() {
+                            var that = this;
+                        var x_axis = new Array( this.graph.count );
+                        $(x_axis).each( function( i) { x_axis[i]=i; } );
+                    var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'g_container',
+                        type: 'line',
+                        marginRight: 130,
+                        marginBottom: 25
+                    },
+                    title: {
+                        text: 'Calibration Parameters to Grid Placement',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: 'Grid Placements are Shown Below',
+                        x: -20
+                    },
+                    xAxis: {
+                        title: {
+                            text: 'Grid NUmber'
+                        },
+                        categories: x_axis 
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Parameter'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        formatter: function() {
+                                return '<b>'+ this.series.name +'</b><br/>'+
+                                this.x +': '+ this.y +' units';
+                        }
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -10,
+                        y: 100,
+                        borderWidth: 0
+                    },
+                    series: that.graph.series
+                });
+                    
+                        }
+                        
                     });
-				</script>
+        </script>
+
+    <!-- Javascript -->
+        <script type="text/javascript"> 
+            var app;
+            $( function()
+                {
+                    app = new simcam();
+                    
+                }
+             );
+        </script>
 	</body>
 </html>
         
