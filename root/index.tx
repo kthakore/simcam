@@ -601,7 +601,7 @@
                                 $('#Distortion').find('td').each( function( i, e ) {
                                             var dd =  parseFloat(data.distortion[i]);
                                            $(e).html( dd );
-                                            that.graph.series[offset].data.push( dd * Math.random());
+                                            that.graph.series[offset].data.push( dd);
                                              offset++;
                                                                            });
                                     
@@ -609,7 +609,7 @@
                                         var di =  parseFloat(data.intrinsics[i]);
                                            $(e).html(di );
 
-                                            $(that.graph.series[offset].data).push( di * Math.random());
+                                            $(that.graph.series[offset].data).push( di );
                                              offset++;                                     });
 
                                          if( that.graph.count++ >= 1 )
