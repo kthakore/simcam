@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <meta charset="utf-8">
+          <title>SimCam</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="SimCam">
+        <meta name="author" content="Kartik Thakore">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href="css/docs.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+    </style>
+
+    </head> 
+    <body>
+      
+    <div class="navbar navbar-fixed-top center">
+        <div class="navbar-inner" >
+            <div class="container" >   
+                <a class="brand" href="#">simcam</a>
+
+                <ul class="nav pull-right">
+                  <li><a href="#camera">camera</a></li>
+                  <li><a href="#calibration">calibration</a></li>
+                  <li><a href="#results">results</a></li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+    <div class="container" id="main_container">
+        <header class="jumbotron subhead" id="overview">
+            <h1>SimCam</h1>
+            <p class="lead">Simulation for camera calibration.</p>
+        <div class="subnav">
+            <ul class="nav nav-pills">
+              <li><a href="#getting_started">Getting Started</a></li>
+              <li><a href="#environment">Environment</a></li>
+              <li><a href="#calibration">Calibration</a></li>
+              <li><a href="#results">Results</a></li>
+              <li><a href="#review">Review</a></li>
+            </ul>
+          </div>
+        </header>
+        <section id="getting_started">
+        <div class="page-header">
+            <h1>Getting Started <small>Starting with SimCam</small></h1>
+       </div>
+        <div class="row"> 
+            <div class="span2 well">
+                <h2>Selecting a Camera</h2>
+                <p>
+                   SimCam is a simple WebGL environment for learning calibration of cameras. To get started
+                   first create a camera.
+                </p>
+            </div>
+            <div class="span4 well">
+            <form class="form-vertical" id="name">
+              <fieldset>
+                <legend>Camera</legend>
+                <div class="control-group">
+                  <div class="controls">
+                    <p class="help-block">Name the Camera</p>
+
+                    <input type="text" id="cam_name">
+                    <p class="help-block">Set the Azimuth</p>
+
+                    <input type="text" id="cam_azimuth">
+
+                    <p class="help-block">Camera Elevation</p>
+
+                    <input type="text" id="cam_elevation">
+                    <p class="help-block">Camera Focus</p>
+
+                    <input type="text" placeholder="[0.0, 0.0, 0.0]" id="cam_focus">
+                    <p class="help-block">Camera Home</p>
+                    <input type="text" placeholder="[0.0, 0.0, 40]" id="cam_home">
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+            </div>
+            <div class="span4 well">
+            <h2>Camera Preview</h2>
+                <canvas />
+            </div>
+        </div>
+        </section>
+        <section id="environment">
+        <div class="page-header">
+            <h1>Environment <small>Select the environment</small></h1>
+       </div>
+        <div class="row"> 
+            <div class="offset9 span3 well">
+                <h2>Selecting an Environment</h2>
+                <p>
+                  Your camera reacts differently to environmental condition. Consider noise, light, and distortion parameters.  
+                </p>
+                
+            </div>
+        </div>
+        </section>
+        
+
+    </div>
+
+  
+        <!-- Javascript -->
+        <script type="text/javascript" src="js/jquery.min.js">        </script>
+        <script type="text/javascript" src="js/underscore-min.js">    </script>
+        <script type="text/javascript" src="js/backbone-min.js">      </script>
+        <script type="text/javascript" src="js/bootstrap.min.js">     </script>
+        <script type="text/javascript" src="js/highcharts.js">        </script>
+        <script type="text/javascript" src="js/modules/exporting.js"> </script>
+
+
+    </body>
+</html>
