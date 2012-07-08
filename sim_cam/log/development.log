@@ -1,0 +1,20 @@
+[Sat Jul  7 21:34:19 2012] [info] Listening at "http://*:3000".
+[Sat Jul  7 21:34:22 2012] [debug] Your secret passphrase needs to be changed!!!
+[Sat Jul  7 21:34:22 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Sat Jul  7 21:34:22 2012] [debug] Routing to controller "SimCam::Example" and action "welcome".
+[Sat Jul  7 21:34:22 2012] [debug] Rendering template "example/welcome.html.ep".
+[Sat Jul  7 21:34:22 2012] [debug] Rendering template "layouts/default.html.ep".
+[Sat Jul  7 21:34:22 2012] [debug] 200 OK (0.011561s, 86.498/s).
+[Sat Jul  7 21:34:30 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Sat Jul  7 21:34:30 2012] [debug] Routing to controller "SimCam::Example" and action "welcome".
+[Sat Jul  7 21:34:30 2012] [debug] Rendering cached template "example/welcome.html.ep".
+[Sat Jul  7 21:34:30 2012] [debug] Rendering cached template "layouts/default.html.ep".
+[Sat Jul  7 21:34:30 2012] [debug] 200 OK (0.002822s, 354.359/s).
+[Sat Jul  7 21:35:20 2012] [info] Listening at "http://*:3000".
+[Sat Jul  7 21:35:33 2012] [debug] Your secret passphrase needs to be changed!!!
+[Sat Jul  7 21:35:33 2012] [debug] GET /img/grid-18px-masked.png (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Sat Jul  7 21:35:33 2012] [debug] Template "not_found.development.html.ep" not found.
+[Sat Jul  7 21:35:33 2012] [debug] Template "not_found.html.ep" not found.
+[Sat Jul  7 21:35:33 2012] [debug] Rendering inline template.
+[Sat Jul  7 21:35:33 2012] [debug] Rendering inline template.
+[Sat Jul  7 21:35:33 2012] [debug] 404 Not Found (0.027592s, 36.242/s).
