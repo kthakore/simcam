@@ -22,20 +22,15 @@
     <div class="navbar navbar-fixed-top center">
         <div class="navbar-inner" >
             <div class="container" >   
-                <a class="brand" href="#">simcam</a>
-
-                <ul class="nav pull-right">
-                  <li><a href="#camera">camera</a></li>
-                  <li><a href="#calibration">calibration</a></li>
-                  <li><a href="#results">results</a></li>
-                </ul>
+                <a class="brand" href="#">SimCam</a>
             </div>
         </div>
     </div> 
     <div class="container" id="main_container">
         <header class="jumbotron subhead" id="overview">
             <h1>SimCam</h1>
-            <p class="lead">Simulation for camera calibration.</p>
+            <p class="lead">Simulation <a href="#" class="" rel="popover" data-content="popover stuff" data-original-title="Todo">for</a>
+ camera calibration.</p>
         <div class="subnav">
             <ul class="nav nav-pills">
               <li><a href="#getting_started">Getting Started</a></li>
@@ -48,7 +43,7 @@
         </header>
         <section id="getting_started">
         <div class="page-header">
-            <h1>Getting Started <small>Starting with SimCam</small></h1>
+            <h1><a href="#" class="" rel="popover" data-content="stuff" data-original-title="SimCAM">Getting Started</a> <small>Starting with SimCam</small></h1>
        </div>
         <div class="row"> 
             <div class="span2 well">
@@ -79,6 +74,16 @@
                     <input type="text" placeholder="[0.0, 0.0, 0.0]" id="cam_focus">
                     <p class="help-block">Camera Home</p>
                     <input type="text" placeholder="[0.0, 0.0, 40]" id="cam_home">
+                    <p class="help-block">Pixel Pitch (mm) </p>
+                    <input type="text" id="pp" />
+                    <p class="help-block">Sensor Size</p>
+                    <div class="input-prepend input-append">
+                        <span class="add-on">U</span><input class="span2" id="appendedPrependedInput" type="text">
+                    </div>
+                     <div class="input-prepend input-append">
+                        <span class="add-on">V</span><input class="span2" id="appendedPrependedInput" type="text">
+                    </div>
+
                   </div>
                 </div>
               </fieldset>
@@ -104,7 +109,35 @@
             </div>
         </div>
         </section>
-        
+         <section id="Calibration">
+        <div class="page-header">
+            <h1>Calibration <small>Place the checkerboards</small></h1>
+       </div>
+        <div class="row"> 
+            <div class="offset9 span3 well">
+                <h2>Place the Calibration Checkboards</h2>
+                <p>
+                  To calibrate the camera, checkerboards are placed within the view of the camera.  
+                </p>
+                
+            </div>
+        </div>
+        </section>
+        <section id="results">
+        <div class="page-header">
+            <h1>Results <small>Compare and view results from calibration</small></h1>
+       </div>
+        <div class="row"> 
+            <div class="offset9 span3 well">
+                <h2>Selecting an Environment</h2>
+                <p>
+                  Your camera reacts differently to environmental condition. Consider noise, light, and distortion parameters.  
+                </p>
+                
+            </div>
+        </div>
+        </section>
+    
 
     </div>
 
@@ -114,9 +147,18 @@
         <script type="text/javascript" src="js/underscore-min.js">    </script>
         <script type="text/javascript" src="js/backbone-min.js">      </script>
         <script type="text/javascript" src="js/bootstrap.min.js">     </script>
+        <script type="text/javascript" src="js/bootstrap-tab.js">     </script>
+        <script type="text/javascript" src="js/bootstrap-tooltip.js">     </script>
+        <script type="text/javascript" src="js/bootstrap-popover.js">     </script>
+
+
+
         <script type="text/javascript" src="js/highcharts.js">        </script>
         <script type="text/javascript" src="js/modules/exporting.js"> </script>
 
+        <script type="text/javascript"> 
+            $('[rel="popover"]').popover({ html : "true" });
+        </script>
 
     </body>
 </html>
