@@ -1,0 +1,27 @@
+=pod 
+
+=head1 SimCAM Project Outline
+
+What needs to be done for SimCAM
+
+=head2 Use Cases 
+
+=over
+
+=item Create Camera 
+
+=item Select Noise 
+
+=item Select Distortions
+
+=item Select Scene
+
+=item Select Grid Pattern
+
+=item Calibrate 
+
+=item See Results
+
+=back 
+
+=cut

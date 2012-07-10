@@ -33,7 +33,7 @@
     main()
     {
         v_st = a_st; 
-        gl_Position = mvp_matrix * a_position;
+        gl_Position = mvp_matrix * position;
     }
     </script>
 
@@ -55,7 +55,7 @@
         vec2 texcoord = mod(floor(v_st * float(u_frequency * 2)), 2.0);
         float delta = abs(texcoord.x - texcoord.y);
     
-        gl_FragColor = mix( u_color1, u_color0, delta);   
+        gl_FragColor = vec4( 0,0,1, 0.0 ); //mix( u_color1, u_color0, delta);   
     }
     </script>
 
