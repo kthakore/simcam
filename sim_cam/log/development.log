@@ -18,3 +18,11 @@
 [Sat Jul  7 21:35:33 2012] [debug] Rendering inline template.
 [Sat Jul  7 21:35:33 2012] [debug] Rendering inline template.
 [Sat Jul  7 21:35:33 2012] [debug] 404 Not Found (0.027592s, 36.242/s).
+[Wed Jul 11 12:54:22 2012] [info] Listening at "http://*:3000".
+[Wed Jul 11 12:54:28 2012] [debug] Your secret passphrase needs to be changed!!!
+[Wed Jul 11 12:54:28 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Wed Jul 11 12:54:28 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Wed Jul 11 12:54:28 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Wed Jul 11 12:54:28 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Wed Jul 11 12:54:28 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Wed Jul 11 12:54:43 2012] [debug] Inactivity timeout.

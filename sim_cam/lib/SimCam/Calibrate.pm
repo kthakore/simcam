@@ -1,8 +1,8 @@
-package SimCam::Example;
+package SimCam::Calibrate;
 use Mojo::Base 'Mojolicious::Controller';
 
 # This action will render a template
-sub welcome {
+sub root {
   my $self = shift;
 
   # Render template "example/welcome.html.ep" with message
