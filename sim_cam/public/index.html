@@ -44,7 +44,7 @@
         <div class="page-header">
             <h1><a href="#" class="" rel="popover" data-content="stuff" data-original-title="SimCAM">Getting Started</a> <small>Starting with SimCam</small></h1>
        </div>
-        <div class="row"> 
+        <div class="row" id="camera_form" > 
             <div class="span2 well">
                 <h2>Selecting a Camera</h2>
                 <p>
@@ -53,34 +53,43 @@
                 </p>
             </div>
             <div class="span4 well">
-            <form class="form-vertical" id="name">
+            <form class="form-vertical" >
               <fieldset>
                 <legend>Camera</legend>
                 <div class="control-group">
                   <div class="controls">
                     <p class="help-block">Name the Camera</p>
 
-                    <input type="text" id="cam_name">
-                    <p class="help-block">Set the Azimuth</p>
+                    <input type="text" id="name">
+                    <p class="help-block">Field of View</p>
 
-                    <input type="text" id="cam_azimuth">
+                    <input type="text" id="fov">
 
-                    <p class="help-block">Camera Elevation</p>
+                    <p class="help-block">Aspect Ratio</p>
 
-                    <input type="text" id="cam_elevation">
-                    <p class="help-block">Camera Focus</p>
+                    <input type="text" id="elevation">
+                    <p class="help-block">Camera Near</p>
 
-                    <input type="text" placeholder="[0.0, 0.0, 0.0]" id="cam_focus">
-                    <p class="help-block">Camera Home</p>
-                    <input type="text" placeholder="[0.0, 0.0, 40]" id="cam_home">
-                    <p class="help-block">Pixel Pitch (mm) </p>
-                    <input type="text" id="pp" />
+                    <input type="text" id="near">
+                    <p class="help-block">Camera Far</p>
+                    <input type="text" id="far">
+                    <p class="help-block"> Position </p>
+                    <div class="input-prepend input-append">
+                        <span class="add-on">X</span><input class="span2" id="x" type="text">
+                    </div>
+                    <div class="input-prepend input-append">
+                        <span class="add-on">Y</span><input class="span2" id="y" type="text">
+                    </div>
+                    <div class="input-prepend input-append">
+                        <span class="add-on">Z</span><input class="span2" id="z" type="text">
+                    </div>
+
                     <p class="help-block">Sensor Size</p>
                     <div class="input-prepend input-append">
-                        <span class="add-on">U</span><input class="span2" id="appendedPrependedInput" type="text">
+                        <span class="add-on">U</span><input class="span2" id="u" type="text">
                     </div>
                      <div class="input-prepend input-append">
-                        <span class="add-on">V</span><input class="span2" id="appendedPrependedInput" type="text">
+                        <span class="add-on">V</span><input class="span2" id="v" type="text">
                     </div>
 
                   </div>
@@ -90,7 +99,7 @@
             </div>
             <div class="span4 well">
             <h2>Camera Preview</h2>
-                <canvas />
+                <div id="cam_canvas" />
             </div>
         </div>
         </section>
@@ -149,6 +158,7 @@
         <script type="text/javascript" src="js/libs/bootstrap-tab.js">     </script>
         <script type="text/javascript" src="js/libs/bootstrap-tooltip.js">     </script>
         <script type="text/javascript" src="js/libs/bootstrap-popover.js">     </script>
+        <script type="text/javascript" src="js/libs/Three.js">        </script>
 
 
 
@@ -163,17 +173,30 @@
         var camera_view = Backbone.View.extend({
             initialize: function(options) {
                 var m = Backbone.Model.extend({ }); 
-                that.model = new m(); 
+                this.model = new m(); 
+            },
+            events : {
+                'change input' : 'update',
+            },
+            render: function() {
+               var c = $(this.el).find('#cam_canvas');
+
+            },
+            update : function(e) {
+                var input = $(e.currentTarget);
+                this.model.set( input.attr('id'), input.val() );
+                console.log( this.model ); 
+                this.render();
             }
         });
 
         var view = Backbone.View.extend({
             initialize: function(options) {
-                                
+                var camera_form = new camera_view({ el : $('#camera_form')});
 
             },
             events : {
-            
+              
             }
 
         });
