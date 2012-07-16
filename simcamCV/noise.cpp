@@ -19,6 +19,12 @@ using namespace cv;
 int main( int argc, char** argv )
 {
     const char* imagename = argc > 1 ? argv[1] : "lena.jpg";
+
+    double alpha = argc > 2 ? atof( argv[2] ) : 0.4;
+
+    int type = argc > 3 ? atoi( argv[3] ) : 0;
+
+    const char* outimage = argc > 4 ? argv[4] : "out.jpg";
     // Ptr<T> is safe ref-conting pointer class
 
     // cv::Mat replaces the CvMat and IplImage, but it's easy to convert
@@ -34,22 +40,24 @@ int main( int argc, char** argv )
     // fills the matrix with normally distributed random values;
     // there is also randu() for uniformly distributed random numbers.
     // Scalar replaces CvScalar, Scalar::all() replaces cvScalarAll().
-    randn(noise, Scalar::all(128), Scalar::all(20));
+    if( type > 0 )
+    {
+        randu(noise, Scalar::all(128), Scalar::all(20));
+    }
+    else
+    {
+        randn(noise, Scalar::all(128), Scalar::all(20));
 
-    double alpha = 0.1; double beta; double input;
+    }
+
+     double beta; double input;
     beta = (1.0 - alpha );
 
     Mat dst; 
 
-    addWeighted( img, alpha, noise, beta, 0.0, dst );
+    addWeighted( img, beta, noise, alpha, 0.0, dst );
 
-    // this is counterpart for cvNamedWindow
-    namedWindow("image with grain", CV_WINDOW_AUTOSIZE);
-    // this is to demonstrate that img and iplimg really share the data -
-    // the result of the above processing is stored to img and thus
-        // in iplimg too.
-    imshow("image with grain", dst);
-    waitKey();
+    imwrite( outimage, dst );
 
     return 0;
     // all the memory will automatically be released
