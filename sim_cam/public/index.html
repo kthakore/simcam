@@ -67,7 +67,7 @@
 
                     <p class="help-block">Aspect Ratio</p>
 
-                    <input type="text" id="elevation">
+                    <input type="text" id="ar">
                     <p class="help-block">Camera Near</p>
 
                     <input type="text" id="near">
@@ -75,13 +75,13 @@
                     <input type="text" id="far">
                     <p class="help-block"> Position </p>
                     <div class="input-prepend input-append">
-                        <span class="add-on">X</span><input class="span2" id="x" type="text">
+                        <span class="add-on">X</span><input class="span2" id="p_x" type="text">
                     </div>
                     <div class="input-prepend input-append">
-                        <span class="add-on">Y</span><input class="span2" id="y" type="text">
+                        <span class="add-on">Y</span><input class="span2" id="p_y" type="text">
                     </div>
                     <div class="input-prepend input-append">
-                        <span class="add-on">Z</span><input class="span2" id="z" type="text">
+                        <span class="add-on">Z</span><input class="span2" id="p_z" type="text">
                     </div>
 
                     <p class="help-block">Sensor Size</p>
@@ -173,19 +173,51 @@
         var camera_view = Backbone.View.extend({
             initialize: function(options) {
                 var m = Backbone.Model.extend({ }); 
-                this.model = new m(); 
+                this.model = new m({
+                    u: 400, v: 320, fov: 35, ar: 400/320,
+                    near: .1, far: 10000, p_x: -15, p_y: 10, p_z: 15
+
+                }); 
+
+                $.each( this.model.attributes, function( i, a ) { $('#'+i).val( a ); } );
+                this.render();
             },
             events : {
                 'change input' : 'update',
             },
-            render: function() {
-               var c = $(this.el).find('#cam_canvas');
+            render : function() {
+             
+            var c = $(this.el).find('#cam_canvas');
+            var renderer = new THREE.WebGLRenderer();
+            renderer.setSize( this.model.get('u'), this.model.get('v') );
+            c.html( renderer.domElement );
+            console.log( renderer );
 
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(
+                this.model.get('fov'),         // Field of view
+                this.model.get('ar'),  // Aspect ratio
+                this.model.get('near'),         // Near
+                this.model.get('far')      // Far
+                );
+            camera.position.set( this.model.get('p_x'), this.model.get('p_y'), this.model.get('p_z') );
+            camera.lookAt( scene.position );
+            scene.add( camera );
+            var cube = new THREE.Mesh(
+                    new THREE.CubeGeometry( 5, 5, 5 ),
+                    new THREE.MeshLambertMaterial( { color: 0xFF0000 } )
+                    );
+            scene.add( cube );
+
+            var light = new THREE.PointLight( 0xFFFF00 );
+            light.position.set( 10, 0, 10 );
+            scene.add( light );
+            renderer.render(scene, camera);
             },
             update : function(e) {
                 var input = $(e.currentTarget);
+                console.log( input.attr('id') );
                 this.model.set( input.attr('id'), input.val() );
-                console.log( this.model ); 
                 this.render();
             }
         });
