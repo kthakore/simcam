@@ -26,3 +26,108 @@
 [Wed Jul 11 12:54:28 2012] [debug] Template "calibrate/root.html.ep" not found.
 [Wed Jul 11 12:54:28 2012] [debug] Nothing has been rendered, assuming delayed response.
 [Wed Jul 11 12:54:43 2012] [debug] Inactivity timeout.
+[Sat Jul 14 18:18:56 2012] [info] Listening at "http://*:3000".
+[Sat Jul 14 18:26:17 2012] [debug] Your secret passphrase needs to be changed!!!
+[Sat Jul 14 18:26:17 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Sat Jul 14 18:26:17 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Sat Jul 14 18:26:17 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Sat Jul 14 18:26:17 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Sat Jul 14 18:26:17 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Sat Jul 14 18:26:21 2012] [debug] GET /img/grid-18px-masked.png (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Sat Jul 14 18:26:21 2012] [debug] Template "not_found.development.html.ep" not found.
+[Sat Jul 14 18:26:21 2012] [debug] Template "not_found.html.ep" not found.
+[Sat Jul 14 18:26:21 2012] [debug] Rendering inline template.
+[Sat Jul 14 18:26:21 2012] [debug] Rendering inline template.
+[Sat Jul 14 18:26:21 2012] [debug] 404 Not Found (0.025939s, 38.552/s).
+[Mon Jul 16 06:35:20 2012] [info] Listening at "http://*:3000".
+[Mon Jul 16 06:35:22 2012] [debug] Your secret passphrase needs to be changed!!!
+[Mon Jul 16 06:35:22 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:35:22 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Mon Jul 16 06:35:22 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:35:22 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:35:22 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:35:28 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:35:28 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:35:28 2012] [debug] Template "calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:35:28 2012] [debug] Template "calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:35:28 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:35:40 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:35:40 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Mon Jul 16 06:35:40 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:35:40 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:35:40 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:35:52 2012] [info] Listening at "http://*:3000".
+[Mon Jul 16 06:35:54 2012] [debug] Your secret passphrase needs to be changed!!!
+[Mon Jul 16 06:35:54 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:35:54 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Mon Jul 16 06:35:54 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:35:54 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:35:54 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:36:09 2012] [debug] Inactivity timeout.
+[Mon Jul 16 06:36:12 2012] [info] Listening at "http://*:3000".
+[Mon Jul 16 06:36:15 2012] [debug] Your secret passphrase needs to be changed!!!
+[Mon Jul 16 06:36:15 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:36:15 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Mon Jul 16 06:36:15 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:36:15 2012] [debug] Template "calibrate/root.html.ep" not found.
+[Mon Jul 16 06:36:15 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:36:30 2012] [debug] Inactivity timeout.
+[Mon Jul 16 06:37:11 2012] [info] Listening at "http://*:3000".
+[Mon Jul 16 06:37:12 2012] [debug] Your secret passphrase needs to be changed!!!
+[Mon Jul 16 06:37:12 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:37:12 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Mon Jul 16 06:37:12 2012] [debug] Template "Calibrate/root.html.ep" not found.
+[Mon Jul 16 06:37:12 2012] [debug] Template "Calibrate/root.html.ep" not found.
+[Mon Jul 16 06:37:12 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:37:14 2012] [debug] GET / (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:37:14 2012] [debug] Routing to controller "SimCam::Calibrate" and action "root".
+[Mon Jul 16 06:37:14 2012] [debug] Template "Calibrate/root.html.ep" not found.
+[Mon Jul 16 06:37:14 2012] [debug] Template "Calibrate/root.html.ep" not found.
+[Mon Jul 16 06:37:14 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:37:29 2012] [debug] Inactivity timeout.
+[Mon Jul 16 06:37:37 2012] [debug] GET /api/profile (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:37:37 2012] [debug] Template "not_found.development.html.ep" not found.
+[Mon Jul 16 06:37:37 2012] [debug] Template "not_found.html.ep" not found.
+[Mon Jul 16 06:37:37 2012] [debug] Rendering inline template.
+[Mon Jul 16 06:37:37 2012] [debug] Rendering inline template.
+[Mon Jul 16 06:37:37 2012] [debug] 404 Not Found (0.022566s, 44.314/s).
+[Mon Jul 16 06:37:37 2012] [debug] GET /asd (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:37:37 2012] [debug] Template "not_found.development.html.ep" not found.
+[Mon Jul 16 06:37:37 2012] [debug] Template "not_found.html.ep" not found.
+[Mon Jul 16 06:37:37 2012] [debug] Rendering cached inline template.
+[Mon Jul 16 06:37:37 2012] [debug] Rendering cached inline template.
+[Mon Jul 16 06:37:37 2012] [debug] 404 Not Found (0.012316s, 81.195/s).
+[Mon Jul 16 06:37:43 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:37:43 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:37:43 2012] [debug] Template "Calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:37:43 2012] [debug] Template "Calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:37:43 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:37:58 2012] [debug] Inactivity timeout.
+[Mon Jul 16 06:37:58 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:37:58 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:37:58 2012] [debug] Template "Calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:37:58 2012] [debug] Template "Calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:37:58 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:38:13 2012] [debug] Inactivity timeout.
+[Mon Jul 16 06:38:22 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:38:22 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:38:22 2012] [debug] Template "Calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:38:22 2012] [debug] Template "Calibrate/counter.html.ep" not found.
+[Mon Jul 16 06:38:22 2012] [debug] Nothing has been rendered, assuming delayed response.
+[Mon Jul 16 06:38:25 2012] [info] Listening at "http://*:3000".
+[Mon Jul 16 06:38:27 2012] [debug] Your secret passphrase needs to be changed!!!
+[Mon Jul 16 06:38:27 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:38:27 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:38:27 2012] [debug] 200 OK (0.002800s, 357.143/s).
+[Mon Jul 16 06:38:59 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:38:59 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:38:59 2012] [debug] 200 OK (0.000840s, 1190.476/s).
+[Mon Jul 16 06:39:00 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:39:00 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:39:00 2012] [debug] 200 OK (0.001142s, 875.657/s).
+[Mon Jul 16 06:39:00 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:39:00 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:39:00 2012] [debug] 200 OK (0.000463s, 2159.827/s).
+[Mon Jul 16 06:39:05 2012] [debug] GET /counter (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.47 Safari/536.11).
+[Mon Jul 16 06:39:05 2012] [debug] Routing to controller "SimCam::Calibrate" and action "counter".
+[Mon Jul 16 06:39:05 2012] [debug] 200 OK (0.000786s, 1272.265/s).

@@ -13,6 +13,8 @@ sub startup {
 
   # Normal route to controller
   $r->get('/')->to('calibrate#root');
+  $r->get('/counter')->to('calibrate#counter');
+
   
 }
 

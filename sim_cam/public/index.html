@@ -29,8 +29,7 @@
     <div class="container" id="main_container">
         <header class="jumbotron subhead" id="overview">
             <h1>SimCam</h1>
-            <p class="lead">Simulation <a href="#" class="" rel="popover" data-content="popover stuff" data-original-title="Todo">for</a>
- camera calibration.</p>
+            <p class="lead">Simulation <a href="#" class="" rel="popover" data-content="popover stuff" data-original-title="Todo">for</a> camera calibration.</p>
         <div class="subnav">
             <ul class="nav nav-pills">
               <li><a href="#getting_started">Getting Started</a></li>
@@ -160,6 +159,26 @@
             $('[rel="popover"]').popover({ html : "true" });
         </script>
         <script type="text/javascript">
+
+        var camera_view = Backbone.View.extend({
+            initialize: function(options) {
+                var m = Backbone.Model.extend({ }); 
+                that.model = new m(); 
+            }
+        });
+
+        var view = Backbone.View.extend({
+            initialize: function(options) {
+                                
+
+            },
+            events : {
+            
+            }
+
+        });
+
+        var main_view = new view();
         </script>
 
     </body>

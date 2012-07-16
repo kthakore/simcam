@@ -7,7 +7,15 @@ sub root {
 
   # Render template "example/welcome.html.ep" with message
   $self->render(
-    message => 'Welcome to the Mojolicious real-time web framework!');
+    json => 'Welcome to the Mojolicious real-time web framework!');
 }
+
+sub counter {
+  my $self = shift;
+
+  $self->render( json => $self->session->{counter}++ );
+
+}
+
 
 1;
