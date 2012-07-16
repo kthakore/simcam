@@ -15,6 +15,11 @@ sub startup {
   $r->get('/')->to('calibrate#root');
   $r->get('/counter')->to('calibrate#counter');
 
+  # Noise
+  $r->post('/noise')->to('environ#noise');
+  $r->post('/distort')->to('environ#distort');
+
+
   
 }
 

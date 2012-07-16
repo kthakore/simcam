@@ -191,7 +191,6 @@
             var renderer = new THREE.WebGLRenderer();
             renderer.setSize( this.model.get('u'), this.model.get('v') );
             c.html( renderer.domElement );
-            console.log( renderer );
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(
@@ -216,7 +215,6 @@
             },
             update : function(e) {
                 var input = $(e.currentTarget);
-                console.log( input.attr('id') );
                 this.model.set( input.attr('id'), input.val() );
                 this.render();
             }
