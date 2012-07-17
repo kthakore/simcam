@@ -45,61 +45,100 @@
             <h1><a href="#" class="" rel="popover" data-content="stuff" data-original-title="SimCAM">Getting Started</a> <small>Starting with SimCam</small></h1>
        </div>
         <div class="row" id="camera_form" > 
-            <div class="span2 well">
+            <div class="span3 well">
                 <h2>Selecting a Camera</h2>
                 <p>
                    SimCam is a simple WebGL environment for learning calibration of cameras. To get started
                    first create a camera.
                 </p>
+  
+
+  <form class="form-vertical">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Camera</legend>
+      </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Name</label>
+          <div class="controls">
+            <input type="text" data-camera="name" placeholder="" class="input-xlarge">
+            <p class="help-block">Name the camera to save your work.</p>
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Appended input-->
+          <label class="control-label">Field of View</label>
+          <div class="controls">
+            <div class="input-append">
+              <input class="span2"  data-camera="fov" placeholder="degrees" type="text">
+              <span class="add-on">&deg;</span>
             </div>
-            <div class="span4 well">
-            <form class="form-vertical" >
-              <fieldset>
-                <legend>Camera</legend>
-                <div class="control-group">
-                  <div class="controls">
-                    <p class="help-block">Name the Camera</p>
+            <p class="help-block">Degree of angle for viewing</p>
+          </div>
 
-                    <input type="text" id="name">
-                    <p class="help-block">Field of View</p>
+        </div>
 
-                    <input type="text" id="fov">
+    <div class="control-group">
 
-                    <p class="help-block">Aspect Ratio</p>
-
-                    <input type="text" id="ar">
-                    <p class="help-block">Camera Near</p>
-
-                    <input type="text" id="near">
-                    <p class="help-block">Camera Far</p>
-                    <input type="text" id="far">
-                    <p class="help-block"> Position </p>
-                    <div class="input-prepend input-append">
-                        <span class="add-on">X</span><input class="span2" id="p_x" type="text">
-                    </div>
-                    <div class="input-prepend input-append">
-                        <span class="add-on">Y</span><input class="span2" id="p_y" type="text">
-                    </div>
-                    <div class="input-prepend input-append">
-                        <span class="add-on">Z</span><input class="span2" id="p_z" type="text">
-                    </div>
-
-                    <p class="help-block">Sensor Size</p>
-                    <div class="input-prepend input-append">
-                        <span class="add-on">U</span><input class="span2" id="u" type="text">
-                    </div>
-                     <div class="input-prepend input-append">
-                        <span class="add-on">V</span><input class="span2" id="v" type="text">
-                    </div>
-
-                  </div>
-                </div>
-              </fieldset>
-            </form>
+          <!-- Prepended text-->
+          <label class="control-label">Sensor Size</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on">U</span>
+              <input class="span2" data-camera="u" placeholder="" id="prependedInput" type="text">
             </div>
-            <div class="span4 well">
+            <p class="help-block">Width of final image</p>
+            <div class="input-prepend">
+              <span class="add-on">V</span>
+              <input class="span2"  data-camera="v" placeholder="" id="prependedInput" type="text">
+            </div>
+            <p class="help-block">Height of final image</p>
+          </div>
+
+        </div><div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Aspect Ratio</label>
+          <div class="controls">
+            <input type="text" data-camera="ar" placeholder="placeholder" class="input-xlarge">
+            <p class="help-block">Ratio of the width to height </p>
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Prepended text-->
+          <label class="control-label">Position</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on">X</span>
+              <input class="span2" data-camera="p_x" placeholder="" id="prependedInput" type="text">
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">Y</span>
+              <input class="span2" data-camera="p_y" placeholder="" id="prependedInput" type="text">
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">Z</span>
+              <input class="span2"data-camera="p_z" placeholder="" id="prependedInput" type="text">
+            </div>
+            <p class="help-block">Position of the camera</p>
+          </div>
+
+        </div>
+    </fieldset>
+  </form>
+
+            </div>
+            <div class="span8 well">
             <h2>Camera Preview</h2>
+                <center>
                 <div id="cam_canvas" />
+                </center>
             </div>
         </div>
         </section>
@@ -113,7 +152,41 @@
                 <p>
                   Your camera reacts differently to environmental condition. Consider noise, light, and distortion parameters.  
                 </p>
-                
+
+  <form class="form-vertical">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Environment</legend>
+      </div>
+    <div class="control-group">
+          <label class="control-label">Noise Distribution</label>
+          <div class="controls">
+      <!-- Multiple Radios -->
+      <label class="radio">
+        <input type="radio" value="Uniform" data-environ="noise_uniform" name="noise_type" checked="checked">
+        Uniform
+      </label>
+      <label class="radio">
+        <input type="radio" value="Normal" data-environ="noise_normal" name="noise_type">
+        Normal
+      </label>
+  </div>
+
+        </div>
+
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" data-environ="noise_strength" for="input01">Noise Strength</label>
+          <div class="controls">
+            <input type="text" placeholder="0.01" class="input-xlarge">
+            <p class="help-block">Strength of Noise</p>
+          </div>
+        </div>
+
+    </fieldset>
+  </form>
+        
             </div>
         </div>
         </section>
@@ -179,7 +252,7 @@
 
                 }); 
 
-                $.each( this.model.attributes, function( i, a ) { $('#'+i).val( a ); } );
+                $.each( this.model.attributes, function( i, a ) { $('[data-camera="'+i+'"]').val( a ); } );
                 this.render();
             },
             events : {
@@ -216,7 +289,7 @@
             },
             update : function(e) {
                 var input = $(e.currentTarget);
-                this.model.set( input.attr('id'), input.val() );
+                this.model.set( input.attr('data-camera'), input.val() );
                 this.render();
             }
         });
