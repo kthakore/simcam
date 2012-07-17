@@ -175,7 +175,7 @@
                 var m = Backbone.Model.extend({ }); 
                 this.model = new m({
                     u: 400, v: 320, fov: 35, ar: 400/320,
-                    near: .1, far: 10000, p_x: -15, p_y: 10, p_z: 15
+                    near: .4, far: 10000, p_x: -15, p_y: 10, p_z: 15
 
                 }); 
 
@@ -188,9 +188,10 @@
             render : function() {
              
             var c = $(this.el).find('#cam_canvas');
-            var renderer = new THREE.WebGLRenderer();
-            renderer.setSize( this.model.get('u'), this.model.get('v') );
-            c.html( renderer.domElement );
+            if( this.renderer ) { delete this.renderer; } 
+            this.renderer = new THREE.WebGLRenderer();
+            this.renderer.setSize( this.model.get('u'), this.model.get('v') );
+            c.html( this.renderer.domElement );
 
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(
@@ -211,7 +212,7 @@
             var light = new THREE.PointLight( 0xFFFF00 );
             light.position.set( 10, 0, 10 );
             scene.add( light );
-            renderer.render(scene, camera);
+            this.renderer.render(scene, camera);
             },
             update : function(e) {
                 var input = $(e.currentTarget);
