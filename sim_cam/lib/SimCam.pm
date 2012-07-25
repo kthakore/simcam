@@ -17,6 +17,8 @@ sub startup {
 
   # Noise
   $r->post('/noise')->to('environ#noise');
+  $r->get('/noise/:alpha/:type')->to('environ#noiseid');
+
   $r->post('/distort')->to('environ#distort');
 
 
