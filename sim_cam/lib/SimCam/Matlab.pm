@@ -10,8 +10,9 @@ sub run_matlab {
     my $run = "cd /tmp; $matlab -nodesktop -nosplash -r $script";
     warn $run;
 
-    system( split( ' ', $run ) );
-    
+    my $result = `$run`;
+
+    warn $foo;    
 }
 
 sub run_matlab_script {
