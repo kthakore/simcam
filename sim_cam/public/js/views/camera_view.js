@@ -4,13 +4,13 @@
                 this.render();
             },
             events : {
-                'change input' : 'update',
+                'change input' : 'update', 
             },
             render : function() {
              
             var c = $(this.el).find('#cam_canvas');
             if( this.renderer ) { delete this.renderer; } 
-            this.renderer = new THREE.WebGLRenderer();
+            this.renderer = new THREE.WebGLRenderer({ clearColor: 0xFFFFFF, clearAlpha: 255  });
             this.renderer.setSize( this.model.get('u'), this.model.get('v') );
             c.html( this.renderer.domElement );
 
@@ -36,7 +36,7 @@
             this.renderer.render(scene, camera);
 
             var canvas = c.find('canvas')[0];
-            this.model.set('image', canvas.toDataURL()) ;
+            this.model.set('image', canvas.toDataURL('image/png')) ;
 
             },
             update : function(e) {

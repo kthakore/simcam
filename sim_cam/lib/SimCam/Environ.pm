@@ -57,6 +57,8 @@ sub get_image {
 sub _get_image {
     my $self = shift;
     my $uri = shift;
+    $uri =~ s/(^.+?,)//; 
+
     my $d = decode_base64($uri);
         my $file_name = sha1_hex(time);
         my $file_loc = 'public/job_images/'.$file_name.'_in.png';
@@ -73,13 +75,13 @@ sub _run_noise {
     
     my $image = $params->{image};
     my $alpha = $params->{alpha} || 0.00;
-    my $type = $params->{type};
+    my $type = $params->{noise_type} || 1;
     my $job_id = sha1_hex( localtime. $alpha. $type );
 
     my $out = 'public/job_images/'.$job_id.'_noise.png';
 
     my( $stdout, $stderr, @result) = capture {
-        `simcamCV/noise $image $alpha $type $out`
+        `../simcamCV/noise $image $alpha $type $out`
     };
 
     if( -f $out )
@@ -116,6 +118,7 @@ sub _run_distort {
         '</data></Distortion>
         </opencv_storage>';
 
+
     my $fy = $params->{fy} || 3000;
     my $fx = $params->{fx} || 3000;
     my $cy = $params->{cy} || 300;
@@ -146,8 +149,11 @@ sub _run_distort {
    
     my $out_image = 'public/job_images/'.$job_id.'.png';
 
+    my $run  = "../simcamCV/distort $dist_path $image $out_image $int_path";
+    warn $run;
     my( $stdout, $stderr, @result) = capture {
-        `simcamCV/distort $dist_path $image $out_image`
+        
+        `$run`
     };
 
     if( -f $out_image )

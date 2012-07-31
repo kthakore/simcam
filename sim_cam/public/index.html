@@ -229,18 +229,15 @@
             <div class="span7 well" >
                 <h2>Noise</h2>
                 <div id="noise_image">
-                    <img id="noiseless" src="img/noiseless.png" />
-                    <img id="nosefull" src="img/noisefull.png" />
+                    <img id="noisefull" src="img/blank.png" />
                 </div>
                 <h2>Distortion</h2>
                 <div id="distortion_image">
-                    <img id="distort" src="img/distort.png" />
-                    <img id="distorted" src="img/distroted.png" />
+                    <img id="distorted" src="img/blank.png" />
                 </div>
                 <h2>Combined</h2>
                 <div id="combined_image">
-                    <img id="start" src="img/distort.png" />
-                    <img id="finish" src="img/distroted.png" />
+                    <img id="finish" src="img/blank.png" />
                 </div>
             </div>
  
@@ -323,19 +320,46 @@
                 'change input' : 'update'
             },
             render : function() {
+                var that = this;
+                this.model.url ='/noise';
+                this.model.save({},{
+                success: function(res){
+                    var noise = $(that.el).find('#noisefull');
+                    if( res.get('success')  === 1 )
+                       {
+                       noise.attr('src', res.get('out') );
+                       }
+                }});
+                this.model.url ='/distort';
+                this.model.save({},{
+                success: function(res){
+                    var noise = $(that.el).find('#distorted');
+                    if( res.get('success')  === 1 )
+                       {
+                        console.log( res );
+                       noise.attr('src', res.get('out') );
+                       }
+                }});
 
             },
-            update : function() {
+            update : function(e) {
+                var input = $(e.currentTarget);
+                var dc = input.attr('data-camera');
+                 var de = input.attr('data-environ');
+               
+                if( dc ) {
+                    this.model.set( input.attr('data-camera'), input.val() );
+                } else if (de) {
+                        this.model.set( 'noise_type', input.val() );
+                }
+                this.render();
+
 
             },
             change_camera : function() {
                 this.set_initial();
             },
             set_initial : function () {
-
-                $('#noiseless').attr('src', this.model.get('image') );
-                $('#distort').attr('src', this.model.get('image') );
-                $('#start').attr('src', this.model.get('image') );
 
             }
 
