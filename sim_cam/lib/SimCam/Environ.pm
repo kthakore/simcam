@@ -81,6 +81,8 @@ sub _run_noise {
     my $out = 'public/job_images/'.$job_id.'_noise.png';
 
     my( $stdout, $stderr, @result) = capture {
+        `convert $image foo.jpg`;
+        `convert foo.jpg $image`;
         `../simcamCV/noise $image $alpha $type $out`
     };
 
