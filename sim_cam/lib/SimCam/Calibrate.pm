@@ -1,5 +1,10 @@
 package SimCam::Calibrate;
 use Mojo::Base 'Mojolicious::Controller';
+use MIME::Base64;
+use File::Slurp;
+use JSON;
+use XML::Simple;
+
 
 # This action will render a template
 sub root {
