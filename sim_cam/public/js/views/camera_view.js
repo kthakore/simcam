@@ -1,13 +1,6 @@
-        var camera_view = Backbone.View.extend({
+          var camera_view = Backbone.View.extend({
             initialize: function(options) {
-                var m = Backbone.Model.extend({ }); 
-                this.model = new m({
-                    u: 400, v: 320, fov: 35, ar: 400/320,
-                    near: .4, far: 10000, p_x: -15, p_y: 10, p_z: 15
-
-                }); 
-
-                $.each( this.model.attributes, function( i, a ) { $('[data-camera="'+i+'"]').val( a ); } );
+                this.model = camera_model;
                 this.render();
             },
             events : {
@@ -41,6 +34,10 @@
             light.position.set( 10, 0, 10 );
             scene.add( light );
             this.renderer.render(scene, camera);
+
+            var canvas = c.find('canvas')[0];
+            this.model.set('image', canvas.toDataURL()) ;
+
             },
             update : function(e) {
                 var input = $(e.currentTarget);

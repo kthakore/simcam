@@ -144,13 +144,13 @@
         </section>
         <section id="environment">
         <div class="page-header">
-            <h1>Environment <small>Select the environment</small></h1>
+            <h1>Image Modifiers <small>Select parameters beyond the projection model camera view.</small></h1>
        </div>
         <div class="row" id="environ_form"> 
            <div class="span3 well">
-                <h2>Selecting an Environment</h2>
+                <h2>Noise & Distortion</h2>
                 <p>
-                  Your camera reacts differently to environmental condition. Consider noise, light, and distortion parameters.  
+                  Your camera reacts differently to environmental conditions. Consider noise and distortion parameters.  
                 </p>
 
   <form class="form-vertical">
@@ -173,13 +173,17 @@
   </div>
 
         </div>
+      <div id="legend" class="">
+        <legend class="">Lens Distortion</legend>
+      </div>
+
 
     <div class="control-group">
 
           <!-- Text input-->
-          <label class="control-label" data-environ="noise_strength" for="input01">Noise Strength</label>
+          <label class="control-label"  for="input01">Noise Strength</label>
           <div class="controls">
-            <input type="text" placeholder="0.01" class="input-xlarge">
+            <input type="text" name="alpha" data-camera="alpha" placeholder="0.01" class="input-xlarge">
             <p class="help-block">Strength of Noise</p>
           </div>
         </div>
@@ -189,15 +193,15 @@
           <div class="controls">
            <div class="input-prepend">
               <span class="add-on">R1</span>
-              <input class="span2" placeholder="0.00" name="r1" type="text">
+              <input class="span2" placeholder="0.00" data-camera="r1" name="r1" type="text">
             </div>
            <div class="input-prepend">
               <span class="add-on">R2</span>
-              <input class="span2" placeholder="0.00" name="r2" type="text">
+              <input class="span2" placeholder="0.00"  data-camera="r2" name="r2" type="text">
             </div>
            <div class="input-prepend">
               <span class="add-on">R3</span>
-              <input class="span2" placeholder="0.00" name="r3" type="text">
+              <input class="span2" placeholder="0.00" data-camera="r3"  name="r3" type="text">
             </div>
             <p class="help-block">Apply Radial Distortions to Camera</p>
           </div>
@@ -209,11 +213,11 @@
           <div class="controls">
            <div class="input-prepend">
               <span class="add-on">T1</span>
-              <input class="span2" placeholder="0.00" name="t1" type="text">
+              <input class="span2" placeholder="0.00" name="t1"  data-camera="t1"  type="text">
             </div>
            <div class="input-prepend">
               <span class="add-on">T2</span>
-              <input class="span2" placeholder="0.00" name="t2" type="text">
+              <input class="span2" placeholder="0.00" name="t2"  data-camera="t2"  type="text">
             </div>
             <p class="help-block">Apply Tangential Distortions to Camera</p>
           </div>
@@ -292,11 +296,48 @@
 
         <script type="text/javascript"> 
             $('[rel="popover"]').popover({ html : "true" });
+                var m = Backbone.Model.extend({ }); 
+
+          var camera_model = new m( {
+                    u: 400, v: 320, fov: 35, ar: 400/320,
+                    near: .4, far: 10000, p_x: -15, p_y: 10, p_z: 15,
+                    r1 : 0.00, r2: 0.00, r3: 0.00, t1: 0.00, t2: 0.00,
+                    alpha : 0.01, 
+                    
+           });
+
         </script>
         <script type="text/javascript" src="js/views/camera_view.js"> </script>
         <script type="text/javascript">
 
-        var environ_form  = new Backbone.View.extend({
+        
+
+        var environ_view = Backbone.View.extend({
+
+            initialize: function( options) {
+                this.model = camera_model;
+                this.model.bind('change', this.change_camera, this );
+
+            },
+            events : {
+                'change input' : 'update'
+            },
+            render : function() {
+
+            },
+            update : function() {
+
+            },
+            change_camera : function() {
+                this.set_initial();
+            },
+            set_initial : function () {
+
+                $('#noiseless').attr('src', this.model.get('image') );
+                $('#distort').attr('src', this.model.get('image') );
+                $('#start').attr('src', this.model.get('image') );
+
+            }
 
         });
 
@@ -304,10 +345,14 @@
         var view = Backbone.View.extend({
             initialize: function(options) {
                 var camera_form = new camera_view({ el : $('#camera_form')});
+                var environ_form = new environ_view({ el : $('#environ_form')} );
+                $.each( camera_model.attributes, function( i, a ) { $('[data-camera="'+i+'"]').val( a ); } );
 
             },
             events : {
               
+            },
+            change_camera : function() {
             }
 
         });
