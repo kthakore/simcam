@@ -340,6 +340,16 @@
                        noise.attr('src', res.get('out') );
                        }
                 }});
+                this.model.url ='/combine';
+                this.model.save({},{
+                success: function(res){
+                    var noise = $(that.el).find('#finish');
+                    if( res.get('success')  === 1 )
+                       {
+                        console.log( res );
+                       noise.attr('src', res.get('out') );
+                       }
+                }});
 
             },
             update : function(e) {

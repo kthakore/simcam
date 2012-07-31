@@ -38,7 +38,8 @@ sub combine {
     my $noise_res =  $self->_run_noise( $params );
 
     $params->{image} =  'public/'.$noise_res->{out};
-    
+
+   
     my $dist_res = $self->_run_distort( $params );
 
     $self->render({ json => $dist_res } );
@@ -87,13 +88,12 @@ sub _run_noise {
 
     my $out = 'public/job_images/'.$job_id.'_noise.png';
 
-    my $run = "../simcamCV/noise foo.jpg $alpha $type foo_out.jpg";
+    my $run = "../simcamCV/noise foo.jpg $alpha $type $out";
 
     my( $stdout, $stderr, @result) = capture {
 
         `convert $image foo.jpg`;
         `$run`;
-        `convert foo_out.jpg $out`;
 
     };
 
@@ -151,7 +151,7 @@ sub _run_distort {
         0. 1.</data></Intrinsics>
         </opencv_storage>';
 
-    my $job_id = sha1_hex( localtime. $r1 . $r2. $t1. $t2. $r3 );
+    my $job_id = sha1_hex( localtime. $r1 . $r2. $t1. $t2. $r3. rand);
 
     my $dist_path = '/tmp/'.$job_id.'_dist.xml';
     my $int_path = '/tmp/'.$job_id.'_int.xml';
@@ -163,7 +163,6 @@ sub _run_distort {
     my $out_image = 'public/job_images/'.$job_id.'.png';
 
     my $run  = "../simcamCV/distort $dist_path $image $out_image $int_path";
-    warn $run;
     my( $stdout, $stderr, @result) = capture {
         
         `$run`
