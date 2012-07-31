@@ -15,13 +15,15 @@ sub startup {
 
   # Noise
   $r->post('/noise')->to('environ#noise');
-  $r->get('/noise/:alpha/:type')->to('environ#noiseid');
+  $r->post('/distort')->to('environ#distort');
+  $r->post('/get_image')->to('environ#get_image');
+
+  $r->post('/combine')->to('environ#combine');
 
   # TODO:
   # $r->post('/calibrate');
   # $r->register('/register');
 
-  $r->post('/distort')->to('environ#distort');
 
 
   

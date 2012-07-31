@@ -10,35 +10,66 @@ use XML::Simple;
 
 sub noise {
     my $self = shift;
-
-    $self->render({ json => {} } );
-}
-
-sub noiseid {
-    my $self  = shift;
     my $params = $self->req->json;
-    my $alpha = $self->param('alpha');
-    my $type  = $self->param('type');
 
-    $self->render({ json => { alpha => $alpha, type => $type } } );
+    $params->{image} = $self->_get_image( $params->{image} );
+
+    $self->render({ json => $self->_run_noise( $params ) } );
 }
 
 
 sub distort {
     my $self = shift;
     my $params = $self->req->json;
+ 
+    $params->{image} = $self->_get_image( $params->{image} );
 
-     
-    $self->_run_distort( $params );
+    $self->render({ json =>   $self->_run_distort( $params )} );
+   
+}
+
+
+sub combine {
+    my $self = shift;
+    my $params = $self->req->json;
+
+    $params->{image} = 'public/job_images/'.$self->_get_image( $params->{image} ).'_in.png';
+
+    my $noise_res =  $self->_run_noise( $params );
+
+    $params->{image} =  'public/'.$noise_res->{out};
     
+    my $dist_res = $self->_run_distort( $params );
 
+    $self->render({ json => $dist_res } );
+
+}   
+
+
+sub get_image {
+    my $self = shift;
+    my $params = $self->req->json;
+    
+    $self->render( { json => { img => $self->_get_image( $params->{image} ) } } ); 
+
+}
+
+sub _get_image {
+    my $self = shift;
+    my $uri = shift;
+    my $d = decode_base64($uri);
+        my $file_name = sha1_hex(time);
+        my $file_loc = 'public/job_images/'.$file_name.'_in.png';
+        write_file( $file_loc , $d );
+
+    return $file_loc;
 }
 
 
 
 sub _run_noise {
     my $self = shift;
-    my ( $params ) = shift;
+    my  $params = shift;
     
     my $image = $params->{image};
     my $alpha = $params->{alpha} || 0.00;
@@ -53,7 +84,7 @@ sub _run_noise {
 
     if( -f $out )
     {
-        return { success => 1, job_id => $job_id, out => $out };        
+        return { success => 1, job_id => $job_id, out => 'job_images/'.$job_id.'_noise.png' };        
     }
     else
     {   
@@ -66,7 +97,7 @@ sub _run_noise {
 
 sub _run_distort {
     my $self = shift;
-    my ( $params ) = shift;
+    my $params = shift;
 
     my $t1= $params->{t1} || 0.0;
     my $t2= $params->{t2} || 0.0;
@@ -121,7 +152,7 @@ sub _run_distort {
 
     if( -f $out_image )
     {
-        return { success => 1, out => $out_image, job_id => $job_id };
+        return { success => 1, out => 'job_images/'.$job_id.'.png', job_id => $job_id };
     }
     else
     {
