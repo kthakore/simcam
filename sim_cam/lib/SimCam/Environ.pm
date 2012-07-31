@@ -76,19 +76,30 @@ sub _run_noise {
     my $image = $params->{image};
     my $alpha = $params->{alpha} || 0.00;
     my $type = $params->{noise_type} || 1;
+
+        $type = 1 if ($type && $type =~ 'Uniform' );
+        $type = 0 if ($type && $type =~ 'Normal' );
+
+
     my $job_id = sha1_hex( localtime. $alpha. $type );
+
+    if ($alpha > 1.00) { $alpha = 1.00 };
 
     my $out = 'public/job_images/'.$job_id.'_noise.png';
 
+    my $run = "../simcamCV/noise foo.jpg $alpha $type foo_out.jpg";
+
     my( $stdout, $stderr, @result) = capture {
+
         `convert $image foo.jpg`;
-        `convert foo.jpg $image`;
-        `../simcamCV/noise $image $alpha $type $out`
+        `$run`;
+        `convert foo_out.jpg $out`;
+
     };
 
     if( -f $out )
     {
-        return { success => 1, job_id => $job_id, out => 'job_images/'.$job_id.'_noise.png' };        
+        return { alpha => $alpha, success => 1, job_id => $job_id, out => 'job_images/'.$job_id.'_noise.png' };        
     }
     else
     {   
