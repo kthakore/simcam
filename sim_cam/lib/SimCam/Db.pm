@@ -24,5 +24,16 @@ sub get_camera {
 
 }
 
+sub cameras {
+     my $self = shift;
+    my $id = $self->param('id');
+    my $d = $self->app->kdb->{d};
+
+
+    $self->render({json => $found } );
+
+
+}
+
 
 1;

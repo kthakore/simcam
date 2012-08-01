@@ -7,6 +7,17 @@ use File::Slurp;
 use JSON;
 use XML::Simple;
 
+sub register {
+    my $self = shift;
+    my $params = $self->req->json;
+
+    my $script = $params->{script};
+
+
+    $self->render({json => { diff => '', first => '', second => ''});
+
+}
+
 sub calibrate {
     my $self = shift;
     my $params = $self->req->json;

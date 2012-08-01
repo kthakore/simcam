@@ -18,7 +18,7 @@ NoL = 1;  % number of pyramid-levels
 
 verbose = 1; %plot images at the end of execution
 
-im_demo=imread('cameraman.tif'); % ... or try your image
+im_demo=imread('1.png'); % ... or try your image
 imwrite(im_demo,'image.pgm')
 
 [A,B,C]=size(im_demo);
@@ -126,6 +126,7 @@ if verbose
         
     end
     
+    h = figure;
     
     % plot images for high-resolution level of the pyramid (if any)
     subplot(2,2,1)
@@ -165,6 +166,10 @@ if verbose
     axis on
 end
 
+print (h, '-dpng', 'out.png' );
 
+fprintf( 1, '\n' );
+
+exit;
 
 
