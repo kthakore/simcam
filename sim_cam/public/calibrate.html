@@ -53,25 +53,14 @@
             <h1>Calibration <small>Place the checkerboards</small></h1>
        </div>
   <div class="row" >
-            <div class="span7 well">
-            <center id="content" >
-
-             </center>
-            <center id="simulated" >
-            </center>
-            </div>
             <div class="span4" id="sidebar" > 
                 <h2>Options</h2>
             <ul class="well sidemenu nav nav-pills nav-stacked">
-                <li><a href="#" id="simulate_noise_distort_btn" class="btn">Simulate Noise/Distortion</a> </li>
-
-                <li><a href="#" id="check_grid_btn" class="btn">Check for Grid</a> </li>
-                <li><a href="#" id="calibrate_btn" class="btn">Calibrate</a> </li>
-
-                <li><a href="#" id="reset" class="btn">Reset</a> </li>
+                <li><input type="button" id="cg_btn" class="btn span3" value="Check for Grid" /> </li>
+                <li><input type="button" id="ca_btn" class="btn span3" value="Calibrate" /> </li>
             </ul>
                 <h2>Selected Grids</h2>
-            <ul class="well sidemenu">
+            <ul class="well sidemenu" id="selected_grids" >
             </ul>
 
                 <h2>Grid Placement</h2>
@@ -82,6 +71,14 @@
                </table> 
            </div>
        </div>
+
+            <div class="span7 well">
+            <center id="content" >
+
+             </center>
+            <center id="simulated" >
+            </center>
+            </div>
    </div>   
         </section>
         <section id="results">
@@ -168,6 +165,7 @@
         var calib_view = Backbone.View.extend({
             initialize: function(options) {
                var that = this; 
+                that.checked_images = [];
                this.model = new m({ id : options.id });    
                this.model.url = '/camera/'+options.id;
             
@@ -179,9 +177,37 @@
                
             },
             events : {
+             'click #cg_btn': 'check_grid',
+             'click #ca_btn': 'calibrate', 
              'change .loc' : 'update_grid',
              'change .rot' : 'update_grid'
             },
+            check_grid : function() {
+             var that = this;
+             var mc = new m({} );
+             
+                var img = $(that.el).find('#simulated').find('img').attr('src');
+                mc.set('image', img );
+                mc.url = '/check';
+                mc.save( {} ,
+                {
+                    success : function( res ) {
+                       if( res.get('checked') == 0 )
+                        {
+                            alert('Checkerboard not detected');
+                        }
+                        else
+                        {
+                            $(that.el).find('#selected_grids').append('<li><img src="'+ res.get('image') +'" /> </li>' );
+                        }
+                    }
+                });
+                 
+            },
+            calibrate : function() {
+              var that = this;
+                console.log( 'sad' );
+            },  
             update_grid : function() {
             var that = this;
              this.grid.position.x = $(this.el).find('#x').val();
@@ -218,7 +244,7 @@
                 $(this.el).find('#camera_view').html( '<img src="'+this.model.get('image')+'" />');
             var c = $(this.el).find('#content');
             if( this.renderer ) { delete this.renderer; } 
-            this.renderer = new THREE.WebGLRenderer({ clearColor: 0xFFFFFF, clearAlpha: 255  });
+            this.renderer = new THREE.WebGLRenderer({ clearColor: 0x888888, clearAlpha: 255  });
             this.renderer.setSize( this.model.get('u'), this.model.get('v') );
             c.html( this.renderer.domElement );
 

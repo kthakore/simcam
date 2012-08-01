@@ -7,6 +7,75 @@ use File::Slurp;
 use JSON;
 use XML::Simple;
 
+sub calibrate {
+    my $self = shift;
+    my $params = $self->req->json;
+    my $checked_images = $params->{checked};
+    if (  $#{$checked_images} < 1 )
+    {
+        $self->render({ json => { message => "Need at least 2 found pattern images to calibrate"}, status => 400 } );
+    }
+    else {
+        my @run = ('simcamCV/calibrate', @{$checked_images} );
+
+        my $status = system @run;
+
+        if( $status == 256 )
+        {
+            my $xs = XML::Simple->new();
+            my $d_data = $xs->XMLin("/tmp/Distortion.xml");
+            my $f_data = $xs->XMLin("/tmp/Intrinsics.xml");
+
+
+            my $d_cv_data = $d_data->{Distortion}->{data};
+
+            $d_cv_data =~ s/\s/ /g;
+
+            my $i_cv_data = $f_data->{Intrinsics}->{data};
+
+            $i_cv_data =~ s/\s/ /g;
+          
+            my @d_array = split(' ', $d_cv_data ); 
+            my @f_array = split(' ', $i_cv_data );
+            
+     
+            my $fo = { distortion => \@d_array, intrinsics => \@f_array };
+            $self->render({ json => $fo } );
+
+        }
+        else
+        {
+
+            $self->render({ json => { message => "Couldn't calibrate"}, status => 400 } );
+
+        }
+    }
+
+
+}
+
+sub check {
+    my $self = shift;
+    my $params = $self->req->json;
+    my $image = $params->{image};
+    
+    unlink '/tmp/found.png';
+
+    my $checked = system '../simcamCV/check', 'public/'.$image; 
+
+    if( -f '/tmp/found.png' )
+    {
+        $checked = 1;
+        `mv /tmp/found.png public/found_$image`;
+    }
+    else {
+        $checked = 0;
+    }
+
+    $self->render({ json => { checked => $checked, image => 'found_'.$image } });
+
+}
+
 
 sub noise {
     my $self = shift;

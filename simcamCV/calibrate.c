@@ -6,7 +6,7 @@
 
 
 int n_boards = 0;
-const int board_dt = 20;
+const int board_dt = 10;
 int board_w;
 int board_h;
 

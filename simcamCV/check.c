@@ -15,7 +15,7 @@ int main (int argc, char * argv[] )
 
     printf( "Processing: %s\n", loc );
     int n_boards = 0;
-    const int board_dt = 20;
+    const int board_dt = 10;
     int board_w;
     int board_h;
 	int corner_count;
@@ -55,6 +55,7 @@ int main (int argc, char * argv[] )
     {
         printf("Found check pattern\n");
         cvSaveImage( "/tmp/found.png", image );
+
         return 1;
     }
 

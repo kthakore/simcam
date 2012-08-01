@@ -35,6 +35,9 @@ sub startup {
   $r->post('/combine')->to('environ#combine');
   $r->put('/combine')->to('environ#combine');
 
+  $r->post('/check')->to('environ#check');
+  $r->post('/calibrate')->to('environ#calibrate');
+
 
   # Save
   $r->post('/save')->to('db#save');
