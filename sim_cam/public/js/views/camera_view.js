@@ -1,7 +1,42 @@
           var camera_view = Backbone.View.extend({
             initialize: function(options) {
+                _.bindAll(this, 'on_keypress');
+                $(document).bind('keypress', this.on_keypress);
+
                 this.model = camera_model;
                 this.render();
+            },
+            on_keypress: function(e) {
+               if( e.keyCode == 119 )
+                {
+                   this.camera.position.z = this.camera.position.z + 5;
+                   
+                }
+                else if( e.keyCode == 115 ){
+                   this.camera.position.z = this.camera.position.z - 5;
+
+                }
+                else if( e.keyCode == 97 ){
+                   this.camera.position.y = this.camera.position.y + 5;
+
+                }
+                else if( e.keyCode == 100 ){
+                   this.camera.position.y = this.camera.position.y - 5;
+
+                }
+                else if( e.keyCode == 101 ){
+                   this.camera.position.x = this.camera.position.x - 5;
+
+                }
+                else if( e.keyCode == 113 ){
+                   this.camera.position.x = this.camera.position.x + 5;
+
+                }
+                else {
+                   console.log( e.keyCode );
+                }
+                this.renderer.render(this.scene, this.camera);
+
             },
             events : {
                 'change input' : 'update', 
@@ -28,11 +63,25 @@
                     new THREE.CubeGeometry( 5, 5, 5 ),
                     new THREE.MeshLambertMaterial( { color: 0xFF0000 } )
                     );
+            var sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry( 5, 20, 20),
+                    new THREE.MeshLambertMaterial( { color: 0x00FF00 } )
+                    );
+
             scene.add( cube );
+            scene.add( sphere );
+            sphere.position.set(20, 0 , 0 );
 
             var light = new THREE.PointLight( 0xFFFF00 );
             light.position.set( 10, 0, 10 );
             scene.add( light );
+
+            var light = new THREE.PointLight( 0x222222 );
+            light.position.set( -20, -20, -20 );
+            scene.add( light );
+
+            this.camera = camera;
+            this.scene = scene;
             this.renderer.render(scene, camera);
 
             var canvas = c.find('canvas')[0];
