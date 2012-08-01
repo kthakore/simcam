@@ -363,8 +363,8 @@
 
         var view = Backbone.View.extend({
             initialize: function(options) {
-                var camera_form = new camera_view({ el : $('#camera_form')});
-                var environ_form = new environ_view({ el : $('#environ_form')} );
+                this.camera_form = new camera_view({ el : $('#camera_form')});
+                this.environ_form = new environ_view({ el : $('#environ_form')} );
                 $.each( camera_model.attributes, function( i, a ) { $('[data-camera="'+i+'"]').val( a ); } );
 
             },

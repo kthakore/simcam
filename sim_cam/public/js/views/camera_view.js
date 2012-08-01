@@ -1,51 +1,8 @@
           var camera_view = Backbone.View.extend({
             initialize: function(options) {
-                _.bindAll(this, 'on_keypress');
-                $(document).bind('keypress', this.on_keypress);
-
+             
                 this.model = camera_model;
                 this.render();
-            },
-            on_keypress: function(e) {
-               if( e.keyCode == 119 )
-                {
-                   this.camera.position.z = this.camera.position.z + 5;
-                   
-                }
-                else if( e.keyCode == 115 ){
-                   this.camera.position.z = this.camera.position.z - 5;
-
-                }
-                else if( e.keyCode == 97 ){
-                   this.camera.position.y = this.camera.position.y + 5;
-
-                }
-                else if( e.keyCode == 100 ){
-                   this.camera.position.y = this.camera.position.y - 5;
-
-                }
-                else if( e.keyCode == 101 ){
-                   this.camera.position.x = this.camera.position.x - 5;
-
-                }
-                else if( e.keyCode == 113 ){
-                   this.camera.position.x = this.camera.position.x + 5;
-
-                }
-        
-                  $(this.el).find('[data-camera="p_x"]').val( this.camera.position.x );
-                  $(this.el).find('[data-camera="p_y"]').val( this.camera.position.y );
-                  $(this.el).find('[data-camera="p_z"]').val( this.camera.position.z );
-
-                this.model.set('p_x', this.camera.position.x );     
-                this.model.set('p_y', this.camera.position.y );     
-                this.model.set('p_z', this.camera.position.z );     
-
-
-    
-                this.renderer.render(this.scene, this.camera);
-                this.obj_moved();
-
             },
             events : {
                 'change input' : 'update', 
