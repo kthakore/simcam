@@ -377,7 +377,7 @@
                 camera_model.save( {}, {
                     success: function( res ) {
                         var template = $('#modal_template').html();
-                        var modal_t = _.template( template, { message :'Saved to: <a href="calibrate.html#camera/'+res.id+'">Calibration Training Link</a> ', header: 'saved'} );
+                        var modal_t = _.template( template, { message :'Saved to: <a href="calibrate.html#camera/'+res.id+'">Calibration Training Link</a> and <a href="registration.html#camera/'+res.id+'">Registration Example Link</a>  ', header: 'saved'} );
                          var modal = $(modal_t);
                           $(this.el).append( modal );
                           modal.modal('show');

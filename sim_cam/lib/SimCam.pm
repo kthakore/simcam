@@ -37,6 +37,9 @@ sub startup {
 
   $r->post('/check')->to('environ#check');
   $r->post('/calibrate')->to('environ#calibrate');
+$r->post('/register')->to('environ#register');
+$r->put('/register')->to('environ#register');
+
 
 
   # Save

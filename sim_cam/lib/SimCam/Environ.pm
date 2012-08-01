@@ -11,10 +11,11 @@ sub register {
     my $self = shift;
     my $params = $self->req->json;
 
-    my $script = $params->{script};
-
-
-    $self->render({json => { diff => '', first => '', second => ''});
+    my $image = 'public/'.$params->{final_image}; 
+       `cp $image register/1.png`;
+     `cd register; matlab -nosplash -nodesktop -r ecc_demo; cp out.png ../public/out.png`; 
+ 
+    $self->render({json => { out => 'public/out.png' } });
 
 }
 
