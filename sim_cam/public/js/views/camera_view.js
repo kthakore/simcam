@@ -32,7 +32,15 @@
                    this.camera.position.x = this.camera.position.x + 5;
 
                 }
+        
+                  $(this.el).find('[data-camera="p_x"]').val( this.camera.position.x );
+                  $(this.el).find('[data-camera="p_y"]').val( this.camera.position.y );
+                  $(this.el).find('[data-camera="p_z"]').val( this.camera.position.z );
+
+                 
+    
                 this.renderer.render(this.scene, this.camera);
+                this.obj_moved();
 
             },
             events : {
@@ -80,10 +88,15 @@
             this.camera = camera;
             this.scene = scene;
             this.renderer.render(scene, camera);
-
-            var canvas = c.find('canvas')[0];
-            this.model.set('image', canvas.toDataURL('image/png')) ;
-
+            this.obj_moved();
+    
+            },
+            obj_moved: function( ) {
+                var c = $(this.el).find('#cam_canvas');
+                var canvas = c.find('canvas')[0];
+                var img = canvas.toDataURL('image/png');
+                this.model.set('image', img) ;
+                this.model.trigger('obj_moved');
             },
             update : function(e) {
                 var input = $(e.currentTarget);

@@ -309,7 +309,7 @@
 
             initialize: function( options) {
                 this.model = camera_model;
-                this.model.bind('change', this.change_camera, this );
+                this.model.bind('obj_moved', this.render, this );
                 this.render();
 
             },
@@ -317,6 +317,8 @@
                 'change input' : 'update'
             },
             render : function() {
+                this.model.set('image', img);
+
                 var that = this;
                 this.model.url ='/noise';
                 this.model.save({},{
@@ -343,6 +345,7 @@
                     if( res.get('success')  === 1 )
                        {
                        noise.attr('src', res.get('out') );
+                       res.set('final_image', res.get('out') );
                        }
                 }});
 
@@ -360,14 +363,7 @@
                 this.render();
 
 
-            },
-            change_camera : function() {
-                this.set_initial();
-            },
-            set_initial : function () {
-
             }
-
         });
 
 
