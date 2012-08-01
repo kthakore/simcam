@@ -32,21 +32,27 @@
             <p class="lead">Simulation <a href="#" class="" rel="popover" data-content="popover stuff" data-original-title="Todo">for</a> camera calibration.</p>
         <div class="subnav">
             <ul class="nav nav-pills">
-              <li><a href="index.html">Getting Started</a></li>
+              <li><a href="index.html">Create Camera</a></li>
               <li><a href="calibrate.html">Calibration</a></li>
               <li><a href="registration.html">Registration</a></li>
             </ul>
           </div>
         </header>
-        <section id="getting_started">
+          <section id="Calibration">
         <div class="page-header">
-            <h1><a href="#" class="" rel="popover" data-content="stuff" data-original-title="SimCAM">Getting Started</a> <small>Starting with SimCam</small></h1>
+            <h1>Sample Image Capture<small>Camera captures images as this</small></h1>
        </div>
+     
+        <div class="row"> 
+              <center id="camera_view" class="span12">
+             </center> 
+        </div>
+
          <section id="Calibration">
         <div class="page-header">
             <h1>Calibration <small>Place the checkerboards</small></h1>
        </div>
-        <div class="row"> 
+                <div class="row"> 
             <div class="offset9 span3 well">
                 <h2>Place the Calibration Checkboards</h2>
                 <p>
@@ -94,103 +100,47 @@
             $('[rel="popover"]').popover({ html : "true" });
                 var m = Backbone.Model.extend({ }); 
 
-          var camera_model = new m( {
-                    u: 400, v: 320, fov: 35, ar: 400/320,
-                    near: .4, far: 10000, p_x: -15, p_y: 10, p_z: 15,
-                    r1 : 0.00, r2: 0.00, r3: 0.00, t1: 0.00, t2: 0.00,
-                    alpha : 0.01, 
-                    
-           });
 
         </script>
-        <script type="text/javascript" src="js/views/camera_view.js"> </script>
         <script type="text/javascript">
+        var m = Backbone.Model.extend({
+         });
 
-        
-
-        var environ_view = Backbone.View.extend({
-
-            initialize: function( options) {
-                this.model = camera_model;
-                this.model.bind('change', this.change_camera, this );
-
-            },
-            events : {
-                'change input' : 'update'
-            },
-            render : function() {
-                var that = this;
-                this.model.url ='/noise';
-                this.model.save({},{
-                success: function(res){
-                    var noise = $(that.el).find('#noisefull');
-                    if( res.get('success')  === 1 )
-                       {
-                       noise.attr('src', res.get('out') );
-                       }
-                }});
-                this.model.url ='/distort';
-                this.model.save({},{
-                success: function(res){
-                    var noise = $(that.el).find('#distorted');
-                    if( res.get('success')  === 1 )
-                       {
-                        console.log( res );
-                       noise.attr('src', res.get('out') );
-                       }
-                }});
-                this.model.url ='/combine';
-                this.model.save({},{
-                success: function(res){
-                    var noise = $(that.el).find('#finish');
-                    if( res.get('success')  === 1 )
-                       {
-                        console.log( res );
-                       noise.attr('src', res.get('out') );
-                       }
-                }});
-
-            },
-            update : function(e) {
-                var input = $(e.currentTarget);
-                var dc = input.attr('data-camera');
-                 var de = input.attr('data-environ');
-               
-                if( dc ) {
-                    this.model.set( input.attr('data-camera'), input.val() );
-                } else if (de) {
-                        this.model.set( 'noise_type', input.val() );
-                }
-                this.render();
-
-
-            },
-            change_camera : function() {
-                this.set_initial();
-            },
-            set_initial : function () {
-
-            }
-
-        });
-
-
-        var view = Backbone.View.extend({
+        var calib_view = Backbone.View.extend({
             initialize: function(options) {
-                var camera_form = new camera_view({ el : $('#camera_form')});
-                var environ_form = new environ_view({ el : $('#environ_form')} );
-                $.each( camera_model.attributes, function( i, a ) { $('[data-camera="'+i+'"]').val( a ); } );
+               var that = this; 
+               this.model = new m({ id : options.id });    
+               this.model.url = '/camera/'+options.id;
+               this.model.bind('change', this.render, this);
 
+               this.model.fetch({ });
             },
             events : {
               
             },
-            change_camera : function() {
+            render : function() {
+                $(this.el).find('#camera_view').html( '<img src="'+this.model.get('image')+'" />');
+                
             }
 
         });
 
-        var main_view = new view();
+        var app = Backbone.Router.extend({
+            initialize: function(options) {
+
+            },
+            routes : {
+              'camera/:id' : 'camera'
+            },
+            camera : function( id ) {
+                this.view = new calib_view( { id : id, el: $('body') } );
+            }
+        });
+
+        var main_app = new app({});
+
+        Backbone.history.start();
+
         </script>
 
     </body>
