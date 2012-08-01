@@ -37,7 +37,11 @@
                   $(this.el).find('[data-camera="p_y"]').val( this.camera.position.y );
                   $(this.el).find('[data-camera="p_z"]').val( this.camera.position.z );
 
-                 
+                this.model.set('p_x', this.camera.position.x );     
+                this.model.set('p_y', this.camera.position.y );     
+                this.model.set('p_z', this.camera.position.z );     
+
+
     
                 this.renderer.render(this.scene, this.camera);
                 this.obj_moved();

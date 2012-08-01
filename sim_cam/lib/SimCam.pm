@@ -36,6 +36,7 @@ sub startup {
 
   # Save
   $r->post('/save')->to('db#save');
+  $r->get('/camera/:id')->to('db#get_camera');
 
 
   # TODO:

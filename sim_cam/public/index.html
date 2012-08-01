@@ -265,10 +265,6 @@
   <div class="modal-body">
     <p><%-message%></p>
   </div>
-  <div class="modal-footer">
-    <a href="#" class="btn" data-dismiss="modal">Close</a>
-    <a href="#" class="btn btn-primary">Save changes</a>
-  </div>
 </div>
       </style>
   
@@ -317,8 +313,6 @@
                 'change input' : 'update'
             },
             render : function() {
-                this.model.set('image', img);
-
                 var that = this;
                 this.model.url ='/noise';
                 this.model.save({},{
@@ -384,7 +378,7 @@
                 camera_model.save( {}, {
                     success: function( res ) {
                         var template = $('#modal_template').html();
-                        var modal_t = _.template( template, { message :'Saved to:'+res.id, head: 'saved'} );
+                        var modal_t = _.template( template, { message :'Saved to: '+res.id, header: 'saved'} );
                          var modal = $(modal_t);
                           $(this.el).append( modal );
                           modal.modal('show');
