@@ -199,6 +199,8 @@
                         else
                         {
                             $(that.el).find('#selected_grids').append('<li><img src="'+ res.get('image') +'" /> </li>' );
+                            that.checked_images.push( img );
+                            console.log( that.checked_images );
                         }
                     }
                 });
