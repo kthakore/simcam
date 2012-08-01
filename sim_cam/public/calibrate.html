@@ -52,30 +52,77 @@
         <div class="page-header">
             <h1>Calibration <small>Place the checkerboards</small></h1>
        </div>
-                <div class="row"> 
-            <div class="offset9 span3 well">
-                <h2>Place the Calibration Checkboards</h2>
-                <p>
-                  To calibrate the camera, checkerboards are placed within the view of the camera.  
-                </p>
-                
-            </div>
-        </div>
+  <div class="row" >
+            <center class="span7 well" id="content" >
+
+             </center>
+            <div class="span4" id="sidebar" > 
+                <h2>Options</h2>
+            <ul class="well sidemenu nav nav-pills nav-stacked">
+                <li><a href="#" id="check_grid">Calibrate</a> </li>
+                <li><a href="#" id="reset">Reset</a> </li>
+            </ul>
+                <h2>Grid Placement</h2>
+            <div class="well">
+               <table class="table table-striped table-bordered table-condensed">
+                                <tr> <td>Location</td><td>(<input size="3" class="loc span1" />, <input size="3" class="loc span1" />, <input size="3" class="loc span1" />) </td> </tr>
+                                <tr> <td>Rotation</td><td>(<input size="3" class="rot span1" />, <input size="3" class="rot span1" />, <input size="3" class="rot span1" />) </td> </tr>
+               </table> 
+           </div>
+       </div>
+   </div>   
         </section>
         <section id="results">
         <div class="page-header">
             <h1>Results <small>Compare and view results from calibration</small></h1>
        </div>
-        <div class="row"> 
-            <div class="offset9 span3 well">
-                <h2>Selecting an Environment</h2>
-                <p>
-                  Your camera reacts differently to environmental condition. Consider noise, light, and distortion parameters.  
-                </p>
-                
+       <div class="row">
+            <div class="span10">
+              <h2>Calibration Graph</h2>
+              <div id="g_container" style="min-width: 400px; height: auto; margin: 0 auto"> 
+                <p>Need more calibration points</p>
+              </div>
+            </div>
+       </div>
+       <div class="row">
+            <div class="span8" >
+            <h2>Current Calibration</h2>
+                <div id="calib" >
+                    <div id="Distortion">
+                        <h4>Current Distortion Parameters</h4>
+                        <table class="table table-bordered table-condensed">
+                          <tr><td></td><td></td><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                     <div id="Intrinsics">
+                        <h4>Current Intrinsics Parameters</h4>
+                        <table class="table table-striped table-bordered table-condensed" >
+                          <tr><td></td><td></td><td></td></tr>
+                          <tr><td></td><td></td><td></td></tr>
+                          <tr><td></td><td></td><td></td></tr>
+                        </table>
+                    </div>
+                    
+                </div>
+
+            </div>
+            <div class="span4" >
+             <h2>Checked Images</h2>
+               <table class="table table-striped table-bordered table-condensed" id="images">
+                <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Grid Found Image</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                </table>
+ 
+
             </div>
         </div>
-        </section>
+         </section>
     
 
     </div>
@@ -119,8 +166,51 @@
               
             },
             render : function() {
+
+             var that = this;
                 $(this.el).find('#camera_view').html( '<img src="'+this.model.get('image')+'" />');
-                
+            var c = $(this.el).find('#content');
+            if( this.renderer ) { delete this.renderer; } 
+            this.renderer = new THREE.WebGLRenderer({ clearColor: 0xFFFFFF, clearAlpha: 255  });
+            this.renderer.setSize( this.model.get('u'), this.model.get('v') );
+            c.html( this.renderer.domElement );
+
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(
+                this.model.get('fov'),         // Field of view
+                this.model.get('ar'),  // Aspect ratio
+                this.model.get('near'),         // Near
+                this.model.get('far')      // Far
+                );
+            camera.position.set( this.model.get('p_x'), this.model.get('p_y'), this.model.get('p_z') );
+            camera.lookAt( scene.position );
+            scene.add( camera );
+            var material = new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture("img/grid.gif")
+            });
+
+            material.map.needsUpdate = true;
+
+            var cube = new THREE.Mesh(
+                    new THREE.CubeGeometry( 8, 5, 0.1 ),
+                    material
+                    );
+
+            cube.overdraw = true;
+            scene.add( cube );
+
+            var light = new THREE.PointLight( 0xFFFFFF );
+            light.position.set( 10, 0, 10 );
+            scene.add( light );
+
+            var light = new THREE.PointLight( 0x222222 );
+            light.position.set( -20, -20, -20 );
+            scene.add( light );
+
+            this.camera = camera;
+            this.scene = scene;
+            this.renderer.render(scene, camera);
+       
             }
 
         });
