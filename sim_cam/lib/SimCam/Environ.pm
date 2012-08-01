@@ -33,7 +33,9 @@ sub combine {
     my $self = shift;
     my $params = $self->req->json;
 
-    $params->{image} = 'public/job_images/'.$self->_get_image( $params->{image} ).'_in.png';
+    $params->{image} = $self->_get_image( $params->{image} );
+
+    warn $params->{image};
 
     my $noise_res =  $self->_run_noise( $params );
 

@@ -23,6 +23,7 @@
                 this.model.get('far')      // Far
                 );
             camera.position.set( this.model.get('p_x'), this.model.get('p_y'), this.model.get('p_z') );
+
             camera.lookAt( scene.position );
             scene.add( camera );
             var cube = new THREE.Mesh(

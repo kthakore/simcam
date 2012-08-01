@@ -33,6 +33,8 @@ sub startup {
   $r->post('/get_image')->to('environ#get_image');
 
   $r->post('/combine')->to('environ#combine');
+  $r->put('/combine')->to('environ#combine');
+
 
   # Save
   $r->post('/save')->to('db#save');
