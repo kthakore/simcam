@@ -263,7 +263,7 @@
     <h3><%-header%></h3>
   </div>
   <div class="modal-body">
-    <p><%-message%></p>
+    <p><%= message %></p>
   </div>
 </div>
       </style>
@@ -378,7 +378,7 @@
                 camera_model.save( {}, {
                     success: function( res ) {
                         var template = $('#modal_template').html();
-                        var modal_t = _.template( template, { message :'Saved to: '+res.id, header: 'saved'} );
+                        var modal_t = _.template( template, { message :'Saved to: <a href="calibrate.html#camera/'+res.id+'">Calibration Training Link</a> ', header: 'saved'} );
                          var modal = $(modal_t);
                           $(this.el).append( modal );
                           modal.modal('show');
