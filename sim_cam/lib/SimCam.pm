@@ -1,5 +1,19 @@
 package SimCam;
 use Mojo::Base 'Mojolicious';
+use KiokuDB;
+use KiokuDB::Backend::Files;
+
+
+has 'kdb' => sub { 
+
+ my $d =  KiokuDB->new(
+               backend => KiokuDB::Backend::Files->new(
+                   dir        => "kdb",
+                   serializer => "json",
+               ),
+           );
+  return { d => $d, scope =>  $d->new_scope };
+};
 
 # This method will run once at server start
 sub startup {
@@ -19,6 +33,10 @@ sub startup {
   $r->post('/get_image')->to('environ#get_image');
 
   $r->post('/combine')->to('environ#combine');
+
+  # Save
+  $r->post('/save')->to('db#save');
+
 
   # TODO:
   # $r->post('/calibrate');

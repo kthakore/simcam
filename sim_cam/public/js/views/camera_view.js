@@ -32,9 +32,6 @@
                    this.camera.position.x = this.camera.position.x + 5;
 
                 }
-                else {
-                   console.log( e.keyCode );
-                }
                 this.renderer.render(this.scene, this.camera);
 
             },
