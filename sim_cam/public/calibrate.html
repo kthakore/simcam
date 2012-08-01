@@ -165,6 +165,27 @@
         var calib_view = Backbone.View.extend({
             initialize: function(options) {
                var that = this; 
+               this.graph ={ 'count' : 0, 
+                                          'series' : [ 
+                                                        {name : 'd1', data: [] },
+                                                        {name : 'd2', data: [] },
+                                                        {name : 'd3', data: [] },
+                                                        {name : 'd4', data: [] },
+                                                        {name : 'd5', data: [] },
+                                                        {name : 'i1', data: [] },
+                                                        {name : 'i2', data: [] },
+                                                        {name : 'i3', data: [] },
+                                                        {name : 'i4', data: [] },
+                                                        {name : 'i5', data: [] },
+                                                        {name : 'i6', data: [] },
+                                                        {name : 'i7', data: [] },
+                                                        {name : 'i8', data: [] },
+                                                        {name : 'i9', data: [] },
+
+                                                 
+                                                                  ],
+                                           'min' : [0, 0], 'max' : [0,0] };
+
                 that.checked_images = [];
                this.model = new m({ id : options.id });    
                this.model.url = '/camera/'+options.id;
@@ -199,7 +220,7 @@
                         else
                         {
                             $(that.el).find('#selected_grids').append('<li><img src="'+ res.get('image') +'" /> </li>' );
-                            that.checked_images.push( img );
+                            that.checked_images.push( 'public/'+img );
                             console.log( that.checked_images );
                         }
                     }
@@ -208,7 +229,47 @@
             },
             calibrate : function() {
               var that = this;
-                console.log( 'sad' );
+               if( that.checked_images < 2 )
+                {
+                    alert( 'Need more then 2 images to calibrate' );
+                }
+               else{
+                 var mc = new m({});
+                 mc.set( 'checked', that.checked_images );
+                 mc.url = '/calibrate';
+
+                 mc.save( {}, 
+                 {
+                    success : function( res )
+                    {
+                       
+                        var data = res.attributes;
+                      var offset = 0;
+
+                                $('#Distortion').find('td').each( function( i, e ) {
+                                            var dd =  parseFloat(data.distortion[i]);
+                                           $(e).html( dd );
+                                            that.graph.series[offset].data.push( dd);
+                                             offset++;
+                                                                           });
+                                    
+                                 $('#Intrinsics').find('td').each( function( i, e ) {
+                                        var di =  parseFloat(data.intrinsics[i]);
+                                           $(e).html(di );
+
+                                            $(that.graph.series[offset].data).push( di );
+                                             offset++;                                     });
+
+                                         if( that.graph.count++ >= 1 )
+                                        {
+                                            that.render_graphs();
+                                        }
+
+                    }
+                 }); 
+
+                }
+
             },  
             update_grid : function() {
             var that = this;
@@ -290,7 +351,60 @@
             $(this.el).find('#rz').val( this.grid.rotation.z );
 
 
-            }
+            },
+    render_graphs : function() {
+                            var that = this;
+                        var x_axis = new Array( this.graph.count );
+                        $(x_axis).each( function( i) { x_axis[i]=i; } );
+                    var chart = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'g_container',
+                        type: 'line',
+                        marginRight: 130,
+                        marginBottom: 25
+                    },
+                    title: {
+                        text: 'Calibration Parameters to Grid Placement',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: 'Grid Placements are Shown Below',
+                        x: -20
+                    },
+                    xAxis: {
+                        title: {
+                            text: 'Grid NUmber'
+                        },
+                        categories: x_axis 
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Parameter'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        formatter: function() {
+                                return '<b>'+ this.series.name +'</b><br/>'+
+                                this.x +': '+ this.y +' units';
+                        }
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        verticalAlign: 'top',
+                        x: -10,
+                        y: 100,
+                        borderWidth: 0
+                    },
+                    series: that.graph.series
+                });
+                    
+                        }
 
         });
 
