@@ -132,10 +132,10 @@ sub _run_distort {
         </opencv_storage>';
 
 
-    my $fy = $params->{fy} || 3000;
-    my $fx = $params->{fx} || 3000;
-    my $cy = $params->{cy} || 300;
-    my $cx = $params->{cx} || 240;
+    my $fy = $params->{fy} || $params->{far} || 3000;
+    my $fx = $params->{fx} || $params->{far} || 3000;
+    my $cy = $params->{cy} || $params->{u} /2 || 300;
+    my $cx = $params->{cx} || $params->{v} /2 || 240;
 
     my $image = $params->{image} || 'in.png';
 
