@@ -81,7 +81,7 @@
             scene.add( sphere );
             sphere.position.set(20, 0 , 0 );
 
-            var ambientLight = new THREE.AmbientLight(0x111111);
+            var ambientLight = new THREE.AmbientLight(0x222222);
             scene.add(ambientLight);
 
 

@@ -65,8 +65,8 @@
                 <h2>Grid Placement</h2>
             <div class="well">
                <table class="table table-striped table-bordered table-condensed">
-                                <tr> <td>Location</td><td>(<input size="3" class="loc span1" />, <input size="3" class="loc span1" />, <input size="3" class="loc span1" />) </td> </tr>
-                                <tr> <td>Rotation</td><td>(<input size="3" class="rot span1" />, <input size="3" class="rot span1" />, <input size="3" class="rot span1" />) </td> </tr>
+                                <tr> <td>Location</td><td>(<input size="3" id="x" class="loc span1" />, <input size="3" id="y" class="loc span1" />, <input size="3" id="z" class="loc span1" />) </td> </tr>
+                                <tr> <td>Rotation</td><td>(<input size="3" id="rx" class="rot span1" />, <input size="3" id="ry" class="rot span1" />, <input size="3" id="rz" class="rot span1" />) </td> </tr>
                </table> 
            </div>
        </div>
@@ -163,7 +163,22 @@
                this.model.fetch({ });
             },
             events : {
-              
+             'change .loc' : 'update_grid',
+             'change .rot' : 'update_grid'
+            },
+            update_grid : function() {
+             this.grid.position.x = $(this.el).find('#x').val();
+             this.grid.position.y = $(this.el).find('#y').val();
+             this.grid.position.z = $(this.el).find('#z').val();
+
+            this.grid.rotation.x = $(this.el).find('#rx').val(  );
+            this.grid.rotation.y = $(this.el).find('#ry').val(  );
+            this.grid.rotation.z = $(this.el).find('#rz').val(  );
+            
+            this.renderer.render(this.scene, this.camera);
+
+                this.model
+
             },
             render : function() {
 
@@ -198,19 +213,22 @@
 
             cube.overdraw = true;
             scene.add( cube );
-
-            var light = new THREE.PointLight( 0xFFFFFF );
-            light.position.set( 10, 0, 10 );
-            scene.add( light );
-
-            var light = new THREE.PointLight( 0x222222 );
-            light.position.set( -20, -20, -20 );
+            this.grid = cube; 
+            var light = new THREE.AmbientLight( 0xFFFFFF );
             scene.add( light );
 
             this.camera = camera;
             this.scene = scene;
             this.renderer.render(scene, camera);
        
+            $(this.el).find('#x').val( this.grid.position.x );
+            $(this.el).find('#y').val( this.grid.position.y );
+            $(this.el).find('#z').val( this.grid.position.z );
+            $(this.el).find('#rx').val( this.grid.rotation.x );
+            $(this.el).find('#ry').val( this.grid.rotation.y );
+            $(this.el).find('#rz').val( this.grid.rotation.z );
+
+
             }
 
         });
