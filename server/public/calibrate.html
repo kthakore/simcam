@@ -262,9 +262,10 @@
              this.grid.position.y = $(this.el).find('#y').val();
              this.grid.position.z = $(this.el).find('#z').val();
 
-            this.grid.rotation.x = $(this.el).find('#rx').val(  );
-            this.grid.rotation.y = $(this.el).find('#ry').val(  );
-            this.grid.rotation.z = $(this.el).find('#rz').val(  );
+            var DegRad = 0.0174532925;
+            this.grid.rotation.x = $(this.el).find('#rx').val(  ) * DegRad;
+            this.grid.rotation.y = $(this.el).find('#ry').val(  ) * DegRad;
+            this.grid.rotation.z = $(this.el).find('#rz').val(  ) * DegRad;
             
             this.renderer.render(this.scene, this.camera);
              this.get_simulated();
