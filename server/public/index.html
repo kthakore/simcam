@@ -282,10 +282,14 @@
 
         <script type="text/javascript" src="js/libs/highcharts.js">        </script>
         <script type="text/javascript" src="js/libs/modules/exporting.js"> </script>
+        <script type="text/javascript" src="js/cleanup.js"> </script>
+
 
         <script type="text/javascript"> 
             $('[rel="popover"]').popover({ html : "true" });
-                var m = Backbone.Model.extend({ }); 
+          var m = Backbone.Model.extend({ }); 
+            
+          var cleanup_images = []; 
 
           var camera_model = new m( {
                     u: 400, v: 320, fov: 35, ar: 400/320,
@@ -315,6 +319,9 @@
             render : function() {
                 var that = this;
                 this.model.url ='/noise';
+                cleanup_model( this.model, 'out');
+                cleanup_model( this.model, 'final_image');
+
                 this.model.save({},{
                 success: function(res){
                     var noise = $(that.el).find('#noisefull');
@@ -324,15 +331,20 @@
                        }
                 }});
                 this.model.url ='/distort';
+                cleanup_model( this.model, 'out');
+
                 this.model.save({},{
                 success: function(res){
                     var noise = $(that.el).find('#distorted');
                     if( res.get('success')  === 1 )
                        {
+
                        noise.attr('src', res.get('out') );
                        }
                 }});
                 this.model.url ='/combine';
+                cleanup_model( this.model, 'out');
+
                 this.model.save({},{
                 success: function(res){
                     var noise = $(that.el).find('#finish');

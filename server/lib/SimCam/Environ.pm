@@ -7,6 +7,22 @@ use File::Slurp;
 use JSON;
 use XML::Simple;
 
+
+sub cleanup {
+    my $self = shift;
+    my $params = $self->req->json;
+
+    my $to_del = 'public/'.$params->{to_del};
+    warn " Trying to kill $to_del ";
+    
+    if( -f $to_del )
+    {
+        unlink $to_del;
+    }
+    $self->render({json => { } });
+
+}
+
 sub register {
     my $self = shift;
     my $params = $self->req->json;
@@ -137,6 +153,7 @@ sub get_image {
     $self->render( { json => { img => $self->_get_image( $params->{image} ) } } ); 
 
 }
+
 
 sub _get_image {
     my $self = shift;
