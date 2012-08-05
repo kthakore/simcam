@@ -15,3 +15,6 @@ noise:
 distort:
 	$(CC) -o distort distort.c $(CFLAGS)
 
+diff:
+	$(CC) -o diff diff.c $(CFLAGS)
+
