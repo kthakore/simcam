@@ -59,10 +59,7 @@
                 <li><input type="button" id="cg_btn" class="btn span3" value="Check for Grid" /> </li>
                 <li><input type="button" id="ca_btn" class="btn span3" value="Calibrate" /> </li>
             </ul>
-                <h2>Selected Grids</h2>
-            <ul class="well sidemenu" id="selected_grids" >
-            </ul>
-
+       
                 <h2>Grid Placement</h2>
             <div class="well">
                <table class="table table-striped table-bordered table-condensed">
@@ -80,6 +77,13 @@
             </center>
             </div>
    </div>   
+   <div class="row">
+        <div class="span12">
+         <h2>Selected Grids</h2>
+            <div class="well sidemenu" id="selected_grids" >
+            </div>
+    </div>
+
         </section>
         <section id="results">
         <div class="page-header">
@@ -152,20 +156,20 @@
                var that = this; 
                this.graph ={ 'count' : 0, 
                                           'series' : [ 
-                                                        {name : 'd1', data: [] },
-                                                        {name : 'd2', data: [] },
-                                                        {name : 'd3', data: [] },
-                                                        {name : 'd4', data: [] },
-                                                        {name : 'd5', data: [] },
-                                                        {name : 'i1', data: [] },
+                                                        {name : 'r1', data: [] },
+                                                        {name : 'r2', data: [] },
+                                                        {name : 't1', data: [] },
+                                                        {name : 't2', data: [] },
+                                                        {name : 'r3', data: [] },
+                                                        {name : 'f1', data: [] },
                                                         {name : 'i2', data: [] },
-                                                        {name : 'i3', data: [] },
+                                                        {name : 'cx', data: [] },
                                                         {name : 'i4', data: [] },
-                                                        {name : 'i5', data: [] },
-                                                        {name : 'i6', data: [] },
+                                                        {name : 'fy', data: [] },
+                                                        {name : 'cy', data: [] },
                                                         {name : 'i7', data: [] },
                                                         {name : 'i8', data: [] },
-                                                        {name : 'i9', data: [] },
+                                                        {name : 's', data: [] },
 
                                                  
                                                                   ],
@@ -204,9 +208,12 @@
                         }
                         else
                         {
-                            $(that.el).find('#selected_grids').append('<li><img src="'+ res.get('image') +'" /> </li>' );
+                            $(that.el).find('#selected_grids').append('<img  width="120px" src="'+ res.get('image') +'" />' );
                             that.checked_images.push( 'public/'+img );
-                            console.log( that.checked_images );
+                            if( that.checked_images.length > 2 )
+                           {
+                                that.calibrate();
+                            }
                         }
                     }
                 });
@@ -214,7 +221,7 @@
             },
             calibrate : function() {
               var that = this;
-               if( that.checked_images < 2 )
+               if( that.checked_images.length < 2 )
                 {
                     alert( 'Need more then 2 images to calibrate' );
                 }

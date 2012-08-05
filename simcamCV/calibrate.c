@@ -16,12 +16,10 @@ int main(int argc, char * argv[])
 	int successes = 0;
 	int step, frame = 0;
  
-    int total = argc - 1; 
+    int total = argc - 1 ; 
     int start = 1;
   
     const char* loc = argv[start] ;
-
-    printf( "\n Total: %d, loc %s \n", total, loc );
 	
 	board_w = 8; // Board width in squares
 	board_h = 5; // Board height 
@@ -56,7 +54,7 @@ int main(int argc, char * argv[])
 			int found = cvFindChessboardCorners( image, board_sz, corners,
 				&corner_count, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS );
             
-             printf("Got successes: %d \ncorner_count: %d\n found: %d", successes, corner_count, found );
+             printf("At: %s \n Got successes: %d \ncorner_count: %d\n found: %d", loc, successes, corner_count, found );
 
 
 			// Get subpixel accuracy on those corners
@@ -108,7 +106,6 @@ int main(int argc, char * argv[])
 
     loc = argv[start] ;
 
-    printf( "\n Total: %d, start %d, loc %s \n", total, start, loc );
 	    image = cvLoadImage( loc );
     //image = cvQueryFrame( capture);
 	} // End collection while loop
