@@ -29,7 +29,7 @@
     <div class="container" id="main_container">
         <header class="jumbotron subhead" id="overview">
             <h1>SimCam</h1>
-            <p class="lead">Simulation <a href="#" class="" rel="popover" data-content="popover stuff" data-original-title="Todo">for</a> camera calibration.</p>
+            <p class="lead">Simulation <a href="#" class="" >for</a> camera calibration.</p>
         <div class="subnav">
             <ul class="nav nav-pills">
               <li><a href="index.html">Create Camera</a></li>
@@ -213,7 +213,15 @@
                         }
                         else
                         {
-                            $(that.el).find('#selected_grids').append('<img  width="120px" src="'+ res.get('image') +'" />' );
+
+                            var p = that.grid.position;
+                            p = p.x+', '+p.y+', '+p.z;
+                            var r = that.grid.rotation;
+                            r = r.x+', '+r.y+', '+r.z;
+
+                            $(that.el).find('#selected_grids').append('<img  width="120px" rel="popover" data-content="<b>Grid Location</b><div>('+ p +')</div><b>Grid Rotation</b><div>('+ r +')</div>" data-original-title="Location/Rotation" src="'+ res.get('image') +'" />' );
+                            $('[rel="popover"]').popover({ html : "true" });
+
                             that.checked_images.push( 'public/'+img );
                             if( that.checked_images.length > 2 )
                            {
@@ -263,7 +271,7 @@
                                             that.render_graphs();
                                         }
                        var de = $('#dist_err');
-                        de.html('<a href="'+res.get('undistorted').out+'"><img width="120px" src="'+ res.get('undistorted').out +'"/></a>"');
+                        de.append('<a href="'+res.get('undistorted').out+'"><img width="120px" src="'+ res.get('undistorted').out +'"/></a>"');
                         de.append('<a href="'+res.get('undistorted').diff.out+'"><img width="120px" src="'+ res.get('undistorted').diff.out +'"/></a>"');
 
                     }
