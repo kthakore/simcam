@@ -10,15 +10,10 @@ use XML::Simple;
 
 sub cleanup {
     my $self = shift;
-    my $params = $self->req->json;
-
-    my $to_del = 'public/'.$params->{to_del};
-    warn " Trying to kill $to_del ";
-    
-    if( -f $to_del )
-    {
-        unlink $to_del;
-    }
+    my $obj = $self->param('obj');
+    my $rmed = "rm public/$obj";
+    warn $rmed;
+    `$rmed`;
     $self->render({json => { } });
 
 }
@@ -111,7 +106,9 @@ sub noise {
 
     $params->{image} = $self->_get_image( $params->{image} );
 
-    $self->render({ json => $self->_run_noise( $params ) } );
+    my $noise = $self->_run_noise( $params ); 
+    unlink( $params->{image} );
+    $self->render({ json => $noise} );
 }
 
 
@@ -121,7 +118,9 @@ sub distort {
  
     $params->{image} = $self->_get_image( $params->{image} );
 
-    $self->render({ json =>   $self->_run_distort( $params )} );
+    my $distorted =   $self->_run_distort( $params );
+    unlink( $params->{image});
+    $self->render({ json => $distorted } );
    
 }
 
@@ -132,9 +131,10 @@ sub combine {
 
     $params->{image} = $self->_get_image( $params->{image} );
 
-    warn $params->{image};
-
     my $noise_res =  $self->_run_noise( $params );
+
+    unlink( $params->{image});
+
 
     $params->{image} =  'public/'.$noise_res->{out};
 

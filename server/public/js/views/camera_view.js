@@ -2,12 +2,12 @@
             initialize: function(options) {
              
                 this.model = camera_model;
-                this.render();
+                this.render(1);
             },
             events : {
                 'change input' : 'update', 
             },
-            render : function() {
+            render : function(init) {
              
             var c = $(this.el).find('#cam_canvas');
             if( this.renderer ) { delete this.renderer; } 
@@ -24,7 +24,20 @@
                 );
             camera.position.set( this.model.get('p_x'), this.model.get('p_y'), this.model.get('p_z') );
 
-            camera.lookAt( scene.position );
+            if( init )
+            {
+                camera.lookAt( scene.position );
+
+                this.model.set('r_x', camera.rotation.x );
+                this.model.set('r_y', camera.rotation.y );
+                this.model.set('r_z', camera.rotation.z );
+
+
+            } else
+            {
+                var DegRad = 0.0174532925;
+                camera.rotation.set( this.model.get('r_x') * DegRad, this.model.get('r_y') * DegRad, this.model.get('r_z') * DegRad );
+            }
             scene.add( camera );
             var cube = new THREE.Mesh(
                     new THREE.CubeGeometry( 5, 5, 5 ),

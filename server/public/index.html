@@ -127,6 +127,28 @@
             <p class="help-block">Position of the camera</p>
           <div>
 
+    </div>
+
+    <div class="control-group">
+
+          <!-- Prepended text-->
+          <label class="control-label">Rotation</label>
+          <div class="controls">
+            <div class="input-prepend">
+              <span class="add-on">X</span>
+              <input class="span2" data-camera="r_x" placeholder="" id="prependedInput" type="text">
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">Y</span>
+              <input class="span2" data-camera="r_y" placeholder="" id="prependedInput" type="text">
+            </div>
+            <div class="input-prepend">
+              <span class="add-on">Z</span>
+              <input class="span2"data-camera="r_z" placeholder="" id="prependedInput" type="text">
+            </div>
+            <p class="help-block">Rotation of the camera</p>
+          <div>
+
         </div>
     </fieldset>
   </form>
@@ -293,9 +315,9 @@
 
           var camera_model = new m( {
                     u: 400, v: 320, fov: 35, ar: 400/320,
-                    near: .4, far: 10000, p_x: -15, p_y: 10, p_z: 15,
+                    near: .4, far: 10000, p_x: 0, p_y: 0, p_z: 15,
                     r1 : 0.00, r2: 0.00, r3: 0.00, t1: 0.00, t2: 0.00,
-                    alpha : 0.01, 
+                    alpha : 0.01 
                     
            });
 
@@ -310,28 +332,45 @@
             initialize: function( options) {
                 this.model = camera_model;
                 this.model.bind('obj_moved', this.render, this );
+                this.old = [];
                 this.render();
 
             },
             events : {
                 'change input' : 'update'
             },
+            do_submit : function() {
+                var that = this;
+                if( this.old.length > 0 )
+                {
+                    $.each( this.old, function(r, i) {
+                                if( that.combined !== i )
+                                {
+                                    $.get('/cleanup?obj='+escape( i ) );
+                                }
+                            });
+                }
+            },
             render : function() {
                 var that = this;
                 this.model.url ='/noise';
-                cleanup_model( this.model, 'out');
-                cleanup_model( this.model, 'final_image');
-
+                
+                if( this.old.length > 0 )
+                {
+                    $.each( this.old, function(r, i) {
+                                $.get('/cleanup?obj='+escape( i ) );
+                            });
+                }
                 this.model.save({},{
                 success: function(res){
                     var noise = $(that.el).find('#noisefull');
                     if( res.get('success')  === 1 )
                        {
                        noise.attr('src', res.get('out') );
+                        that.old.push( res.get('out') );
                        }
                 }});
                 this.model.url ='/distort';
-                cleanup_model( this.model, 'out');
 
                 this.model.save({},{
                 success: function(res){
@@ -340,10 +379,11 @@
                        {
 
                        noise.attr('src', res.get('out') );
+                        that.old.push( res.get('out') );
+
                        }
                 }});
                 this.model.url ='/combine';
-                cleanup_model( this.model, 'out');
 
                 this.model.save({},{
                 success: function(res){
@@ -352,6 +392,8 @@
                        {
                        noise.attr('src', res.get('out') );
                        res.set('final_image', res.get('out') );
+                        that.old.push( res.get('out') );
+                        that.combined = res.get('out');
                        }
                 }});
 
@@ -384,8 +426,8 @@
                 'click #submit' : 'save_camera'   
             },
             save_camera: function() {
-
-                camera_model.url = '/save';
+                 this.environ_form.do_submit();
+                 camera_model.url = '/save';
                 camera_model.save( {}, {
                     success: function( res ) {
                         var template = $('#modal_template').html();
