@@ -251,23 +251,30 @@
                        
                         var data = res.attributes;
                       var offset = 0;
-
+                        var max = 0;
+                        var min = 0;
                                 $('#Distortion').find('td').each( function( i, e ) {
                                             var dd =  parseFloat(data.distortion[i]);
                                            $(e).html( dd );
+                                            if( dd < min ) { min = dd; }
+                                            else if( dd > max ) { max = dd; }
+
                                             that.graph.series[offset].data.push( dd);
                                              offset++;
                                                                            });
                                     
                                  $('#Intrinsics').find('td').each( function( i, e ) {
-                                        var di =  parseFloat(data.intrinsics[i]);
-                                           $(e).html(di );
+                                       var di =  parseFloat(data.intrinsics[i]);
+                                                                  $(e).html(di );
+                                            if( di < min ) { min = di; }
+                                            else if( di > max ) { max = di; }
 
-                                            $(that.graph.series[offset].data).push( di );
+                                            that.graph.series[offset].data.push( di );
+                                             
                                              offset++;                                     });
-
                                          if( that.graph.count++ >= 1 )
                                         {
+                                            console.log( that.graph.series );
                                             that.render_graphs();
                                         }
                        var de = $('#dist_err');
@@ -391,7 +398,7 @@
                     },
                     xAxis: {
                         title: {
-                            text: 'Grid NUmber'
+                            text: 'Number of Grids'
                         },
                         categories: x_axis 
                     },
