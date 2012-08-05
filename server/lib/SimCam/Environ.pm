@@ -113,7 +113,6 @@ sub noise {
     $params->{image} = $self->_get_image( $params->{image} );
 
     my $noise = $self->_run_noise( $params ); 
-    unlink( $params->{image} );
     $self->render({ json => $noise} );
 }
 
@@ -146,13 +145,9 @@ sub combine {
     $params->{image} =  'public/'.$noise_res->{out};
     my $dist_res = $self->_run_distort( $params );
 
-    unless( $params->{save_noise} )
+    if( $params->{save_noise} )
     {
-        unlink( $params->{image});
-    }
-    else
-    {
-        $dist_res->{save_noise} = $noise_res->{out};       
+          $dist_res->{save_noise} = $noise_res->{out};       
     }
 
 
