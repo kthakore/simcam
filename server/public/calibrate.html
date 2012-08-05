@@ -228,6 +228,7 @@
                else{
                  var mc = new m({});
                  mc.set( 'checked', that.checked_images );
+                 mc.set( 'diff', that.noise_saved );
                  mc.url = '/calibrate';
 
                  mc.save( {}, 
@@ -282,6 +283,7 @@
             var c = $(this.el).find('#content');
             var uri =    c.find('canvas')[0].toDataURL();
             var me = new m( this.model.attributes );
+                me.set('save_noise', true );
                 me.set('image', uri );
                 me.url ='/combine';
                 me.save({},{
@@ -290,7 +292,14 @@
                     if( res.get('success')  === 1 )
                        {
                        noise.html('<img src="'+res.get('out')+'" />');
+
+                        if( that.noise_saved )
+                        {
+                            $.get('/cleanup?obj='+escape( that.noise_saved ) );
+                        }
+                        that.noise_saved =  res.get('save_noise');
                        }
+                    
                 }});
 
             },

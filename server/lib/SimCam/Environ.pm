@@ -60,9 +60,15 @@ sub calibrate {
           
             my @d_array = split(' ', $d_cv_data ); 
             my @f_array = split(' ', $i_cv_data );
-            
-     
-            my $fo = { distortion => \@d_array, intrinsics => \@f_array };
+           
+            my $last = pop @{$checked_images};
+            my $distorted =   $self->_run_undistort( { image => $last, dist => '/tmp/Distortion.xml', int => '/tmp/Intrinsics.xml'} );
+            warn $params->{diff};
+        
+            my $diff = $self->_run_diff( $params->{diff}, $distorted->{out} ); 
+
+            $distorted->{diff} = $diff;
+            my $fo = { distortion => \@d_array, intrinsics => \@f_array, undistorted => $distorted };
             $self->render({ json => $fo } );
 
         }
@@ -129,17 +135,26 @@ sub combine {
     my $self = shift;
     my $params = $self->req->json;
 
+    
+
     $params->{image} = $self->_get_image( $params->{image} );
 
     my $noise_res =  $self->_run_noise( $params );
 
     unlink( $params->{image});
 
-
     $params->{image} =  'public/'.$noise_res->{out};
-
-   
     my $dist_res = $self->_run_distort( $params );
+
+    unless( $params->{save_noise} )
+    {
+        unlink( $params->{image});
+    }
+    else
+    {
+        $dist_res->{save_noise} = $noise_res->{out};       
+    }
+
 
     $self->render({ json => $dist_res } );
 
@@ -206,6 +221,57 @@ sub _run_noise {
 
         return { success => 0, job_id => $job_id, result => { out => $stdout, err => $stderr, res => \@result} };
 
+    }
+
+}
+sub _run_diff {
+    my $self = shift;
+    my $image0 = shift;
+    my $imaget = shift;
+    my $job_id = sha1_hex( localtime.rand);
+ 
+    my $out_image = 'public/job_images/'.$job_id.'.png';
+
+    my $run  = "../simcamCV/diff public/$image0 public/$imaget $out_image ";
+    my( $stdout, $stderr, @result) = capture {
+        
+        `$run`
+    };
+
+    if( -f $out_image )
+    {
+        return { success => 1, out => 'job_images/'.$job_id.'.png', job_id => $job_id };
+    }
+    else
+    {
+        return { success => 0, result => { out => $stdout, err => $stderr, res => \@result } , job_id => $job_id};  
+    }
+
+}
+sub _run_undistort {
+    my $self = shift;
+    my $params = shift;
+
+    my $image = $params->{image};
+    my $dist_path = $params->{dist};
+    my $int_path = $params->{int};
+    my $job_id = sha1_hex( localtime.rand);
+ 
+    my $out_image = 'public/job_images/'.$job_id.'.png';
+
+    my $run  = "../simcamCV/distort $dist_path $image $out_image $int_path";
+    my( $stdout, $stderr, @result) = capture {
+        
+        `$run`
+    };
+
+    if( -f $out_image )
+    {
+        return { success => 1, out => 'job_images/'.$job_id.'.png', job_id => $job_id };
+    }
+    else
+    {
+        return { success => 0, result => { out => $stdout, err => $stderr, res => \@result } , job_id => $job_id};  
     }
 
 }
