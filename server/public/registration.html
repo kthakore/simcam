@@ -110,7 +110,11 @@
 
             },
             routes : {
+              ' ' : 'select_cameras',
               'camera/:id' : 'camera'
+            },
+            select_cameras : function () {
+
             },
             camera : function( id ) {
                 this.view = new calib_view( { id : id, el: $('body') } );

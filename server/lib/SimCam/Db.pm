@@ -1,4 +1,5 @@
 package SimCam::Db;
+use Data::Dumper;
 use Mojo::Base 'Mojolicious::Controller';
 
 sub save {
@@ -21,6 +22,25 @@ sub get_camera {
     my $found =  $d->lookup( $id );
 
     $self->render({json => $found } );
+
+}
+
+sub cameras {
+    my $self = shift;
+    my $d = $self->app->kdb->{d};
+
+    my $found =  $d->backend->all_entries; 
+    my @cameras = ();
+    my $c = $found->next();
+
+    foreach my $camera ( @{$c} )
+    {
+        my $hash = $camera->data;
+           $hash->{id} = $camera->id();
+        push @cameras, $hash;
+
+    }
+    $self->render({json => \@cameras } );
 
 }
 

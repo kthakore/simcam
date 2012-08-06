@@ -6,12 +6,9 @@ use KiokuDB::Backend::Files;
 
 has 'kdb' => sub { 
 
-    my $d =  KiokuDB->new(
-            backend => KiokuDB::Backend::Files->new(
-                dir        => "kdb",
-                serializer => "json",
-                ),
-            );
+    my $d =  KiokuDB->connect(
+            "dbi:SQLite:dbname=simcam.db"
+             );
     return { d => $d, scope =>  $d->new_scope };
 };
 
@@ -45,6 +42,8 @@ sub startup {
 # Save
     $r->post('/save')->to('db#save');
     $r->get('/camera/:id')->to('db#get_camera');
+    $r->get('/cameras')->to('db#cameras');
+
 
 
 # TODO:
