@@ -40,12 +40,12 @@
         </header>
           <section id="Calibration">
         <div class="page-header">
-            <h1>Sample Image Capture<small>Camera captures images as this</small></h1>
+            <h1>Sample Image Capture <small>Camera captures images as this</small></h1>
        </div>
      
         <div class="row"> 
-              <center id="camera_view" class="span12">
-             </center> 
+              <div id="camera_view" class="span12">
+             </div> 
         </div>
 
          <section id="Calibration">
@@ -56,6 +56,7 @@
             <div class="span4" id="sidebar" > 
                 <h2>Options</h2>
             <ul class="well sidemenu nav nav-pills nav-stacked">
+                <li><input type="button" id="3v_btn" class="btn span3" value="3D view" /></ li>
                 <li><input type="button" id="cg_btn" class="btn span3" value="Check for Grid" /> </li>
                 <li><input type="button" id="ca_btn" class="btn span3" value="Calibrate" /> </li>
             </ul>
@@ -193,9 +194,15 @@
             },
             events : {
              'click #cg_btn': 'check_grid',
-             'click #ca_btn': 'calibrate', 
+             'click #ca_btn': 'calibrate',
+             'click #3v_btn' : 'three_view', 
              'change .loc' : 'update_grid',
              'change .rot' : 'update_grid'
+            },
+            three_view : function() {
+              var that = this;
+              ;
+
             },
             check_grid : function() {
              var that = this;
@@ -329,7 +336,7 @@
             render : function() {
 
              var that = this;
-                $(this.el).find('#camera_view').html( '<img src="'+this.model.get('image')+'" />');
+                $(this.el).find('#camera_view').html( '<img style="border:1px solid black; width:250px" src="'+this.model.get('image')+'" />');
             var c = $(this.el).find('#content');
             if( this.renderer ) { delete this.renderer; } 
             this.renderer = new THREE.WebGLRenderer({ clearColor: 0x888888, clearAlpha: 255  });
