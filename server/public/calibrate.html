@@ -71,7 +71,7 @@
        </div>
 
             <div class="span7 well">
-            <center id="content" >
+            <center id="content" style="display:none">
 
              </center>
             <center id="simulated" >
@@ -286,7 +286,8 @@
                                         }
                        var de = $('#dist_err');
                         de.append('<a href="'+res.get('undistorted').out+'"><img width="120px" src="'+ res.get('undistorted').out +'"/></a>"');
-                        de.append('<a href="'+res.get('undistorted').diff.out+'"><img width="120px" src="'+ res.get('undistorted').diff.out +'"/></a>"');
+                        de.append('<a href="'+res.get('undistorted').diff.out+'"><img width="120px" rel="popover" data-content="<b>Mean Pixel Difference:</b><br /><small>Lower is better</small> <div>'+ res.get('undistorted').diff.mean +'</div><b>Standard Deviation Pixel Difference:</b><br /><small>Lower is better</small> <div>'+ res.get('undistorted').diff.std +'</div>" data-original-title="Image Stats" src="'+ res.get('undistorted').diff.out +'"/></a>"');
+                        $('[rel="popover"]').popover({ html : "true" });
 
                     }
                  }); 

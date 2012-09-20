@@ -67,7 +67,12 @@ sub calibrate {
         
             my $diff = $self->_run_diff( $params->{diff}, $distorted->{out} ); 
 
+            my $img_out_diff = $diff->{out};
+            $diff->{mean} = `convert public/$img_out_diff -format "%[fx:mean]" info:`;
+            $diff->{std} =  `convert public/$img_out_diff -format "%[fx:standard_deviation]" info:`;
+
             $distorted->{diff} = $diff;
+
             my $fo = { distortion => \@d_array, intrinsics => \@f_array, undistorted => $distorted };
             $self->render({ json => $fo } );
 
