@@ -95,6 +95,10 @@ Camera</a></li>
 			this.plane.visible = false;
 			this.scene.add( this.plane );
 
+            var x_plane = new THREE.Mesh( new THREE.PlaneGeometry( 2000, 2000, 32, 32 ), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
+               x_plane.rotation.set( 3.14159 /2, 0, 0 );
+            this.scene.add( x_plane );
+
 
             var sphere = new THREE.Mesh(
                     new THREE.SphereGeometry( .2, 20, 20),
@@ -160,11 +164,15 @@ Camera</a></li>
             mouseup : function( e ) {
                 e.preventDefault();
                 console.log('MOuse up');
+                
                 if ( this.INTERSECTED )
                 {
                     this.plane.position.copy( this.INTERSECTED.position );
                     this.SELECTED = null;
                     console.log('Letting object go');
+                    this.controls.enabled = true;
+                } else if ( this.SELECTED ){ 
+                    this.SELECTED = null;
                     this.controls.enabled = true;
                 }
                 this.el.style.cursor = 'auto';
