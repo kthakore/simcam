@@ -33,7 +33,7 @@
          <section id="main_section" style="margin-top:-30px">
 
         <div class="row-fluid" >
-          <div class="span12" style="background-color:red" id="main_view">  </div>
+          <div class="span12" style="" id="main_view">  </div>
         </div>
         <div class="row-fluid"  >
           <div class="span12" id="spacer_view"> </div>
@@ -54,10 +54,7 @@
         <script type="text/javascript" src="js/libs/underscore-min.js">    </script>
         <script type="text/javascript" src="js/libs/backbone-min.js">      </script>
         <script type="text/javascript" src="js/libs/bootstrap.min.js">     </script>
-        <script type="text/javascript" src="js/libs/bootstrap-tab.js">     </script>
-        <script type="text/javascript" src="js/libs/bootstrap-tooltip.js">     </script>
-        <script type="text/javascript" src="js/libs/bootstrap-popover.js">     </script>
-        <script type="text/javascript" src="js/libs/Three.js">        </script>
+           <script type="text/javascript" src="js/libs/Three.js">        </script>
 
 
 
@@ -73,7 +70,42 @@
         var main_view = Backbone.View.extend({
             initialize: function() {
                 this.model = new m({} );
-                console.log('Main View Loaded');
+                        this.renderer = new THREE.WebGLRenderer({ clearColor: 0x888888, clearAlpha: 255  });
+                var width = $(this.el).width();
+                var height = (width * 4) /8;
+                this.renderer.setSize( $(this.el).width(), height );
+                $(this.el).html( this.renderer.domElement );
+
+                this.scene = new THREE.Scene();
+                this.camera = new THREE.PerspectiveCamera( 
+                    35, width/height, .4, 1000 );
+                this.camera.position.set( 2, 2, 10 );
+                this.camera.lookAt( this.scene.position );
+                this.scene.add( this.camera );
+
+                
+            var cube = new THREE.Mesh(
+                    new THREE.CubeGeometry( 20, .001, 20 ),
+                    new THREE.MeshLambertMaterial( { color: 0xcc1144 } )
+                    );
+            var sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry( .2, 20, 20),
+                    new THREE.MeshLambertMaterial( { color: 0x00FF00 } )
+                    );
+
+            this.scene.add( cube );
+            this.scene.add( sphere );
+            sphere.position.set(2, 2 , 0 );              
+
+            console.log('Main View Loaded');
+       
+
+            var light = new THREE.PointLight( 0xFFFFff );
+            light.position.set( 10,10, 10 );
+            this.scene.add( light );
+
+            this.renderer.render(this.scene, this.camera);
+
             },
             events : {
 
