@@ -2,3 +2,6 @@
 calibrate
 check
 *_found.png
+found_job_images/
+simcam.db
+simcamCV/diff
