@@ -24,9 +24,9 @@
             <p class="lead">Simulation for camera calibration.</p>
         <div class="subnav" id="main_nav">
             <ul class="nav nav-pills">
-              <li><a href="#create">Create Camera</a></li>
-              <li><a href="#calibrate">Calibrate</a></li>
-              <li><a href="#reference">Reference</a></li>
+              <li><a href="javascript:void(0)" id="create_camera" >Create Camera</a></li>
+              <li><a href="javascript:void(0)" id="calibrate" >Calibrate</a></li>
+              <li><a href="javascript:void(0)" id="reference" >Reference</a></li>
             </ul>
           </div>
         </header>
@@ -66,29 +66,95 @@
 
         <script type="text/javascript"> 
             $('[rel="popover"]').popover({ html : "true" });
-                var m = Backbone.Model.extend({ }); 
+                
+        var m = Backbone.Model.extend({ }); 
+        var c = Backbone.Collection.extend({ });
 
+        var main_view = Backbone.View.extend({
+            initialize: function() {
+                this.model = new m({} );
+                console.log('Main View Loaded');
+            },
+            events : {
 
-        var calib_view = Backbone.View.extend({
-            initialize: function(options) {
-               var that = this; 
-               this.model = new m({ id : options.id });    
+            },
+            draw_camera : function( c ) {
+
+            } // draw_camera
+            }); //main_view
+        var side_view = Backbone.View.extend({ 
+            initialize: function() {
+                this.model = new m({} );
+                console.log('Side View Loaded');
+            },
+            events : {
+            } 
+
+            }); //side_view
+
+        var td_view = Backbone.View.extend({ 
+            initialize: function() {
+                this.model = new m({} );
+                console.log('Td view Loaded');
 
             },
             events : {
-            },
-            render: function() {
-                
+
             }
 
+            }); // td_view
+
+
+
+        var app_view = Backbone.View.extend({ 
+            initialize: function() {
+                this.model = new m({});
+                this.cameras = new c({ model : m });
+                this.cameras.bind('add', this.add_camera, this);
+                this.cameras.bind('reset', this.add_cameras, this );
+                this.cameras.bind('all', this.render, this );
+        
+                this.main_view = new main_view({ el : $('#main_view') });
+                this.side_view = new side_view({ el : $('#side_view') });
+                this.td_view = new td_view({el : $('#td_view') });
+
+                console.log('Loaded App View');
+            },
+            events : {
+                'click #create_camera' : 'create_camera'
+            },
+            add_camera : function( camera ) {
+                console.log('Camera add');  
+            },
+            add_cameras : function( ) {
+                console.log('Cameras reset');
+            },
+            render : function () {
+
+            },
+            create_camera : function( model )  {
+ 
+                  var camera_model = new m( {
+                    u: 400, v: 320, fov: 35, ar: 400/320,
+                    near: .4, far: 10000, p_x: 0, p_y: 0, p_z: 15,
+                    r1 : 0.00, r2: 0.00, r3: 0.00, t1: 0.00, t2: 0.00,
+                    alpha : 0.01 
+                    }); // camera_model new
+
+                this.cameras.add( camera_model );
+
+                this.main_view.draw_camera( camera_model );
+                console.log('Created and added camera');
+
+            }, //create_camera 
         });
 
         var app = Backbone.Router.extend({
             initialize: function(options) {
-
+                this.view = new app_view( { el: $('body') } );
             },
             routes : {
-              ' ' : 'start'
+              ' ' : 'start',
             },
             start : function () {
 
