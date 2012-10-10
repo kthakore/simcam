@@ -4,6 +4,7 @@ var main_camera_view = Backbone.View.extend({
 
     initialize: function() {
         var that = this;
+                this.mouse =  new THREE.Vector2(), this.offset = new THREE.Vector3();
 
   				this.camera = new THREE.PerspectiveCamera( 35, $(this.el).innerWidth() / window.innerHeight, 1, 10000 );
 				this.camera.position.z = 1000;
@@ -111,12 +112,105 @@ var main_camera_view = Backbone.View.extend({
        'mouseup canvas' : 'on_canvas_mup',
     },
     on_canvas_mmove : function( event ) {
+                
+
+
+				event.preventDefault();
+
+			    this.mouse.x = ( event.clientX / $(this.el).innerWidth() ) * 2 - 1;
+				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+				//
+
+				var vector = new THREE.Vector3( this.mouse.x, this.mouse.y, 0.5 );
+				this.projector.unprojectVector( vector, this.camera );
+
+				var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
+
+
+				if ( this.SELECTED ) {
+
+					var intersects = ray.intersectObject( this.plane );
+                    if( intersects[0] && intersects[0].point ) {
+					    this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
+                    }
+					return;
+
+				}
+
+
+				var intersects = ray.intersectObjects( this.objects );
+
+				if ( intersects.length > 0 ) {
+
+					if ( this.INTERSECTED != intersects[ 0 ].object ) {
+
+						if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+
+						this.INTERSECTED = intersects[ 0 ].object;
+						this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
+
+						this.plane.position.copy( this.INTERSECTED.position );
+						this.plane.lookAt( this.camera.position );
+                        this.plane.rotation.copy( this.camera.rotation );
+
+					}
+
+				    this.el.style.cursor = 'pointer';
+
+				} else {
+
+					if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+
+					this.INTERSECTED = null;
+
+					this.el.style.cursor = 'auto';
+
+				}
+
 
     },
     on_canvas_mdown : function(event ) {
 
+				event.preventDefault();
+
+				var vector = new THREE.Vector3( this.mouse.x, this.mouse.y, 0.5 );
+				this.projector.unprojectVector( vector, this.camera );
+
+				var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
+
+				var intersects = ray.intersectObjects( this.objects );
+
+				if ( intersects.length > 0 ) {
+
+					this.controls.enabled = false;
+
+					this.SELECTED = intersects[ 0 ].object;
+
+					var intersects = ray.intersectObject( this.plane );
+					this.offset.copy( intersects[ 0 ].point ).subSelf( this.plane.position );
+
+					this.el.style.cursor = 'move';
+
+				}
+
+
     },
     on_canvas_mup : function(event ) {
+				event.preventDefault();
+
+				this.controls.enabled = true;
+
+				if ( this.INTERSECTED ) {
+
+					this.plane.position.copy( this.INTERSECTED.position );
+
+					this.SELECTED = null;
+
+				}
+
+				this.el.style.cursor = 'auto';
+
     },
     on_resize : function (event ) {
 
