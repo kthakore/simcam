@@ -41,13 +41,17 @@
     <script type="text/javascript" src="js/libs/backbone-min.js"></script> 
     <script type="text/javascript" src="js/libs/bootstrap.min.js"></script> 
     <script type="text/javascript" src="js/libs/highcharts.js"></script> 
-    <script type="text/javascript" src="js/libs/modules/exporting.js">
-    </script>
+    <script type="text/javascript" src="js/libs/modules/exporting.js"></script>
+
+    <script type="text/javascript" src="js/views/main_camera_view.js"></script>
 
 		<script>
-            var td_view = Backbone.View.extend({
+            
+            
+            var main_view = Backbone.View.extend({
                 initialize: function() {
-                    var that = this; 
+                   var that = this; 
+                                     
                     
                 },
             }); 
@@ -62,6 +66,7 @@
 
 			init();
 			animate();
+            
 
 			function init() {
 
