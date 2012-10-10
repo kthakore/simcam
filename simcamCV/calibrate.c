@@ -26,10 +26,6 @@ int main(int argc, char * argv[])
 	n_boards = total; // Number of boards
 	int board_n = board_w * board_h;
 	CvSize board_sz = cvSize( board_w, board_h );
-	CvCapture* capture = cvCreateCameraCapture( 0 );
-	assert( capture );
-
-	cvNamedWindow( "Calibration" );
 	// Allocate Sotrage
 	CvMat* image_points		= cvCreateMat( n_boards*board_n, 2, CV_32FC1 );
 	CvMat* object_points		= cvCreateMat( n_boards*board_n, 3, CV_32FC1 );
@@ -64,7 +60,6 @@ int main(int argc, char * argv[])
 
 			// Draw it
 			cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
-			cvShowImage( "Calibration", image );
             if( found )
             {            cvSaveImage( "/tmp/grid_save.png", image);   }
 
@@ -83,16 +78,6 @@ int main(int argc, char * argv[])
 			}
 //		} 
 
-		// Handle pause/unpause and ESC
-		int c = cvWaitKey( 15 );
-		if( c == 'p' ){
-			c = 0;
-			while( c != 'p' && c != 27 ){
-				c = cvWaitKey( 250 );
-			}
-		}
-		if( c == 27 )
-			return 0;
  
     if( start < total )
     {
@@ -155,26 +140,12 @@ int main(int argc, char * argv[])
 	cvInitUndistortMap( intrinsic, distortion, mapx, mapy );
 
 	// Run the camera to the screen, now showing the raw and undistorted image
-	cvNamedWindow( "Undistort" );
 
 	while( image ){
 		IplImage *t = cvCloneImage( image );
-		cvShowImage( "Calibration", image ); // Show raw image
 		cvRemap( t, image, mapx, mapy ); // undistort image
 		cvReleaseImage( &t );
-		cvShowImage( "Undistort", image ); // Show corrected image
 
-		// Handle pause/unpause and esc
-		int c = cvWaitKey( 15 );
-		if( c == 'p' ){
-			c = 0;
-			while( c != 'p' && c != 27 ){
-				c = cvWaitKey( 250 );
-			}
-		}
-		if( c == 27 )
-			break;
-		image = cvQueryFrame( capture );
 	}
 */
 

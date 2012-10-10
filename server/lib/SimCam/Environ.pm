@@ -6,7 +6,8 @@ use MIME::Base64;
 use File::Slurp;
 use JSON;
 use XML::Simple;
-
+use utf8;
+use Data::Dumper;
 
 sub cleanup {
     my $self = shift;
@@ -116,8 +117,9 @@ sub noise {
     my $params = $self->req->json;
 
     $params->{image} = $self->_get_image( $params->{image} );
-
     my $noise = $self->_run_noise( $params ); 
+    $self->app->log->info( Dumper $noise);
+
     $self->render({ json => $noise} );
 }
 
@@ -329,6 +331,10 @@ sub _run_distort {
     my $out_image = 'public/job_images/'.$job_id.'.png';
 
     my $run  = "../simcamCV/distort $dist_path $image $out_image $int_path";
+
+    $self->app->log->info( $run );
+
+
     my( $stdout, $stderr, @result) = capture {
         
         `$run`

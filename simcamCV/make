@@ -2,3 +2,4 @@ g++ -o check check.c -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv
 g++ -o calibrate calibrate.c -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_core
 g++ -o noise noise.cpp -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_core
 g++ -o distort distort.c -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_core
+g++ -o diff diff.c -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_core
