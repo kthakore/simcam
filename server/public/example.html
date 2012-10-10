@@ -11,8 +11,6 @@
 
 		<style>
 			body {
-				font-family: Monospace;
-				background-color: #f0f0f0;
 				margin: 0px;
 				overflow: hidden;
                 padding: 0px;
@@ -20,6 +18,22 @@
 		</style>
 	</head>
 	<body>
+        <div class="container-fluid">
+            <div class="row-fluid" >
+                <div id="main_view" class="span10" >
+                </div>
+                <div id="side_view" class="span2">
+                    <h2>Camera View</h2>
+                    <div style="height:350px; background-color:red" ></div>
+                    <h2>Options</h2>
+                    <center class="btn-group btn-group-vertical">
+                    <button class="btn">Current Camera</button>
+                      <button class="btn">Lights</button>
+                      <button class="btn">Calibration</button>
+                    </center>
+                </div>
+            </div> 
+        </div>
 
 		<script src="js/libs/three.js"></script>
     <script type="text/javascript" src="js/libs/jquery.min.js"></script> 
@@ -31,6 +45,12 @@
     </script>
 
 		<script>
+            var td_view = Backbone.View.extend({
+                initialize: function() {
+                    var that = this; 
+                    
+                },
+            }); 
 
 			var container, stats;
 			var camera, controls, scene, projector, renderer;
@@ -45,10 +65,9 @@
 
 			function init() {
 
-				container = document.createElement( 'div' );
-				document.body.appendChild( container );
+				container = $('#main_view')[0]; 
 
-				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera = new THREE.PerspectiveCamera( 35, $(container).innerWidth() / window.innerHeight, 1, 10000 );
 				camera.position.z = 1000;
 
 				controls = new THREE.OrbitControls( camera );
@@ -109,15 +128,25 @@
 
 				}
 
-				plane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
-				plane.visible = true;
+				plane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
+				xplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0xCC0000, opacity: 0.25, transparent: true, wireframe: true } ) );
+				yplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0x00CC00, opacity: 0.25, transparent: true, wireframe: true } ) );
+				zplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0x0000CC, opacity: 0.25, transparent: true, wireframe: true } ) );
+
+                yplane.rotation.set( 0, 1.57079633, 0 );
+                zplane.rotation.set( 1.57079633, 0, 0 );
+
+
+                scene.add(xplane); scene.add(yplane); scene.add(zplane);
+
+				plane.visible = false;
 				scene.add( plane );
 
 				projector = new THREE.Projector();
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.sortObjects = false;
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( $(container).innerWidth(), window.innerHeight );
 
 				renderer.shadowMapEnabled = true;
 				renderer.shadowMapSoft = true;
@@ -136,10 +165,10 @@
 
 			function onWindowResize() {
 
-				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.aspect = $(continer).innerWidth() / window.innerHeight;
 				camera.updateProjectionMatrix();
 
-				renderer.setSize( window.innerWidth, window.innerHeight );
+				renderer.setSize( $(container).innerWidth(), window.innerHeight );
 
 			}
 
@@ -147,7 +176,7 @@
 
 				event.preventDefault();
 
-				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.x = ( event.clientX / $(container).innerWidth() ) * 2 - 1;
 				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 				//
