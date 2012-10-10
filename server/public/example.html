@@ -47,7 +47,7 @@
 
 		<script>
             
-            
+           var mcv = new main_camera_view({el : $('#main_view') }); 
             var main_view = Backbone.View.extend({
                 initialize: function() {
                    var that = this; 
@@ -64,8 +64,6 @@
 			offset = new THREE.Vector3(),
 			INTERSECTED, SELECTED;
 
-			init();
-			animate();
             
 
 			function init() {
@@ -170,7 +168,7 @@
 
 			function onWindowResize() {
 
-				camera.aspect = $(continer).innerWidth() / window.innerHeight;
+				camera.aspect = $(container).innerWidth() / window.innerHeight;
 				camera.updateProjectionMatrix();
 
 				renderer.setSize( $(container).innerWidth(), window.innerHeight );
@@ -280,20 +278,6 @@
 			}
 
 
-			function animate() {
-
-				requestAnimationFrame( animate );
-
-				render();
-			}
-
-			function render() {
-
-				controls.update();
-
-				renderer.render( scene, camera );
-
-			}
 
 		</script>
 
