@@ -21,7 +21,7 @@
 	</head>
 	<body>
 
-		<script src="js/libs/Three.js"></script>
+		<script src="js/libs/three.js"></script>
     <script type="text/javascript" src="js/libs/jquery.min.js"></script> 
     <script type="text/javascript" src="js/libs/underscore-min.js"></script>
     <script type="text/javascript" src="js/libs/backbone-min.js"></script> 
@@ -51,7 +51,7 @@
 				camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
 				camera.position.z = 1000;
 
-				controls = new THREE.TrackballControls( camera );
+				controls = new THREE.OrbitControls( camera );
 				controls.rotateSpeed = 1.0;
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
@@ -214,6 +214,7 @@
 				if ( intersects.length > 0 ) {
 
 					controls.enabled = false;
+                    console.log( controls.enabled );
 
 					SELECTED = intersects[ 0 ].object;
 
