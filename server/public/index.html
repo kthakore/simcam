@@ -1,448 +1,102 @@
 <!DOCTYPE html>
-<html>
-    <head> 
-        <meta charset="utf-8">
-          <title>SimCam</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en">
+	<head>
+		<title>Simcam Environment</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
         <meta name="description" content="SimCam">
         <meta name="author" content="Kartik Thakore">
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
-        <link href="css/docs.css" rel="stylesheet">
 
-    <style>
-        body {
-            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-        }
-    </style>
-
-    </head> 
-    <body>
-      
-    <div class="navbar navbar-fixed-top center">
-        <div class="navbar-inner" >
-            <div class="container" >   
-                <a class="brand" href="#">SimCam</a>
-            </div>
-        </div>
-    </div> 
-    <div class="container" id="main_container">
-        <header class="jumbotron subhead" id="overview">
-            <h1>SimCam</h1>
-            <p class="lead">Simulation <a href="#" class="" rel="popover" data-content="popover stuff" data-original-title="Todo">for</a> camera calibration.</p>
-        <div class="subnav">
-            <ul class="nav nav-pills">
-              <li><a href="index.html">Getting Started</a></li>
-              <li><a href="calibrate.html">Calibration</a></li>
-              <li><a href="Registration.html">Registration</a></li>
-            </ul>
-          </div>
-        </header>
-        <section id="getting_started">
-        <div class="page-header">
-            <h1><a href="#" class="" rel="popover" data-content="stuff" data-original-title="SimCAM">Getting Started</a> <small>Starting with SimCam</small></h1>
-       </div>
-        <div class="row" id="camera_form" > 
-            <div class="span3 well">
-                <h2>Selecting a Camera</h2>
-                <p>
-                   SimCam is a simple WebGL environment for learning calibration of cameras. To get started
-                   first create a camera.
-                </p>
-  
-
-  <form class="form-vertical">
-    <fieldset>
-      <div id="legend" class="">
-        <legend class="">Camera</legend>
-      </div>
-    <div class="control-group">
-
-          <!-- Text input-->
-          <label class="control-label" for="input01">Name</label>
-          <div class="controls">
-            <input type="text" data-camera="name" placeholder="" class="input-xlarge">
-            <p class="help-block">Name the camera to save your work.</p>
-          </div>
-        </div>
-
-    <div class="control-group">
-
-          <!-- Appended input-->
-          <label class="control-label">Field of View</label>
-          <div class="controls">
-            <div class="input-append">
-              <input class="span2"  data-camera="fov" placeholder="degrees" type="text">
-              <span class="add-on">&deg;</span>
-            </div>
-            <p class="help-block">Degree of angle for viewing</p>
-          </div>
-
-        </div>
-
-    <div class="control-group">
-
-          <!-- Prepended text-->
-          <label class="control-label">Sensor Size</label>
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on">U</span>
-              <input class="span2" data-camera="u" placeholder="" id="prependedInput" type="text">
-            </div>
-            <p class="help-block">Width of final image</p>
-            <div class="input-prepend">
-              <span class="add-on">V</span>
-              <input class="span2"  data-camera="v" placeholder="" id="prependedInput" type="text">
-            </div>
-            <p class="help-block">Height of final image</p>
-          </div>
-
-        </div><div class="control-group">
-
-          <!-- Text input-->
-          <label class="control-label" for="input01">Aspect Ratio</label>
-          <div class="controls">
-            <input type="text" data-camera="ar" placeholder="placeholder" class="input-xlarge">
-            <p class="help-block">Ratio of the width to height </p>
-          </div>
-        </div>
-
-    <div class="control-group">
-
-          <!-- Prepended text-->
-          <label class="control-label">Position</label>
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on">X</span>
-              <input class="span2" data-camera="p_x" placeholder="" id="prependedInput" type="text">
-            </div>
-            <div class="input-prepend">
-              <span class="add-on">Y</span>
-              <input class="span2" data-camera="p_y" placeholder="" id="prependedInput" type="text">
-            </div>
-            <div class="input-prepend">
-              <span class="add-on">Z</span>
-              <input class="span2"data-camera="p_z" placeholder="" id="prependedInput" type="text">
-            </div>
-            <p class="help-block">Position of the camera</p>
-          <div>
-
-    </div>
-
-    <div class="control-group">
-
-          <!-- Prepended text-->
-          <label class="control-label">Rotation</label>
-          <div class="controls">
-            <div class="input-prepend">
-              <span class="add-on">X</span>
-              <input class="span2" data-camera="r_x" placeholder="" id="prependedInput" type="text">
-            </div>
-            <div class="input-prepend">
-              <span class="add-on">Y</span>
-              <input class="span2" data-camera="r_y" placeholder="" id="prependedInput" type="text">
-            </div>
-            <div class="input-prepend">
-              <span class="add-on">Z</span>
-              <input class="span2"data-camera="r_z" placeholder="" id="prependedInput" type="text">
-            </div>
-            <p class="help-block">Rotation of the camera</p>
-          <div>
-
-        </div>
-    </fieldset>
-  </form>
-
-            </div>
-            <div class="span8 well">
-            <h2>Camera Preview</h2>
-                <center>
-                <div id="cam_canvas" />
-                </center>
-            </div>
-        </div>
-        </section>
-        <section id="environment">
-        <div class="page-header">
-            <h1>Image Modifiers <small>Select parameters beyond the projection model camera view.</small></h1>
-       </div>
-        <div class="row" id="environ_form"> 
-           <div class="span3 well">
-                <h2>Noise & Distortion</h2>
-                <p>
-                  Your camera reacts differently to environmental conditions. Consider noise and distortion parameters.  
-                </p>
-
-  <form class="form-vertical">
-    <fieldset>
-      <div id="legend" class="">
-        <legend class="">Environment</legend>
-      </div>
-    <div class="control-group">
-          <label class="control-label">Noise Distribution</label>
-          <div class="controls">
-      <!-- Multiple Radios -->
-      <label class="radio">
-        <input type="radio" value="Uniform" data-environ="noise_uniform" name="noise_type" checked="checked">
-        Uniform
-      </label>
-      <label class="radio">
-        <input type="radio" value="Normal" data-environ="noise_normal" name="noise_type">
-        Normal
-      </label>
-  </div>
-
-        </div>
-      <div id="legend" class="">
-        <legend class="">Lens Distortion</legend>
-      </div>
-
-
-    <div class="control-group">
-
-          <!-- Text input-->
-          <label class="control-label"  for="input01">Noise Strength</label>
-          <div class="controls">
-            <input type="text" name="alpha" data-camera="alpha" placeholder="0.01" class="input-xlarge">
-            <p class="help-block">Strength of Noise</p>
-          </div>
-        </div>
-    <div class="control-group">
-          <!-- Text input-->
-          <label class="control-label" for="input01">Radial Distortion Parameters</label>
-          <div class="controls">
-           <div class="input-prepend">
-              <span class="add-on">R1</span>
-              <input class="span2" placeholder="0.00" data-camera="r1" name="r1" type="text">
-            </div>
-           <div class="input-prepend">
-              <span class="add-on">R2</span>
-              <input class="span2" placeholder="0.00"  data-camera="r2" name="r2" type="text">
-            </div>
-           <div class="input-prepend">
-              <span class="add-on">R3</span>
-              <input class="span2" placeholder="0.00" data-camera="r3"  name="r3" type="text">
-            </div>
-            <p class="help-block">Apply Radial Distortions to Camera</p>
-          </div>
-        </div>
-
-    <div class="control-group">
-          <!-- Text input-->
-          <label class="control-label" for="input01">Tangential Distortion Parameters</label>
-          <div class="controls">
-           <div class="input-prepend">
-              <span class="add-on">T1</span>
-              <input class="span2" placeholder="0.00" name="t1"  data-camera="t1"  type="text">
-            </div>
-           <div class="input-prepend">
-              <span class="add-on">T2</span>
-              <input class="span2" placeholder="0.00" name="t2"  data-camera="t2"  type="text">
-            </div>
-            <p class="help-block">Apply Tangential Distortions to Camera</p>
-          </div>
-        </div>
-    </fieldset>
-  </form>
-        
-            </div>
-            <div class="span7 well" >
-                <h2>Noise</h2>
-                <div id="noise_image">
-                    <img id="noisefull" src="img/blank.png" />
+		<style>
+			body {
+				margin: 0px;
+				overflow: hidden;
+                padding: 0px;
+			}
+		</style>
+	</head>
+	<body>
+        <div class="container-fluid">
+            <div class="row-fluid" >
+                <div id="main_view" class="span10" >
                 </div>
-                <h2>Distortion</h2>
-                <div id="distortion_image">
-                    <img id="distorted" src="img/blank.png" />
+                <div id="side_view" class="span2">
+                    <h2>Camera View</h2>
+                    <div id="camera_view" style="background-color:red" ></div>
+                    <h2>Options</h2>
+                    <center class="btn-group btn-group-vertical">
+                      <button class="btn">Current Camera</button>
+                      <button class="btn">Lights</button>
+                      <button class="btn">Calibration</button>
+                    </center>
                 </div>
-                <h2>Combined</h2>
-                <div id="combined_image">
-                    <img id="finish" src="img/blank.png" />
-                </div>
-            </div>
- 
+            </div> 
         </div>
-        </section>
-         <section id="Finish">
-        <div class="page-header">
-            <h1>Calibration <small>Place the checkerboards</small></h1>
-       </div>
-        <div class="row"> 
-            <div class="span12 well">
-                <h2>Save the Camera</h2>
-                <input type="submit" id="submit" class="btn btn-primary" />
-            </div>
-        </div>
-        </section>
-    
 
-    </div>
+		<script src="js/libs/three.js"></script>
+    <script type="text/javascript" src="js/libs/jquery.min.js"></script> 
+    <script type="text/javascript" src="js/libs/underscore-min.js"></script>
+    <script type="text/javascript" src="js/libs/backbone-min.js"></script> 
+    <script type="text/javascript" src="js/libs/bootstrap.min.js"></script> 
+    <script type="text/javascript" src="js/libs/highcharts.js"></script> 
+    <script type="text/javascript" src="js/libs/modules/exporting.js"></script>
 
-        <style type="text/template" id="modal_template">
-<div class="modal hide" >
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">×</button>
-    <h3><%-header%></h3>
-  </div>
-  <div class="modal-body">
-    <p><%= message %></p>
-  </div>
-</div>
-      </style>
-  
-        <!-- Javascript -->
-        <script type="text/javascript" src="js/libs/jquery.min.js">        </script>
-        <script type="text/javascript" src="js/libs/underscore-min.js">    </script>
-        <script type="text/javascript" src="js/libs/backbone-min.js">      </script>
-        <script type="text/javascript" src="js/libs/bootstrap.min.js">     </script>
-        <script type="text/javascript" src="js/libs/bootstrap-tab.js">     </script>
-        <script type="text/javascript" src="js/libs/bootstrap-tooltip.js">     </script>
-        <script type="text/javascript" src="js/libs/bootstrap-popover.js">     </script>
-        <script type="text/javascript" src="js/libs/Three.js">        </script>
+    <script type="text/javascript" src="js/views/main_camera_view.js"></script>
+
+		<script>
 
 
+            var side_view = Backbone.View.extend({ 
+                initialize: function() {
+                    var that = this;
+                    $(window).on('resize', function() { that.on_resize(); } )
+                    that.on_resize();
+                },
+                events : {
+                },
+                on_resize : function( ) {
+                    var width = $(this.el).innerWidth();
+                     $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
+                },
+                animate : function() {
 
-        <script type="text/javascript" src="js/libs/highcharts.js">        </script>
-        <script type="text/javascript" src="js/libs/modules/exporting.js"> </script>
-        <script type="text/javascript" src="js/cleanup.js"> </script>
+                },
+                render : function() {
 
-
-        <script type="text/javascript"> 
-            $('[rel="popover"]').popover({ html : "true" });
-          var m = Backbone.Model.extend({ }); 
-            
-          var cleanup_images = []; 
-
-          var camera_model = new m( {
-                    u: 400, v: 320, fov: 35, ar: 400/320,
-                    near: .4, far: 10000, p_x: 0, p_y: 0, p_z: 15,
-                    r1 : 0.00, r2: 0.00, r3: 0.00, t1: 0.00, t2: 0.00,
-                    alpha : 0.01 
-                    
-           });
-
-        </script>
-        <script type="text/javascript" src="js/views/camera_view.js"> </script>
-        <script type="text/javascript">
-
-        
-
-        var environ_view = Backbone.View.extend({
-
-            initialize: function( options) {
-                this.model = camera_model;
-                this.model.bind('obj_moved', this.render, this );
-                this.old = [];
-                this.render();
-
-            },
-            events : {
-                'change input' : 'update'
-            },
-            do_submit : function() {
-                var that = this;
-                if( this.old.length > 0 )
-                {
-                    $.each( this.old, function(r, i) {
-                                if( that.combined !== i )
-                                {
-                                    $.get('/cleanup?obj='+escape( i ) );
-                                }
-                            });
                 }
-            },
-            render : function() {
-                var that = this;
-                this.model.url ='/noise';
+            });
+
+            var view = Backbone.View.extend({
+                initialize: function() {
+                   var that = this; 
+                    var m = Backbone.Model.extend({ } );
+                    this.camera = new m();
+                    this.grid = new m();
+
+                    this.views = {
+                        main : new main_camera_view({el : $('#main_view'), models: { camera : this.camera, grid: this.grid} }),
+                        side : new side_view({ el: $('#side_view')})
+                    };
+                        
+                                      
+                    this.camera.bind('move', that.on_camera_move, that); 
+                    this.grid.bind('move', that.on_grid_move, that );
+                }, 
+                on_camera_move : function(e) {
+
+                },
+                on_grid_move : function(e ) {
+
+                }
                 
-                if( this.old.length > 0 )
-                {
-                    $.each( this.old, function(r, i) {
-                                $.get('/cleanup?obj='+escape( i ) );
-                            });
-                }
-                this.model.save({},{
-                success: function(res){
-                    var noise = $(that.el).find('#noisefull');
-                    if( res.get('success')  === 1 )
-                       {
-                       noise.attr('src', res.get('out') );
-                        that.old.push( res.get('out') );
-                       }
-                }});
-                this.model.url ='/distort';
+            }); 
 
-                this.model.save({},{
-                success: function(res){
-                    var noise = $(that.el).find('#distorted');
-                    if( res.get('success')  === 1 )
-                       {
+              new view({ el: $('body') } );  
+			
 
-                       noise.attr('src', res.get('out') );
-                        that.old.push( res.get('out') );
+		</script>
 
-                       }
-                }});
-                this.model.url ='/combine';
-
-                this.model.save({},{
-                success: function(res){
-                    var noise = $(that.el).find('#finish');
-                    if( res.get('success')  === 1 )
-                       {
-                       noise.attr('src', res.get('out') );
-                       res.set('final_image', res.get('out') );
-                        that.old.push( res.get('out') );
-                        that.combined = res.get('out');
-                       }
-                }});
-
-            },
-            update : function(e) {
-                var input = $(e.currentTarget);
-                var dc = input.attr('data-camera');
-                 var de = input.attr('data-environ');
-               
-                if( dc ) {
-                    this.model.set( input.attr('data-camera'), input.val() );
-                } else if (de) {
-                        this.model.set( 'noise_type', input.val() );
-                }
-                this.render();
-
-
-            }
-        });
-
-
-        var view = Backbone.View.extend({
-            initialize: function(options) {
-                this.camera_form = new camera_view({ el : $('#camera_form')});
-                this.environ_form = new environ_view({ el : $('#environ_form')} );
-                $.each( camera_model.attributes, function( i, a ) { $('[data-camera="'+i+'"]').val( a ); } );
-
-            },
-            events : {
-                'click #submit' : 'save_camera'   
-            },
-            save_camera: function() {
-                 this.environ_form.do_submit();
-                 camera_model.url = '/save';
-                camera_model.save( {}, {
-                    success: function( res ) {
-                        var template = $('#modal_template').html();
-                        var modal_t = _.template( template, { message :'Saved to: <a href="calibrate.html#camera/'+res.id+'">Calibration Training Link</a> and <a href="registration.html#camera/'+res.id+'">Registration Example Link</a>  ', header: 'saved'} );
-                         var modal = $(modal_t);
-                          $(this.el).append( modal );
-                          modal.modal('show');
-                     
-                    }
-                });
-            }
-        });
-
-        var main_view = new view( {el : $('body') });
-        </script>
-
-    </body>
+	</body>
 </html>
