@@ -27,7 +27,7 @@
                     <div id="camera_view" style="background-color:red" ></div>
                     <h2>Options</h2>
                     <center class="btn-group btn-group-vertical">
-                    <button class="btn">Current Camera</button>
+                      <button class="btn">Current Camera</button>
                       <button class="btn">Lights</button>
                       <button class="btn">Calibration</button>
                     </center>
@@ -46,14 +46,26 @@
     <script type="text/javascript" src="js/views/main_camera_view.js"></script>
 
 		<script>
-            
+           var side_camera = Backbone.Model.extend({ } ); 
+               ss_m = new side_camera();
            var mcv = new main_camera_view({el : $('#main_view') }); 
 
             var side_view = Backbone.View.extend({ 
                 initialize: function() {
                     var that = this;
+                    $(window).on('resize', function() { that.on_resize(); } )
+                    that.on_resize();
+                    ss_m.bind('move', that.on_camera_move);
+                },
+                events : {
+                },
+                on_resize : function( ) {
                     var width = $(this.el).innerWidth();
-                    $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
+                     $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
+                }, 
+                on_camera_move : function(e) {
+                    console.log( e);
+
                 }
             });
             new side_view({ el: $('#side_view')});

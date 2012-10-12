@@ -43,23 +43,18 @@ var main_camera_view = Backbone.View.extend({
 
 				var geometry = new THREE.CubeGeometry( 40, 40, 40 );
 
-				for ( var i = 0; i < 2; i ++ ) {
 
 					var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
 					object.material.ambient = object.material.color;
 
-					object.position.x = Math.random() * 1000 - 500;
-					object.position.y = Math.random() * 600 - 300;
-					object.position.z = Math.random() * 800 - 400;
+					object.position.x = 10;
+					object.position.y = 0;
+					object.position.z = 0;
 
-					object.rotation.x = ( Math.random() * 360 ) * Math.PI / 180;
-					object.rotation.y = ( Math.random() * 360 ) * Math.PI / 180;
-					object.rotation.z = ( Math.random() * 360 ) * Math.PI / 180;
-
-					object.scale.x = Math.random() * 2 + 1;
-					object.scale.y = Math.random() * 2 + 1;
-					object.scale.z = Math.random() * 2 + 1;
+					object.scale.x = 2;
+					object.scale.y = 2;
+					object.scale.z = 4;
 
 					object.castShadow = true;
 					object.receiveShadow = true;
@@ -67,8 +62,6 @@ var main_camera_view = Backbone.View.extend({
 					this.scene.add( object );
 
 					this.objects.push( object );
-
-				}
 
 				this.plane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
 				xplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0xCC0000, opacity: 0.25, transparent: true, wireframe: true } ) );
@@ -79,9 +72,9 @@ var main_camera_view = Backbone.View.extend({
                 zplane.rotation.set( 1.57079633, 0, 0 );
 
 
-                this.scene.add(xplane); this.scene.add(yplane); this.scene.add(zplane);
+//                this.scene.add(xplane); this.scene.add(yplane); this.scene.add(zplane);
 
-				this.plane.visible = false;
+				this.plane.visible = true;
 				this.scene.add(this.plane );
 
 				this.projector = new THREE.Projector();
@@ -132,7 +125,35 @@ var main_camera_view = Backbone.View.extend({
 
 					var intersects = ray.intersectObject( this.plane );
                     if( intersects[0] && intersects[0].point ) {
-					    this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
+                        if( event.shiftKey )
+                        {
+                            var loc =  intersects[ 0 ].point.subSelf( this.offset ); 
+                            var vector = new THREE.Vector3(0,0,0);
+
+                            vector.sub( this.SELECTED.position, loc );
+
+                                                // Direction we are already facing (without rotation)
+                    var forward = new THREE.Vector3(0,0,-1);
+
+                    // Direction we want to be facing (towards mouse pointer)
+                    var target = new THREE.Vector3().sub(vector, this.SELECTED.position).normalize();
+
+                    // Axis and angle of rotation
+                    var axis = new THREE.Vector3().cross(forward, target);
+                    var sinAngle = axis.length(); // |u x v| = |u|*|v|*sin(a)
+                    var cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
+                    var angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
+                    axis.normalize();
+                    
+                    this.SELECTED.useQuaternion = true;
+                    this.SELECTED.quaternion.setFromAxisAngle(axis, angle);
+                            ss_m.trigger('rotate',  this.SELECTED.rotation );
+       
+                        }
+                        else {
+					       this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
+                           ss_m.trigger('move',  this.SELECTED.position );
+                        }
                     }
 					return;
 
