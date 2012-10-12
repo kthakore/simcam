@@ -7,7 +7,7 @@ var main_camera_view = Backbone.View.extend({
                 this.mouse =  new THREE.Vector2(), this.offset = new THREE.Vector3();
 
   				this.camera = new THREE.PerspectiveCamera( 35, $(this.el).innerWidth() / window.innerHeight, 1, 10000 );
-				this.camera.position.z = 1000;
+                this.camera.position.set(65,65,65);
 
 				this.controls = new THREE.OrbitControls( this.camera );
 				this.controls.rotateSpeed = 1.0;
@@ -41,28 +41,33 @@ var main_camera_view = Backbone.View.extend({
 
 				this.scene.add( light );
 
-				var geometry = new THREE.CubeGeometry( 40, 40, 40 );
+                var jsonLoader = new THREE.JSONLoader();
+                jsonLoader.load( "/3d_objs/camera.js", function( geometry ) {  
+
+                    var cam_obj = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x2200cc } ) );
+
+					cam_obj.material.ambient = cam_obj.material.color;
+
+					cam_obj.position.x = 0;
+					cam_obj.position.y = 20;
+					cam_obj.position.z = 45;
+
+					cam_obj.scale.x = 5;
+					cam_obj.scale.y = 5;
+					cam_obj.scale.z = 5;
+
+                    cam_obj.rotation.set(  Math.PI/2 ,0,  0 );
+                    cam_obj.model = that.options.models.camera;
+//					cam_obj.castShadow = false;
+//					cam_obj.receiveShadow = false;
+
+					that.scene.add( cam_obj );
+
+					that.objects.push( cam_obj );
 
 
-					var object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-
-					object.material.ambient = object.material.color;
-
-					object.position.x = 10;
-					object.position.y = 0;
-					object.position.z = 0;
-
-					object.scale.x = 2;
-					object.scale.y = 2;
-					object.scale.z = 4;
-
-					object.castShadow = true;
-					object.receiveShadow = true;
-
-					this.scene.add( object );
-
-					this.objects.push( object );
-
+                    } );
+                    
 				this.plane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
 				xplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0xCC0000, opacity: 0.25, transparent: true, wireframe: true } ) );
 				yplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0x00CC00, opacity: 0.25, transparent: true, wireframe: true } ) );
@@ -72,9 +77,9 @@ var main_camera_view = Backbone.View.extend({
                 zplane.rotation.set( 1.57079633, 0, 0 );
 
 
-//                this.scene.add(xplane); this.scene.add(yplane); this.scene.add(zplane);
+                this.scene.add(xplane); this.scene.add(yplane); this.scene.add(zplane);
 
-				this.plane.visible = true;
+				this.plane.visible = false;
 				this.scene.add(this.plane );
 
 				this.projector = new THREE.Projector();
@@ -147,13 +152,12 @@ var main_camera_view = Backbone.View.extend({
                     
                     this.SELECTED.useQuaternion = true;
                     this.SELECTED.quaternion.setFromAxisAngle(axis, angle);
-                            ss_m.trigger('rotate',  this.SELECTED.rotation );
        
                         }
                         else {
 					       this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
-                           ss_m.trigger('move',  this.SELECTED.position );
                         }
+                        this.SELECTED.model.trigger( 'move', this.SELECTED );
                     }
 					return;
 

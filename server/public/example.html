@@ -46,37 +46,48 @@
     <script type="text/javascript" src="js/views/main_camera_view.js"></script>
 
 		<script>
-           var side_camera = Backbone.Model.extend({ } ); 
-               ss_m = new side_camera();
-           var mcv = new main_camera_view({el : $('#main_view') }); 
+
 
             var side_view = Backbone.View.extend({ 
                 initialize: function() {
                     var that = this;
                     $(window).on('resize', function() { that.on_resize(); } )
                     that.on_resize();
-                    ss_m.bind('move', that.on_camera_move);
                 },
                 events : {
                 },
                 on_resize : function( ) {
                     var width = $(this.el).innerWidth();
                      $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
-                }, 
-                on_camera_move : function(e) {
-                    console.log( e);
-
                 }
             });
-            new side_view({ el: $('#side_view')});
+
             var view = Backbone.View.extend({
                 initialize: function() {
                    var that = this; 
-                                     
-                    
+                    var m = Backbone.Model.extend({ } );
+                    this.camera = new m();
+                    this.grid = new m();
+
+                    this.views = {
+                        main : new main_camera_view({el : $('#main_view'), models: { camera : this.camera, grid: this.grid} }),
+                        side : new side_view({ el: $('#side_view')})
+                    };
+                        
+                                      
+                    this.camera.bind('move', that.on_camera_move, that); 
+                    this.grid.bind('move', that.on_grid_move, that );
+                }, 
+                on_camera_move : function(e) {
+                    console.log(this );
                 },
+                on_grid_move : function(e ) {
+
+                }
+                
             }); 
 
+              new view({ el: $('body') } );  
 			
 
 		</script>
