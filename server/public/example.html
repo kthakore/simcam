@@ -59,6 +59,12 @@
                 on_resize : function( ) {
                     var width = $(this.el).innerWidth();
                      $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
+                },
+                animate : function() {
+
+                },
+                render : function() {
+
                 }
             });
 
@@ -79,7 +85,7 @@
                     this.grid.bind('move', that.on_grid_move, that );
                 }, 
                 on_camera_move : function(e) {
-                    console.log(this );
+
                 },
                 on_grid_move : function(e ) {
 

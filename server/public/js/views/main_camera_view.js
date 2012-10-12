@@ -48,18 +48,28 @@ var main_camera_view = Backbone.View.extend({
 
 					cam_obj.material.ambient = cam_obj.material.color;
 
-					cam_obj.position.x = 0;
-					cam_obj.position.y = 20;
-					cam_obj.position.z = 45;
+					cam_obj.position.set(0,0,15);
 
-					cam_obj.scale.x = 5;
-					cam_obj.scale.y = 5;
-					cam_obj.scale.z = 5;
-
+					cam_obj.scale.set(1,1,1);
                     cam_obj.rotation.set(  Math.PI/2 ,0,  0 );
-                    cam_obj.model = that.options.models.camera;
+                    cam_obj.model = that.options.models.grid;
 //					cam_obj.castShadow = false;
 //					cam_obj.receiveShadow = false;
+            var material = new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture("img/grid.gif")
+            });
+
+            material.map.needsUpdate = true;
+
+            var cube = new THREE.Mesh(
+                    new THREE.CubeGeometry( 8, 5, 0.1 ),
+                    material
+                    );
+            cube.model = that.options.models.camera;
+            cube.overdraw = true;
+           that.scene.add( cube ); that.objects.push( cube );
+            
+            cube.position.set(0,0,0);
 
 					that.scene.add( cam_obj );
 
@@ -141,7 +151,7 @@ var main_camera_view = Backbone.View.extend({
                     var forward = new THREE.Vector3(0,0,-1);
 
                     // Direction we want to be facing (towards mouse pointer)
-                    var target = new THREE.Vector3().sub(vector, this.SELECTED.position).normalize();
+                    var target = vector.normalize();
 
                     // Axis and angle of rotation
                     var axis = new THREE.Vector3().cross(forward, target);
