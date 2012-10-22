@@ -7,7 +7,7 @@
 
                     var cc = this.options.models.camera.toJSON(); 
       				this.camera = new THREE.PerspectiveCamera( cc.fov, cc.ar , cc.near, cc.far );
-                    this.camera.position.set(cc.p_x,cc.p_y,cc.p_z);
+                    this.camera.position.set(0,0,15);
 
                     this.scene = new THREE.Scene();
                     this.scene.add( new THREE.AmbientLight( 0x505050 ) );
@@ -39,7 +39,9 @@
                         );
                 cube.overdraw = true;
                that.scene.add( cube ); 
-           
+                this.grid = cube;
+                               this.camera.lookAt( this.grid );
+                    this.camera.rotation.set(0,0,0);
                 var cv = $(this.el).find('#camera_view');
              
                 this.renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -69,8 +71,19 @@
 
 
                 },
-                update : function(model ) {
-                   
+                update_grid : function( model, obj ) {
+                    var that = this;
+                    var grid = that.options.models.grid;
+                    that.grid.position.copy( grid.get('position') );
+                    that.grid.rotation.copy( grid.get('rotation') );
+                }, 
+                update_cam : function( model, obj) { 
+                    var that = this;
+                    var cam = that.options.models.camera;
 
+                    that.camera.position.copy( cam.get('position') );
+                    that.camera.rotation.copy( cam.get('rotation') );
+
+        
                 }
             });

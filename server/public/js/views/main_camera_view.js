@@ -51,7 +51,7 @@ var main_camera_view = Backbone.View.extend({
 					cam_obj.position.set(0,0,15);
 
 					cam_obj.scale.set(1,1,1);
-                    cam_obj.rotation.set(  Math.PI/2 ,0,  0 );
+                    cam_obj.rotation.set( 0 ,0,  0 );
                     cam_obj.model = that.options.models.camera;
 //					cam_obj.castShadow = false;
 //					cam_obj.receiveShadow = false;
@@ -161,9 +161,11 @@ var main_camera_view = Backbone.View.extend({
                     var cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
                     var angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
                     axis.normalize();
-                    
-                    this.SELECTED.useQuaternion = true;
-                    this.SELECTED.quaternion.setFromAxisAngle(axis, angle);
+                   
+                    var a = new THREE.Mesh();
+                    a.useQuaternion = true;
+                    a.quaternion.setFromAxisAngle(axis, angle);
+                        this.SELECTED.rotation.set( a.quaternion.x, a.quaternion.y, a.quaternion.z );
        
                         }
                         else {

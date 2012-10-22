@@ -55,11 +55,11 @@
                     var m = Backbone.Model.extend({ } );
                     this.camera = this.options.camera;
                     this.grid = new m();
-                    this.camera.bind('init', that.on_init, that); 
-                    this.grid.bind('init', that.on_init, that );
+                    this.camera.bind('init', that.on_init_cam, that); 
+                    this.grid.bind('init', that.on_init_grid, that );
 
-                    this.camera.bind('move', that.on_move, that); 
-                    this.grid.bind('move', that.on_move, that );
+                    this.camera.bind('move', that.on_move_cam, that); 
+                    this.grid.bind('move', that.on_move_grid, that );
 
 
                     this.views = {
@@ -69,18 +69,27 @@
                         
                                       
                 }, 
-                on_init: function( model, obj ) {
+                on_init_cam: function( model, obj ) {
                     model.set('position', obj.position );
                     model.set('rotation', obj.rotation );
-                    this.views.side.update( model );
                 },
-                on_move : function(model, obj ) {
+                on_move_cam : function(model, obj ) {
                     model.set('position', obj.position );
                     model.set('rotation', obj.rotation );
-                    this.views.side.update( model );
+                    this.views.side.update_cam( model, obj );
+
+                },
+                 on_init_grid: function( model, obj ) {
+                    model.set('position', obj.position );
+                    model.set('rotation', obj.rotation );
+                },
+                on_move_grid : function(model, obj ) {
+                    model.set('position', obj.position );
+                    model.set('rotation', obj.rotation );
+                    this.views.side.update_grid( model, obj );
 
                 }
-                
+               
             }); 
 
             var app = Backbone.Router.extend({
