@@ -44,39 +44,10 @@
     <script type="text/javascript" src="js/libs/modules/exporting.js"></script>
 
     <script type="text/javascript" src="js/views/main_camera_view.js"></script>
+    <script type="text/javascript" src="js/views/side_camera_view.js"></script>
 
 		<script>
 
-
-            var side_view = Backbone.View.extend({ 
-                initialize: function() {
-                    var that = this;
-                    $(window).on('resize', function() { that.on_resize(); } )
-                    that.on_resize();
-                    
-                },
-                events : {
-                },
-                on_resize : function( ) {
-                    var width = $(this.el).innerWidth();
-                     $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
-                },
-                animate : function() {
-                    var that = this; 
-	    			requestAnimationFrame( function() { that.animate() } );
-		    		this.render();
-
-                },
-                render : function() {
-
-	    			this.renderer.render( this.scene, this.camera );
-
-
-                },
-                update : function(model ) {
-
-                }
-            });
 
             var view = Backbone.View.extend({
                 initialize: function() {
@@ -93,7 +64,7 @@
 
                     this.views = {
                         main : new main_camera_view({el : $('#main_view'), models: { camera : this.camera, grid: this.grid} }),
-                        side : new side_view({ el: $('#side_view'), models: { camera : this.camera, grid: this.grid} })
+                        side : new side_camera_view({ el: $('#side_view'), models: { camera : this.camera, grid: this.grid} })
                     };
                         
                                       
