@@ -38,12 +38,12 @@
                         material
                         );
                 cube.overdraw = true;
-               that.scene.add( cube ); 
+                that.scene.add( cube ); 
                 this.grid = cube;
-                               this.camera.lookAt( this.grid );
-                    this.camera.rotation.set(0,0,0);
+                this.camera.lookAt( this.grid );
+                this.camera.rotation.set(0,0,0);
                 var cv = $(this.el).find('#camera_view');
-             
+
                 this.renderer = new THREE.WebGLRenderer( { antialias: true } );
 				this.renderer.sortObjects = false;
 				this.renderer.setSize( cv.innerHeight(), cv.innerWidth());
