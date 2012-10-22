@@ -53,6 +53,7 @@
                     var that = this;
                     $(window).on('resize', function() { that.on_resize(); } )
                     that.on_resize();
+                    
                 },
                 events : {
                 },
@@ -61,9 +62,15 @@
                      $('#camera_view').attr('style', 'height: '+width+'px; background-color:salmon');
                 },
                 animate : function() {
+                    var that = this; 
+	    			requestAnimationFrame( function() { that.animate() } );
+		    		this.render();
 
                 },
                 render : function() {
+
+	    			this.renderer.render( this.scene, this.camera );
+
 
                 },
                 update : function(model ) {
@@ -75,7 +82,7 @@
                 initialize: function() {
                    var that = this; 
                     var m = Backbone.Model.extend({ } );
-                    this.camera = new m();
+                    this.camera = this.options.camera;
                     this.grid = new m();
                     this.camera.bind('init', that.on_init, that); 
                     this.grid.bind('init', that.on_init, that );
@@ -105,7 +112,55 @@
                 
             }); 
 
-              var v = new view({ el: $('body') } );  
+            var app = Backbone.Router.extend({
+            initialize: function(options) {
+
+            },
+            routes : {
+              '' : 'default',
+              ':id' : 'camera'
+            },
+            get_camera_model : function(id, cb) {
+                 var m = Backbone.Model.extend({ url: '/camera/'+id} );
+                 var model = new m( {  });
+                 model.fetch({ success: function() {  cb( ); }});
+                 return model;
+            },
+            default : function( ) {
+                var that = this;
+                console.log('Camera id not available');
+                var cc = Backbone.Collection.extend({ url: '/cameras' });
+        
+                var c = new cc(); c.fetch( { success: function() { 
+                     var m = c.at(0);
+                     console.log('Chosing '+m.id);
+                     that.camera( m.id, m ); 
+                } } );
+            },
+            camera : function( id, model ) {
+                var that = this;
+                if( model) {
+                    that.v = new view({ camera: model, el: $('body') } );  
+
+                } else
+                {       
+                    model = this.get_camera_model( id, function() { 
+                    that.v = new view({ camera: model, el: $('body') } );  
+
+                    } );
+                }
+
+            }
+        });
+
+        var main_app;
+        $( function() { 
+         main_app = new app({});
+
+        Backbone.history.start();
+           });
+
+
 			
 
 		</script>
