@@ -93,7 +93,7 @@
 
                     this.views = {
                         main : new main_camera_view({el : $('#main_view'), models: { camera : this.camera, grid: this.grid} }),
-                        side : new side_view({ el: $('#side_view')})
+                        side : new side_view({ el: $('#side_view'), models: { camera : this.camera, grid: this.grid} })
                     };
                         
                                       
