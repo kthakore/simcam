@@ -52,7 +52,7 @@ var main_camera_view = Backbone.View.extend({
 
 					cam_obj.scale.set(1,1,1);
                     cam_obj.rotation.set(  Math.PI/2 ,0,  0 );
-                    cam_obj.model = that.options.models.grid;
+                    cam_obj.model = that.options.models.camera;
 //					cam_obj.castShadow = false;
 //					cam_obj.receiveShadow = false;
             var material = new THREE.MeshLambertMaterial({
@@ -65,7 +65,8 @@ var main_camera_view = Backbone.View.extend({
                     new THREE.CubeGeometry( 8, 5, 0.1 ),
                     material
                     );
-            cube.model = that.options.models.camera;
+            cube.model = that.options.models.grid;
+            cube.model.trigger( 'init', cube.model, cube ); 
             cube.overdraw = true;
            that.scene.add( cube ); that.objects.push( cube );
             
@@ -74,6 +75,7 @@ var main_camera_view = Backbone.View.extend({
 					that.scene.add( cam_obj );
 
 					that.objects.push( cam_obj );
+            cam_obj.model.trigger( 'init', cam_obj.model, cam_obj ); 
 
 
                     } );
@@ -167,7 +169,7 @@ var main_camera_view = Backbone.View.extend({
                         else {
 					       this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
                         }
-                        this.SELECTED.model.trigger( 'move', this.SELECTED );
+                        this.SELECTED.model.trigger( 'move', this.SELECTED.model, this.SELECTED );
                     }
 					return;
 

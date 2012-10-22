@@ -65,6 +65,9 @@
                 },
                 render : function() {
 
+                },
+                update : function(model ) {
+
                 }
             });
 
@@ -74,6 +77,12 @@
                     var m = Backbone.Model.extend({ } );
                     this.camera = new m();
                     this.grid = new m();
+                    this.camera.bind('init', that.on_init, that); 
+                    this.grid.bind('init', that.on_init, that );
+
+                    this.camera.bind('move', that.on_move, that); 
+                    this.grid.bind('move', that.on_move, that );
+
 
                     this.views = {
                         main : new main_camera_view({el : $('#main_view'), models: { camera : this.camera, grid: this.grid} }),
@@ -81,19 +90,22 @@
                     };
                         
                                       
-                    this.camera.bind('move', that.on_camera_move, that); 
-                    this.grid.bind('move', that.on_grid_move, that );
                 }, 
-                on_camera_move : function(e) {
-
+                on_init: function( model, obj ) {
+                    model.set('position', obj.position );
+                    model.set('rotation', obj.rotation );
+                    this.views.side.update( model );
                 },
-                on_grid_move : function(e ) {
+                on_move : function(model, obj ) {
+                    model.set('position', obj.position );
+                    model.set('rotation', obj.rotation );
+                    this.views.side.update( model );
 
                 }
                 
             }); 
 
-              new view({ el: $('body') } );  
+              var v = new view({ el: $('body') } );  
 			
 
 		</script>
