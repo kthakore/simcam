@@ -135,12 +135,14 @@
                      var m = c.at(0);
                      console.log('Chosing '+m.id);
                      that.camera( m.id, m ); 
+                     
                 } } );
             },
             camera : function( id, model ) {
                 var that = this;
                 if( model) {
                     that.v = new view({ camera: model, el: $('body') } );  
+                    that.navigate( id );
 
                 } else
                 {       
