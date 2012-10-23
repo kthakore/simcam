@@ -11,7 +11,7 @@
              
             var c = $(this.el).find('#cam_canvas');
             if( this.renderer ) { delete this.renderer; } 
-            this.renderer = new THREE.WebGLRenderer({ clearColor: 0xFFFFFF, clearAlpha: 255  });
+            this.renderer = new THREE.WebGLRenderer({ clearColor: 0x888888, clearAlpha: 255  });
             this.renderer.setSize( this.model.get('u'), this.model.get('v') );
             c.html( this.renderer.domElement );
 

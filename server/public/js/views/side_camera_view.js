@@ -44,7 +44,7 @@
                 this.camera.rotation.set(0,0,0);
                 var cv = $(this.el).find('#camera_view');
 
-                this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+                this.renderer = new THREE.WebGLRenderer( { antialias: true, clearColor: 0x888888, clearAlpha: 255   } );
 				this.renderer.sortObjects = false;
 				this.renderer.setSize( cv.innerHeight(), cv.innerWidth());
 
