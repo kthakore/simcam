@@ -1,30 +1,76 @@
 package SimCam;
 use Mojo::Base 'Mojolicious';
-use KiokuDB;
-use KiokuDB::Backend::Files;
+use SimCam::Schema;
+use Mojolicious::Plugin::Config;
+use Mojolicious::Plugin::Session;
+use Mojolicious::Plugin::Authentication;
+use Digest::SHA qw(sha1_hex);
+use Authen::Passphrase::SaltedSHA512;
+use DateTime;
 
-
-has 'kdb' => sub { 
-
-    my $d =  KiokuDB->connect(
-            "dbi:SQLite:dbname=simcam.db"
-             );
-    return { d => $d, scope =>  $d->new_scope };
-};
+has 'schema' =>
+  sub { return SimCam::Schema->connect('dbi:SQLite:database=simcam.db'); };
 
 # This method will run once at server start
 sub startup {
     my $self = shift;
 
+    $self->plugin(
+        'authentication' => {
+            session     => { 'stash_key' => 'simcam' },
+            'load_user' => sub {
 
-# Router
+                my $self   = shift;
+                my $uid    = shift;
+                my $schema = $self->app->schema;
+                my $usrs   = $schema->resultset('Usr');
+                warn "Trying to load $uid";
+                my $usr    = $usrs->find( { id => $uid } );
+                if ($usr) {
+                    return $usr;
+                }
+                else {
+                    warn 'not loaded';
+                    return undef;
+                }
+
+            },
+            'validate_user' => sub {
+                my $self   = shift;
+                my $schema = $self->app->schema;
+                my $email  = shift;
+
+                my $usr =
+                  $schema->resultset('Usr')->search( { email => $email } )
+                  ->next();
+                
+            
+                if ($usr) {
+                    return $usr->id();
+                }
+                else {
+                    warn 'not validate';
+                    return undef;
+                }
+              }
+
+        }
+    );
+
+    # Router
     my $r = $self->routes;
 
-# Normal route to controller
+    # Normal route to controller
     $r->get('/')->to('root#index');
+    $r->post('/login')->to('root#login');
+    $r->get('/logout')->to('root#logout');
+
+    $r->get('/start')->to('root#start');
+
+
     $r->get('/counter')->to('calibrate#counter');
 
-# Noise
+    # Noise
     $r->post('/noise')->to('environ#noise');
     $r->post('/distort')->to('environ#distort');
     $r->post('/get_image')->to('environ#get_image');
@@ -39,19 +85,14 @@ sub startup {
 
     $r->any('/cleanup')->to('environ#cleanup');
 
-# Save
+    # Save
     $r->post('/save')->to('db#save');
     $r->get('/camera/:id')->to('db#get_camera');
     $r->get('/cameras')->to('db#cameras');
 
-
-
-# TODO:
-# $r->post('/calibrate');
-# $r->register('/register');
-
-
-
+    # TODO:
+    # $r->post('/calibrate');
+    # $r->register('/register');
 
 }
 
