@@ -166,6 +166,7 @@ var main_camera_view = Backbone.View.extend({
                     a.useQuaternion = true;
                     a.quaternion.setFromAxisAngle(axis, angle);
                         this.SELECTED.rotation.set( a.quaternion.x, a.quaternion.y, a.quaternion.z );
+                        this.SELECTED.rotation.multiplyScalar( 0.5 );
        
                         }
                         else {
