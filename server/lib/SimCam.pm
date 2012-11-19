@@ -21,7 +21,7 @@ sub startup {
     my $r = $self->routes;
 
 # Normal route to controller
-    $r->get('/' => sub { shift->render_static('/index.html') });
+    $r->get('/')->to('root#index');
     $r->get('/counter')->to('calibrate#counter');
 
 # Noise
