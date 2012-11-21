@@ -70,7 +70,7 @@ __PACKAGE__->table("Sessions");
   data_type: 'integer'
   is_nullable: 0
 
-=head2 json_tracker
+=head2 json_store
 
   data_type: 'text'
   is_nullable: 1
@@ -88,7 +88,7 @@ __PACKAGE__->add_columns(
   { data_type => "datetime", is_nullable => 0 },
   "milestone",
   { data_type => "integer", is_nullable => 0 },
-  "json_tracker",
+  "json_store",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -127,20 +127,16 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-19 15:40:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QU/V58F7e6FHjmlHYWB+lA
+# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-21 08:43:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FIEIzmU75QYTDLSzYz8Pbw
 
 use Mojo::JSON;
+use SimCam::Schema::Util;
 
  sub TO_JSON {
     my $self = shift;
-
-    return {
-       questionnaire => Mojo::JSON->decode($self->json_tracker), 
-       %{ $self->next::method },
-    }
+    return SimCam::Schema::Util::TO_JSON( $self, $self->next::method );    
  }
-
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

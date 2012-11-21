@@ -48,11 +48,11 @@ sub logout {
 
 sub start {
     my $self = shift;
-    my $user = $self->current_user;
+
+    my $user = $self->_check_user();
 
     $self->render( user => $user);
-
-
+    
 }
 
 
@@ -62,6 +62,7 @@ sub entry_questionnaire {
     my $user = $self->current_user;
 
     if( $user ) {
+
         my @names = $self->param;
 
         my $pp_eq = {};    
@@ -79,6 +80,19 @@ sub entry_questionnaire {
         $self->redirect_to('/');
     }  
 
+}
+
+
+# Util
+
+sub _check_user
+{
+    my $self = shift;
+
+    my $user = $self->current_user;
+    $self->redirect_to('/') unless $user;
+
+    return $user;
 }
 
 1;

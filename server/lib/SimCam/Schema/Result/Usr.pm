@@ -66,7 +66,7 @@ __PACKAGE__->table("Usrs");
   is_nullable: 0
   size: 64
 
-=head2 json_entrance_questionaire
+=head2 json_store
 
   data_type: 'text'
   is_nullable: 1
@@ -82,7 +82,7 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 0, size => 3 },
   "apikey",
   { data_type => "varchar", is_nullable => 0, size => 64 },
-  "json_entrance_questionaire",
+  "json_store",
   { data_type => "text", is_nullable => 1 },
 );
 
@@ -116,20 +116,17 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-19 15:40:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:loOglSnspCAHbleMaarpDA
+# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-21 08:43:50
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zmRvT6/6ZXXfmeAgrUK5sg
+
 
 use Mojo::JSON;
+use SimCam::Schema::Util;
 
  sub TO_JSON {
     my $self = shift;
-
-    return {
-       questionnaire => Mojo::JSON->decode($self->json_entrance_questionaire), 
-       %{ $self->next::method },
-    }
+    return SimCam::Schema::Util::TO_JSON( $self, $self->next::method );    
  }
-
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
