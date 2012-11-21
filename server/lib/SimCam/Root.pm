@@ -10,22 +10,31 @@ sub index {
 
     # Render template "root/index.html.ep" with message
     if ($user) {
-        $self->redirect_to('/start');
+        $self->redirect_to('/session/start');
     }
     else {
         $self->render( template => 'root/login' );
     }
 }
 
+
+sub start_session {
+    my $self = shift;
+
+    my $user = $self->current_user;
+
+    $self->render( user => $user );
+
+}
+
+
 sub login {
     my $self = shift;
     my $u    = $self->param('email');
 
-    warn $u;
-
     my $e = '';
-    if ( $self->authenticate($u) ) {
-        $self->redirect_to('/start');
+    if ( $self->authenticate( lc($u) ) ) {
+        $self->redirect_to('/session/start');
     }
     else {
         $self->redirect_to('/');
@@ -37,63 +46,53 @@ sub logout {
     my $self = shift;
     my $user = $self->current_user;
 
-    if( $user )
-    {
-      $self->session(expires => 1);
-       
+    if ($user) {
+        $self->session( expires => 1 );
+
     }
     $self->redirect_to('/');
 
 }
-
-sub start {
-    my $self = shift;
-
-    my $user = $self->_check_user();
-
-    $self->render( user => $user);
-    
-}
-
-
-sub entry_questionnaire {
+sub end_session {
     my $self = shift;
 
     my $user = $self->current_user;
 
-    if( $user ) {
-
-        my @names = $self->param;
-
-        my $pp_eq = {};    
-        foreach my $name ( @names ) {
-        
-            $pp_eq->{$name} = $self->param($name);
-            
-
-        }
-
-        $self->render( { json => $pp_eq });
-
-    } else {
-
-        $self->redirect_to('/');
-    }  
+    $self->render( user => $user );
 
 }
 
+
+sub run_session {
+    my $self        = shift;
+    my $session_num = $self->param('num');
+
+    my $user = $self->current_user;
+
+    $self->render( { text => $session_num } );
+
+}
+
+sub save_session {
+    my $self        = shift;
+    my $session_num = $self->param('num');
+
+    my $user = $self->current_user;
+
+    my @names = $self->param;
+
+    my $pp_eq = {};
+    foreach my $name (@names) {
+
+        $pp_eq->{$name} = $self->param($name);
+
+    }
+
+    $self->render( { json => $pp_eq } );
+
+}
 
 # Util
-
-sub _check_user
-{
-    my $self = shift;
-
-    my $user = $self->current_user;
-    $self->redirect_to('/') unless $user;
-
-    return $user;
-}
 
 1;
 

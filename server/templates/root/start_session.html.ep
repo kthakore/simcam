@@ -4,7 +4,7 @@
 <h1>Getting Started</h1>
 <span><%= $user->email %></span>
 
-  <form class="form-horizontal" action="/entry_questionnaire" method="post">
+  <form class="form-horizontal" action="/session/0" method="post">
     <fieldset>
       <div id="legend" class="">
         <legend class="">Entry Questionnaire </legend>
