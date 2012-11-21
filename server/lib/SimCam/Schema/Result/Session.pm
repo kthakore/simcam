@@ -49,6 +49,12 @@ __PACKAGE__->table("Sessions");
   is_auto_increment: 1
   is_nullable: 0
 
+=head2 num
+
+  data_type: 'integer'
+  default_value: 0
+  is_nullable: 0
+
 =head2 usr
 
   data_type: 'integer'
@@ -80,6 +86,8 @@ __PACKAGE__->table("Sessions");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "num",
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
   "usr",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "start_time",
@@ -127,8 +135,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-21 08:43:50
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FIEIzmU75QYTDLSzYz8Pbw
+# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-21 09:44:18
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LLdkA77d4DfF9o6TOr8S3w
 
 use Mojo::JSON;
 use SimCam::Schema::Util;
