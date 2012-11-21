@@ -1,5 +1,6 @@
 package SimCam::Root;
 use Mojo::Base 'Mojolicious::Controller';
+use Mojo::JSON;
 
 # This action will render a template
 sub index {
@@ -49,8 +50,34 @@ sub start {
     my $self = shift;
     my $user = $self->current_user;
 
-    $self->render( { text => 'Hi' } );
+    $self->render( user => $user);
 
+
+}
+
+
+sub entry_questionnaire {
+    my $self = shift;
+
+    my $user = $self->current_user;
+
+    if( $user ) {
+        my @names = $self->param;
+
+        my $pp_eq = {};    
+        foreach my $name ( @names ) {
+        
+            $pp_eq->{$name} = $self->param($name);
+            
+
+        }
+
+        $self->render( { json => $pp_eq });
+
+    } else {
+
+        $self->redirect_to('/');
+    }  
 
 }
 

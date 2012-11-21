@@ -119,6 +119,17 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-19 15:40:35
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:loOglSnspCAHbleMaarpDA
 
+use Mojo::JSON;
+
+ sub TO_JSON {
+    my $self = shift;
+
+    return {
+       questionnaire => Mojo::JSON->decode($self->json_entrance_questionaire), 
+       %{ $self->next::method },
+    }
+ }
+
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

@@ -66,6 +66,7 @@ sub startup {
     $r->get('/logout')->to('root#logout');
 
     $r->get('/start')->to('root#start');
+    $r->post('/entry_questionnaire')->to('root#entry_questionnaire');
 
 
     $r->get('/counter')->to('calibrate#counter');
