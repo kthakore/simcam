@@ -69,7 +69,7 @@ sub run_session {
 
     my $user = $self->current_user;
 
-    $self->render( { text => $session_num } );
+    $self->render( session => $session_num, user => $user  );
 
 }
 
