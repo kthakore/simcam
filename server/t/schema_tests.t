@@ -80,4 +80,27 @@ $rs_usr->search({
 })->delete();
 
 
+### Count function
+ $user = $rs_usr->create( {
+        email => lc 'kthakore@uwo.ca',
+        type  => 'SH',
+        apikey => '123as2vq2',
+        json_store => '{"as": a}'
+    });
+is ( $rs_usr->count({
+    type => 'D' 
+}), 0 );
+is ( $rs_usr->count({
+    type => 'S' 
+}), 0 );
+is ( $rs_usr->count({
+    type => 'SH' 
+}), 1 );
+
+
+
+$rs_usr->search({
+    email => 'kthakore@uwo.ca'
+})->delete();
+
 done_testing();

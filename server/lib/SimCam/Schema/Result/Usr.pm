@@ -61,12 +61,6 @@ __PACKAGE__->table("Usrs");
   is_nullable: 0
   size: 3
 
-=head2 apikey
-
-  data_type: 'varchar'
-  is_nullable: 0
-  size: 64
-
 =head2 current_session
 
   data_type: 'integer'
@@ -87,8 +81,6 @@ __PACKAGE__->add_columns(
   { data_type => "text", is_nullable => 0 },
   "type",
   { data_type => "varchar", default_value => "D", is_nullable => 0, size => 3 },
-  "apikey",
-  { data_type => "varchar", is_nullable => 0, size => 64 },
   "current_session",
   { data_type => "integer", default_value => 0, is_nullable => 0 },
   "json_store",
@@ -125,8 +117,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-21 09:44:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vFJXu7cPLrwvw6LKcB3nGQ
+# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-23 12:19:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1vPl1ESuW7jmgCXaFcUexA
 
 
 use Mojo::JSON;

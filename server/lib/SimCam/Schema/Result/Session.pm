@@ -49,12 +49,6 @@ __PACKAGE__->table("Sessions");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 num
-
-  data_type: 'integer'
-  default_value: 0
-  is_nullable: 0
-
 =head2 usr
 
   data_type: 'integer'
@@ -69,11 +63,12 @@ __PACKAGE__->table("Sessions");
 =head2 end_time
 
   data_type: 'datetime'
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 milestone
 
   data_type: 'integer'
+  default_value: 0
   is_nullable: 0
 
 =head2 json_store
@@ -86,16 +81,14 @@ __PACKAGE__->table("Sessions");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "num",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
   "usr",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "start_time",
   { data_type => "datetime", is_nullable => 0 },
   "end_time",
-  { data_type => "datetime", is_nullable => 0 },
+  { data_type => "datetime", is_nullable => 1 },
   "milestone",
-  { data_type => "integer", is_nullable => 0 },
+  { data_type => "integer", default_value => 0, is_nullable => 0 },
   "json_store",
   { data_type => "text", is_nullable => 1 },
 );
@@ -135,8 +128,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-21 09:44:18
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LLdkA77d4DfF9o6TOr8S3w
+# Created by DBIx::Class::Schema::Loader v0.07022 @ 2012-11-23 11:56:19
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:an4xPQs/rren4cIkmFe9Sg
 
 use Mojo::JSON;
 use SimCam::Schema::Util;
