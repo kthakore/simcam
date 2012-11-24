@@ -1,0 +1,129 @@
+  <form class="form-horizontal" action="/session/<%=$session%>" method="post">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Entry Questionnaire </legend>
+      </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Name</label>
+          <div class="controls">
+            <input type="text" placeholder="Bob Smith" name="name" class="input-xlarge">
+            <p class="help-block">Your Name</p>
+          </div>
+        </div>
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Gender</label>
+          <div class="controls">
+            <select class="input-xlarge">
+      <option>Male</option>
+      <option>Female</option></select>
+          </div>
+
+        </div>
+  <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Age</label>
+          <div class="controls">
+            <select class="input-xlarge">
+      <option>10-20</option>
+      <option>20-24</option>
+      <option>24-30</option>
+      <option>30-35</option>
+      <option>40-45</option>
+      <option>50-55</option>
+      <option>60-65</option>
+      <option>65-70</option>
+      <option>70+</option></select>
+          </div>
+    </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">What is your profession?</label>
+          <div class="controls">
+            <input type="text" placeholder="" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">What is your education level?</label>
+          <div class="controls">
+            <select class="input-xlarge">
+      <option>High School</option>
+      <option>Post Graduate Diploma</option>
+      <option>Bachelors</option>
+      <option>Graduate</option>
+      <option></option></select>
+          </div>
+
+        </div>
+
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Have you participated in an internet-based course/training before? </label>
+          <div class="controls">
+            <select class="input-xlarge">
+      <option>Yes</option>
+      <option>No</option></select>
+          </div>
+
+        </div>
+
+    <div class="control-group">
+          <label class="control-label">If you answered YES to the above question: what was your overall learning experience? (1=poor, 7=excellent)</label>
+
+          <!-- Multiple Checkboxes -->
+          <div class="controls">
+      <!-- Inline Checkboxes -->
+      <label class="checkbox inline">
+        <input type="checkbox" value="1">
+        1
+      </label>
+      <label class="checkbox inline">
+        <input type="checkbox" value="2">
+        2
+      </label>
+      <label class="checkbox inline">
+        <input type="checkbox" value="3">
+        3
+      </label>
+      <label class="checkbox inline">
+        <input type="checkbox" value="4">
+        4
+      </label>
+      <label class="checkbox inline">
+        <input type="checkbox" value="5">
+        5
+      </label>
+      <label class="checkbox inline">
+        <input type="checkbox" value="6">
+        6
+      </label>
+      <label class="checkbox inline">
+        <input type="checkbox" value="7">
+        7
+      </label>
+  </div>
+
+        </div>
+
+    </fieldset> 
+  </form>
+
+% content_for javascript => begin
+    <script src="js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+
+    </script>
+% end;
+
+

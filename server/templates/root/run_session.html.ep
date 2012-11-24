@@ -4,12 +4,6 @@
 <h1>Session <%= $session->milestone %> at <%= $session->start_time->dmy.' '. $session->start_time->hms %> </h1>
 
 <div class="container-fluid" >
-<%= include 'root/session/'. $session->milestone  %>
+<%= include 'root/sessions/'. $session->milestone, session => $session->milestone  %>
 </div>
-% content_for javascript => begin
-    <script src="js/tracker.js"></script>
-    <script type="text/javascript">
-    </script>
-% end;
-
 

@@ -88,11 +88,11 @@ sub login {
             type => 'SH' 
         });
     
-        if ( $d_types < $s_types && $d_types < $sh_types ) {
+        if ( $d_types < $s_types || $d_types < $sh_types ) {
             $type = 'D';
-        } elsif ( $s_types < $d_types && $s_types < $sh_types ) {
+        } elsif ( $s_types < $d_types || $s_types < $sh_types ) {
             $type = 'S';
-        } elsif ( $sh_types < $d_types && $sh_types > $s_types ) {
+        } elsif ( $sh_types < $d_types || $sh_types > $s_types ) {
             $type = 'SH';
         } else {
             my @types = ( 'SH', 'S', 'D' ); 

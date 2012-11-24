@@ -19,7 +19,6 @@ my $rs_session = $schema->resultset('Session');
 my $user = $rs_usr->create( {
         email => lc 'kthakore@uwo.ca',
         type  => 'SH',
-        apikey => '123as2vq2',
         json_store => Mojo::JSON->encode( { test => 1 } )
     });
 
@@ -31,8 +30,7 @@ is_deeply( $u_json->{store}, {test => 1 } );
  $user = $rs_usr->create( {
         email => lc 'kthakore@uwo.ca',
         type  => 'SH',
-        apikey => '123as2vq2',
-        json_store => Mojo::JSON->encode( [1, 2, 3 ] )
+         json_store => Mojo::JSON->encode( [1, 2, 3 ] )
     });
 
 
@@ -43,7 +41,6 @@ is_deeply( $u_json->{store}, [1, 2, 3] );
  $user = $rs_usr->create( {
         email => lc 'kthakore@uwo.ca',
         type  => 'SH',
-        apikey => '123as2vq2',
         json_store => 'Cat'
     });
 
@@ -55,7 +52,6 @@ is( $u_json->{store}, 'Cat' );
  $user = $rs_usr->create( {
         email => lc 'kthakore@uwo.ca',
         type  => 'SH',
-        apikey => '123as2vq2'
     });
 
 
@@ -65,7 +61,6 @@ is( $u_json->{store}, undef );
  $user = $rs_usr->create( {
         email => lc 'kthakore@uwo.ca',
         type  => 'SH',
-        apikey => '123as2vq2',
         json_store => '{"as": a}'
     });
 
@@ -84,7 +79,6 @@ $rs_usr->search({
  $user = $rs_usr->create( {
         email => lc 'kthakore@uwo.ca',
         type  => 'SH',
-        apikey => '123as2vq2',
         json_store => '{"as": a}'
     });
 is ( $rs_usr->count({
@@ -97,7 +91,54 @@ is ( $rs_usr->count({
     type => 'SH' 
 }), 1 );
 
+my @users = ();
 
+foreach my $i (0..59) {
+        my $rs_usr = $schema->resultset('Usr');
+
+        my $type;
+
+        my $d_types =  $rs_usr->count({
+            type => 'D' 
+        });
+        my $s_types =  $rs_usr->count({
+            type => 'S' 
+        });
+        my $sh_types =  $rs_usr->count({
+            type => 'SH' 
+        });
+
+        warn "Ds: $d_types, Ss: $s_types, SHs = $sh_types";
+    
+        if ( $d_types < $s_types || $d_types < $sh_types  ) {
+            $type = 'D';
+        } elsif ( $s_types < $d_types || $s_types < $sh_types ) {
+            $type = 'S';
+        } elsif ( $sh_types < $d_types || $sh_types > $s_types ) {
+            $type = 'SH';
+        } else {
+            my @types = ( 'SH', 'S', 'D' ); 
+            $type = $types[ rand @types ];
+        }
+
+        my $u = $rs_usr->create( {
+            email => $i.'@foo.com',
+            type => $type,
+            current_session => 0,
+            json_store => '{}'
+        } );
+
+    warn "$i and ".$u->type;
+
+    push @users, $u
+
+}
+
+
+foreach my $u( @users ) {
+
+    $u->delete();
+    }
 
 $rs_usr->search({
     email => 'kthakore@uwo.ca'
