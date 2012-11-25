@@ -180,9 +180,13 @@ sub save_session {
         my $schema = $self->app->schema;
         my $rs_session = $schema->resultset('Session');
 
-        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session });
+        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session })->next();
 
-        $session->update({ json_store => Mojo::JSON->encode( $pp_eq ) } );
+        my $js = Mojo::JSON->decode( $session->json_store() );
+
+        $js->{params} = $pp_eq;
+
+        $session->update({ json_store => Mojo::JSON->encode( $js ) } );
 
         #TODO: Ask for session end
 

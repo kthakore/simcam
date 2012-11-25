@@ -1,9 +1,11 @@
 % layout 'experiment';
 % title 'SimCAM Experiment Runner';
 
-<h1>Session <%= $session->milestone %> at <%= $session->start_time->dmy.' '. $session->start_time->hms %> </h1>
+<!-- <h1>Session <%= $session->milestone %> at <%= $session->start_time->dmy.' '. $session->start_time->hms %> </h1> -->
 
-<div class="container-fluid" >
-<%= include 'root/sessions/'. $session->milestone, session => $session->milestone  %>
+<div class="container" >
+   <div class="row">
+<%= include 'root/sessions/'. $session->milestone, session => $session  %>
+    </div>
 </div>
 
