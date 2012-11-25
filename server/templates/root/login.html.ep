@@ -9,7 +9,6 @@
       }
 
       .form-signin {
-        max-width: 300px;
         padding: 19px 29px 29px;
         margin: 0 auto 20px;
         background-color: #fff;
@@ -32,16 +31,19 @@
         margin-bottom: 15px;
         padding: 7px 9px;
       }
-
     </style>
     <div class="container">
 
       <form class="form-signin" action="/login" method="post">
-        <h2 class="form-signin-heading">Please sign in</h2>
+
+            <h2 class="form-signin-heading" >Welcome to SimCam</h2>
+            <p>SimCAM is an experimental training tool. This tool will train you in Cameras and Camera calibration. Sign in with your email here to get started. </p>
         <input type="text" name="email" class="input-block-level" placeholder="Email address">
         <button class="btn btn-large btn-primary" type="submit">Sign in</button>
       </form>
 
+
+    </div>
 
 % content_for javascript => begin
     <script type="text/javascript">
