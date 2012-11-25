@@ -24,13 +24,11 @@ sub startup {
                 my $uid    = shift;
                 my $schema = $self->app->schema;
                 my $usrs   = $schema->resultset('Usr');
-                warn "Trying to load $uid";
                 my $usr    = $usrs->find( { id => $uid } );
                 if ($usr) {
                     return $usr;
                 }
                 else {
-                    warn 'not loaded';
                     return undef;
                 }
 
