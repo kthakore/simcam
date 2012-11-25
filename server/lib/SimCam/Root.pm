@@ -12,52 +12,12 @@ sub index {
 
 # Render template "root/index.html.ep" with message
     if ($user) {
-        $self->redirect_to('/session/start');
+        $self->redirect_to('/session/'.$user->current_session.'/start');
     }
     else {
 
         $self->render( template => 'root/login' );
     }
-}
-
-
-sub start_session {
-    my $self = shift;
-
-    my $user = $self->current_user;
-
-    if( $user) {
-
-        #get the current_session
-        my $s_num = $user->current_session;
-        $s_num = 0 unless $s_num;
-
-        #Create a session if it doesn exist
-
-        my $schema = $self->app->schema();
-        my $se_rs = $schema->resultset('Session');
-
-        my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
-
-        if( $session ) {
-            #session already exists just show it then
-
-            return $self->redirect_to('/session/'.$s_num);
-        } else {
-
-            $se_rs->create({
-                usr => $user->id,
-                start_time => DateTime->now(), 
-                json_store => '{}'
-            });
-
-           return  $self->redirect_to('/session/'.$s_num );
-        } 
-
-    } else {
-        $self->redirect_to('/');
-    }
-
 }
 
 
@@ -67,7 +27,7 @@ sub login {
 
     my $e = '';
     if ( $self->authenticate( lc($u) ) ) {
-        $self->redirect_to('/session/start');
+        $self->redirect_to('/session/0/start');
     }
     else {
 
@@ -108,7 +68,7 @@ sub login {
 
         $self->authenticate( lc( $u ) );   
 
-        $self->redirect_to('/session/start');
+        $self->redirect_to('/session/0/start');
     }
 
 }
@@ -124,12 +84,48 @@ sub logout {
     $self->redirect_to('/');
 
 }
-sub end_session {
+
+
+sub start_session {
     my $self = shift;
 
     my $user = $self->current_user;
 
-    $self->render( user => $user );
+    if( $user) {
+
+        #get the current_session
+        my $s_num = $user->current_session;
+        $s_num = 0 unless $s_num;
+
+        #Create a session if it doesn exist
+
+        my $schema = $self->app->schema();
+        my $se_rs = $schema->resultset('Session');
+
+        my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
+
+        if( $session ) {
+            #session already exists just show it then
+            $self->app->log->info("Session start to session/$s_num");
+
+            return $self->redirect_to('/session/'.$s_num);
+        } else {
+
+            $se_rs->create({
+                usr => $user->id,
+                milestone => $s_num,
+                start_time => DateTime->now(), 
+                json_store => '{}'
+            });
+
+            $self->app->log->info("Session start to session/$s_num after Create");
+
+           return  $self->redirect_to('/session/'.$s_num );
+        } 
+
+    } else {
+        $self->redirect_to('/');
+    }
 
 }
 
@@ -153,7 +149,9 @@ sub run_session {
             $self->render({ user => $user, session => $session} );
 
         } else {
-            return $self->redirect_to('/session/start');
+            $self->app->log->info("Redirecting session $s_num to start");
+
+            return $self->redirect_to('/session/'.$s_num.'/start');
         }
 
     } else {
@@ -179,9 +177,55 @@ sub save_session {
 
         }
 
-        $self->render( { json => $pp_eq } );
+        my $schema = $self->app->schema;
+        my $rs_session = $schema->resultset('Session');
+
+        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session });
+
+        $session->update({ json_store => Mojo::JSON->encode( $pp_eq ) } );
+
+        #TODO: Ask for session end
+
+        return $self->redirect_to('/session/'.$session_num .'/end');
+
     } else {
         $self->redirect_to('/');
+    }
+
+}
+
+
+
+sub end_session {
+    my $self = shift;
+
+    my $user = $self->current_user;
+
+    if( $user ) {
+    
+        my $schema = $self->app->schema;
+        my $rs_session = $schema->resultset('Session');
+
+        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session });
+
+        $session->update({ end_time => DateTime->now() } );
+
+        if( $user->current_session < 2 ) {
+            my $next_session = $user->current_session + 1;
+            $user->update({ current_session => $next_session });
+            $self->app->log->info("Redirecting end to start session $next_session");
+            return $self->redirect_to('/session/'.$next_session.'/start');
+        } else {
+            return $self->render( user => $user );
+
+        }
+
+        
+
+    } else {
+
+        return $self->redirect_to('/');
+
     }
 
 }

@@ -65,12 +65,12 @@ sub startup {
     $r->post('/login')->to('root#login');
     $r->get('/logout')->to('root#logout');
 
-    $r->get('/session/start')->to('root#start_session');
+    $r->get('/session/:num/start')->to('root#start_session');
+    $r->get('/session/:num/end')->to('root#end_session');
 
     $r->get('/session/:num')->to('root#run_session');
     $r->post('/session/:num')->to('root#save_session');
 
-    $r->get('/session/end')->to('root#end_session');
 
     $r->get('/counter')->to('calibrate#counter');
 
