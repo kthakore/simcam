@@ -63,6 +63,7 @@ sub startup {
     $r->post('/login')->to('root#login');
     $r->get('/logout')->to('root#logout');
 
+
     $r->get('/session/:num/start')->to('root#start_session');
     $r->get('/session/:num/end')->to('root#end_session');
 
