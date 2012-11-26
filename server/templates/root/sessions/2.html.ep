@@ -1,0 +1,33 @@
+<% if( $user->type eq 'D' ) { %> 
+
+ Default 
+<% } elsif ( $user->type eq 'S' ) { %>
+
+ Simulator 
+<% } else {  %>
+
+Simulator hints 
+
+<% } %>
+
+
+% content_for javascript => begin
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+                return false;
+            }
+            });
+
+        new v({el : $('body') });
+
+    </script>
+% end;
+
+

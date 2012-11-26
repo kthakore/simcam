@@ -142,6 +142,10 @@ sub run_session {
         my $schema = $self->app->schema();
         my $se_rs = $schema->resultset('Session');
 
+        if( $s_num != $user->current_session ) {
+            return $self->redirect_to( '/session/'.$user->current_session );
+        } 
+
         my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
         
         if( $session ) {
@@ -214,7 +218,7 @@ sub end_session {
 
         $session->update({ end_time => DateTime->now() } );
 
-        if( $user->current_session < 2 ) {
+        if( $user->current_session < 4 ) {
             my $next_session = $user->current_session + 1;
             $user->update({ current_session => $next_session });
             $self->app->log->info("Redirecting end to start session $next_session");
