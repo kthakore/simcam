@@ -4,6 +4,8 @@ use Mojo::JSON;
 
 use DateTime;
 
+our $MaxSessions = 4;
+
 # This action will render a template
 sub index {
     my $self = shift;
@@ -218,7 +220,7 @@ sub end_session {
 
         $session->update({ end_time => DateTime->now() } );
 
-        if( $user->current_session < 4 ) {
+        if( $user->current_session < $SimCam::Root::MaxSessions ) {
             my $next_session = $user->current_session + 1;
             $user->update({ current_session => $next_session });
             $self->app->log->info("Redirecting end to start session $next_session");
