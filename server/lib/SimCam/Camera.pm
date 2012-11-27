@@ -10,8 +10,16 @@ sub save {
     my $camera_rs = $schema->resultset('Camera');
     $params->{image} = $params->{final_image};
 
+    my @values = qw/alpha near far final_image fov image job_id  p_x p_y p_z r1 r2 r3 r_x r_y r_z success t1 t2 u v /;
+    my $fixed_params = {};
+
+    foreach my $value (@values){
+        
+       $fixed_params->{$value} = $params->{$value} if( $params->{$value} )
+    }
+
     my $camera = $camera_rs->create(
-        $params        
+        $fixed_params        
     );
 
     $self->render({ json => $camera });
