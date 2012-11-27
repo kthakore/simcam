@@ -28,7 +28,6 @@
       <div class="bar" style="width: <%=100*($session->milestone/4)%>%;"></div>
     </div>
    </div>
-   <div class="row">
 <%= include 'root/sessions/'. $session->milestone, session => $session  %>
     </div>
 </div>
