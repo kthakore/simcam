@@ -13,9 +13,9 @@
 
 <div class="row">
 
-    <h2>Prespective Camera Model</h2>
+    <h2>Pin hole Camera Model</h2>
 
-    <p>The prespective camera is a common model used to describe a camera. The model is sometimes also called the pinhole camera model. The camera </p>
+    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform. This transform, transforms the 3D coordinates to 2D coordinates. </p>
     
 </div>
     <% if( $user->type eq 'D' ) { %> 

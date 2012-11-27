@@ -77,44 +77,41 @@
           </div>
 
         </div>
-
-    <div class="control-group">
-          <label class="control-label">If you answered YES to the above question: what was your overall learning experience? (1=poor, 7=excellent)</label>
-
-          <!-- Multiple Checkboxes -->
+ <div class="control-group">
+          <label class="control-label">If you answered YES to the above question: what was your overall learning experience? (1=poor, 7=excellent</label>
           <div class="controls">
-      <!-- Inline Checkboxes -->
-      <label class="checkbox inline">
-        <input type="checkbox" value="1">
+      <!-- Inline Radios -->
+      <label class="radio inline">
+        <input type="radio" value="1" name="impression" checked="checked">
         1
       </label>
-      <label class="checkbox inline">
-        <input type="checkbox" value="2">
+      <label class="radio inline">
+        <input type="radio" value="2" name="impression">
         2
       </label>
-      <label class="checkbox inline">
-        <input type="checkbox" value="3">
+      <label class="radio inline">
+        <input type="radio" value="3" name="impression">
         3
       </label>
-      <label class="checkbox inline">
-        <input type="checkbox" value="4">
+      <label class="radio inline">
+        <input type="radio" value="4" name="impression">
         4
       </label>
-      <label class="checkbox inline">
-        <input type="checkbox" value="5">
+      <label class="radio inline">
+        <input type="radio" value="5" name="impression">
         5
       </label>
-      <label class="checkbox inline">
-        <input type="checkbox" value="6">
+      <label class="radio inline">
+        <input type="radio" value="6" name="impression">
         6
       </label>
-      <label class="checkbox inline">
-        <input type="checkbox" value="7">
+      <label class="radio inline">
+        <input type="radio" value="7" name="impression">
         7
       </label>
   </div>
-
         </div>
+
     <div class="control-group">
           <!-- Button -->
           <div class="controls">

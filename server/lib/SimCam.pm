@@ -89,9 +89,9 @@ sub startup {
     $r->any('/cleanup')->to('environ#cleanup');
 
     # Save
-    $r->post('/save')->to('db#save');
-    $r->get('/camera/:id')->to('db#get_camera');
-    $r->get('/cameras')->to('db#cameras');
+    $r->post('/save')->to('camera#save');
+    $r->get('/camera/:id')->to('camera#get_camera');
+    $r->get('/cameras')->to('camera#cameras');
 
     # TODO:
     # $r->post('/calibrate');
