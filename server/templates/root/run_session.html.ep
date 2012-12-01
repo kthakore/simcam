@@ -25,7 +25,7 @@
 <div class="container" >
    <div class="row span12">
     <div class="progress progress-striped">
-      <div class="bar" style="width: <%=100*($session->milestone/4)%>%;"></div>
+      <div class="bar" style="width: <%=100*($session->milestone/6)%>%;"></div>
     </div>
    </div>
 <%= include 'root/sessions/'. $session->milestone, session => $session  %>

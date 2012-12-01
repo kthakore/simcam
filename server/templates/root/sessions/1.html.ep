@@ -1,35 +1,128 @@
 <div class="row">
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Entry Questionnaire </legend>
+      </div>
+    <div class="control-group">
 
-    <h1>The Camera</h1>
+          <!-- Text input-->
+          <label class="control-label" for="input01">Name</label>
+          <div class="controls">
+            <input type="text" placeholder="Bob Smith" name="name" class="input-xlarge">
+            <p class="help-block">Your Name</p>
+          </div>
+        </div>
+    <div class="control-group">
 
-    <p> 
-      The concept of a camera has been around for a while. Surely you may be familiar with cameras
-      and capturing images with them. To begin understanding of camera calibration we begin with modelling
-      the camera.</p>
-    <div class="span4"> <img src="/images/session_1_camera.gif" /> <br /> <center><span style="clear:both" class="small"> <a href="http://www.cs.columbia.edu/~jebara/htmlpapers/SFM/node6.html">source</a> </span></center> </div>
+          <!-- Select Basic -->
+          <label class="control-label">Gender</label>
+          <div class="controls">
+            <select name="gender" class="input-xlarge">
+      <option>Male</option>
+      <option>Female</option></select>
+          </div>
 
-    <p> The camera essentially, for the purpose of this training environment, captures real world (3D) coordinates and maps them to an image screen (2D) coordinates.  
+        </div>
+  <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Age</label>
+          <div class="controls">
+            <select name="age" class="input-xlarge">
+      <option>10-20</option>
+      <option>20-24</option>
+      <option>24-30</option>
+      <option>30-35</option>
+      <option>40-45</option>
+      <option>50-55</option>
+      <option>60-65</option>
+      <option>65-70</option>
+      <option>70+</option></select>
+          </div>
+    </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">What is your profession?</label>
+          <div class="controls">
+            <input name="profession" type="text" placeholder="" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">What is your education level?</label>
+          <div class="controls">
+            <select name="education_level" class="input-xlarge">
+      <option>High School</option>
+      <option>Post Graduate Diploma</option>
+      <option>Bachelors</option>
+      <option>Graduate</option>
+      <option></option></select>
+          </div>
+
+        </div>
+
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Have you participated in an internet-based course/training before? </label>
+          <div class="controls">
+            <select name="training_before" class="input-xlarge">
+      <option>Yes</option>
+      <option>No</option></select>
+          </div>
+
+        </div>
+ <div class="control-group">
+          <label class="control-label">If you answered YES to the above question: what was your overall learning experience? (1=poor, 7=excellent</label>
+          <div class="controls">
+      <!-- Inline Radios -->
+      <label class="radio inline">
+        <input type="radio" value="1" name="impression" checked="checked">
+        1
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="2" name="impression">
+        2
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="3" name="impression">
+        3
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="4" name="impression">
+        4
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="5" name="impression">
+        5
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="6" name="impression">
+        6
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="7" name="impression">
+        7
+      </label>
+  </div>
+        </div>
+
+    <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+    </fieldset> 
+  </form>
 </div>
-
-<div class="row">
-
-    <h2>Pin hole Camera Model</h2>
-
-    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform. This transform, transforms the 3D coordinates to 2D coordinates. </p>
-    
-</div>
-    <% if( $user->type eq 'D' ) { %> 
-
-<!--    Default  -->
-    <% } elsif ( $user->type eq 'S' ) { %>
-
-<!--    Simulator  -->
-    <% } else {  %>
-
-<!--    Simulator hints -->
-    <% } %>
-
-</div> 
 
 % content_for javascript => begin
     <script src="/js/tracker.js"></script>
@@ -41,7 +134,6 @@
             validate : function() {
 
                 console.log('Validating form');
-                return false;
             }
             });
 
