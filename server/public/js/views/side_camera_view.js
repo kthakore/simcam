@@ -52,7 +52,7 @@
                 $(window).on('resize', function() { that.on_resize(); } )
 
                     this.animate();
-                   
+                  that.on_resize(); 
                 },
                 events : {
                 },

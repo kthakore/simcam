@@ -114,7 +114,6 @@
         
                 var c = new cc(); c.fetch( { success: function() { 
                      var m = c.at(0);
-                     console.log('Chosing '+m.id);
                      that.camera( m.id, m ); 
                      
                 } } );
@@ -123,7 +122,6 @@
                 var that = this;
                 if( model) {
                     that.v = new view({ camera: model, el: $('body') } );  
-                    that.navigate( id );
 
                 } else
                 {       

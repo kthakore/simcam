@@ -17,7 +17,6 @@ $(function() {
     $.each( to_capture, function(i, tc ) {
 
         $(window).on(tc, function(e) {
-            console.log( tc );
             evnts[tc].push( [ e.offsetX, e.offsetY ] );                   
         });
     
