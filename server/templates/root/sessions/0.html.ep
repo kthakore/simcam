@@ -1,6 +1,14 @@
 <div class="row">
 <h1>Welcome</h1>
-<p>Welcome Blurb</p>
+<p>Welcome to SimCam. </p>
+
+<h2>Required Technologies</h2>
+
+<ul id="tech_check_list">
+<li id="HTML5">  </li>
+<li id="WebGL">WebGL: <span id="webgl_check"> </span>  </li>
+<li id="Flash">  </li>
+</ul>
 
 <h1>Entrance Task</h2>
 
@@ -20,7 +28,20 @@
    
   </form>
 </div>
+
+<!-- Depth of Field -->
+
+<!-- Fragment Shader -->
+
+
 % content_for javascript => begin
+    <script src="/js/modernizr.js"></script>
+    <script type="text/javascript"> 
+
+        if( Modernizr.webgl ) {
+            $('#webgl_check').html( 'Available' );
+         } else {  $('#webgl_check').html('Not Available' ); }
+    </script>
     <script src="/js/tracker.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
