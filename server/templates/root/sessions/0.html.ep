@@ -35,7 +35,7 @@
 
 
 % content_for javascript => begin
-    <script src="/js/modernizr.js"></script>
+    <script src="/js/libs/modernizr.js"></script>
     <script type="text/javascript"> 
 
         if( Modernizr.webgl ) {
