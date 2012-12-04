@@ -16,6 +16,7 @@ has 'kdb' => sub {
 sub startup {
     my $self = shift;
 
+    $self->mode('production');
 
 # Router
     my $r = $self->routes;
