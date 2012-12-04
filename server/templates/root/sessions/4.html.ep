@@ -1,17 +1,23 @@
-<h1>Camera Calibration</h1>
+<div class="row">
 
-<% if( $user->type eq 'D' ) { %> 
+    <h1>Real Lenses and Camera</h1>
 
- Default 
-<% } elsif ( $user->type eq 'S' ) { %>
+    <p> 
+    This tutorial hopes to teach you what is camera calibration and how to apply it. 
+    </p>
 
- Simulator 
-<% } else {  %>
+    <% if( $user->type eq 'D' ) { %> 
 
-Simulator hints 
+    Default 
+    <% } elsif ( $user->type eq 'S' ) { %>
 
-<% } %>
+    Simulator 
+    <% } else {  %>
 
+    Simulator hints 
+    <% } %>
+
+</div> 
 
 % content_for javascript => begin
     <script src="/js/tracker.js"></script>

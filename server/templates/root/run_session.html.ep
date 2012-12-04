@@ -22,10 +22,10 @@
       </div>
     </div>
 
-<div class="container" >
-   <div class="row span12">
+<div class="container-fluid" style="padding:50px;" >
+   <div class="row">
     <div class="progress progress-striped">
-      <div class="bar" style="width: <%=100*($session->milestone/6)%>%;"></div>
+      <div class="bar" style="width: <%=100*($session->milestone/7)%>%;"></div>
     </div>
    </div>
 <%= include 'root/sessions/'. $session->milestone, session => $session  %>

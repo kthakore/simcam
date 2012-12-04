@@ -1,25 +1,45 @@
 <div class="row">
 
-    <h1>Real Lenses and Camera</h1>
+    <h1>The Camera</h1>
 
     <p> 
-    This tutorial hopes to teach you what is camera calibration and how to apply it. 
-    </p>
+      The concept of a camera has been around for a while. Surely you may be familiar with cameras
+      and capturing images with them. To begin understanding of camera calibration we begin with modelling
+      the camera.</p>
+    <div class="span4"> <img src="/images/session_1_camera.gif" /> <br /> <center><span style="clear:both" class="small"> <a href="http://www.cs.columbia.edu/~jebara/htmlpapers/SFM/node6.html">source</a> </span></center> </div>
 
+    <p> The camera essentially, for the purpose of this training environment, captures real world (3D) coordinates and maps them to an image screen (2D) coordinates.  
+</div>
+
+<div class="row">
+
+    <h2>Pin hole Camera Model</h2>
+
+    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform. This transform, transforms the 3D coordinates to 2D coordinates. </p>
+    
+</div>
     <% if( $user->type eq 'D' ) { %> 
 
-    Default 
+<!--    Default  -->
     <% } elsif ( $user->type eq 'S' ) { %>
 
-    Simulator 
+<!--    Simulator  -->
     <% } else {  %>
 
-    Simulator hints 
+<!--    Simulator hints -->
     <% } %>
 
 </div> 
 
 % content_for javascript => begin
+    <% if( $user->type eq 'S' or $user->type eq 'SH' ) { %>
+        		<script src="js/libs/three.js"></script>
+
+    <script type="text/javascript" src="js/views/main_camera_view.js"></script>
+    <script type="text/javascript" src="js/views/side_camera_view.js"></script>
+
+
+    <% } %>
     <script src="/js/tracker.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">

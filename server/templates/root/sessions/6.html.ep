@@ -1,5 +1,4 @@
-<h1>Camera Calibration</h1>
-
+<h1>Exit Task</h1>
 <% if( $user->type eq 'D' ) { %> 
 
  Default 

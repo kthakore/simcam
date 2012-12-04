@@ -1,24 +1,19 @@
 <div class="row">
-<h1>Welcome</h1>
-<p>Welcome to SimCam. To participate in this experiment your broswer needs to support the following technologies: </p>
+    <h1>Welcome</h1>
+    <p>Welcome to SimCam. To participate in this experiment your broswer needs to support the following technologies: </p>
 
-<h4>Required Technologies</h4>
-<ul id="tech_check_list">
-<li id="Canvas">Canvas: <span id="canvas_check"> </span>  </li>
-<li id="WebGL">WebGL: <span id="webgl_check"> </span>  </li>
-</ul>
+    <h4>Required Technologies</h4>
+    <ul id="tech_check_list">
+    <li id="Canvas">Canvas: <span id="canvas_check"> </span>  </li>
+    <li id="WebGL">WebGL: <span id="webgl_check"> </span>  </li>
+    </ul>
 
-<p>If your browser doesn't support these technologies please schedule a time to get access to our 
-in lab comuputer. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
+    <p>If your browser doesn't support these technologies please schedule a time to get access to our 
+    in lab comuputer. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
 
-<h1>Entrance Task</h2>
+</div>
 
-<p>Please take the best picture of the object below. </p>
-
-<canvas id="moving_view"> </canvas>
-
-<canvas id="dof_view"></canvas>
-
+<div class="row">
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
      <input type="hidden" name="position" />
      <div class="control-group">
@@ -53,19 +48,6 @@ in lab comuputer. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p
     </script>
     <script src="/js/tracker.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
-    <script type="text/javascript">
-        var v = Backbone.View.extend({ 
-            initialize: function() { console.log('start'); },
-            events : { 'submit form': 'validate' },
-            validate : function() {
-
-                console.log('Validating form');
-            }
-            });
-
-        new v({el : $('body') });
-
-    </script>
 % end;
 
 

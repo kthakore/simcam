@@ -4,7 +4,7 @@ use Mojo::JSON;
 
 use DateTime;
 
-our $MaxSessions = 4;
+our $MaxSessions = 7;
 
 # This action will render a template
 sub index {
