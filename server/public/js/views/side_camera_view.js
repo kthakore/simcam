@@ -49,15 +49,20 @@
 				this.renderer.setSize( cv.innerHeight(), cv.innerWidth());
 
 				$(this.el).find('#camera_view').html(this.renderer.domElement );
+                $(window).on('resize', function() { that.on_resize(); } )
 
                     this.animate();
-                   
+                  that.on_resize(); 
                 },
                 events : {
                 },
                 on_resize : function( ) {
                     var width = $(this.el).innerWidth();
-                     $('#camera_view').attr('style', 'height: '+width+'px;');
+                 var cv = $(this.el).find('#camera_view');
+                  if( this.renderer ) { 
+    				this.renderer.setSize( cv.innerHeight(), cv.innerWidth());
+                    }
+
                 },
                 animate : function() {
                     var that = this; 

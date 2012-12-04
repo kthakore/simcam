@@ -24,9 +24,10 @@
                 </div>
                 <div id="side_view" class="span2">
                     <h2>Camera View</h2>
-                    <div id="camera_view" style="background-color:red" ></div>
+                    <div id="camera_view"></div>
                     <h2>Options</h2>
                     <center class="btn-group btn-group-vertical">
+                      <button id="reset_button" class="btn">Reset</button>
                       <button class="btn">Current Camera</button>
                       <button class="btn">Lights</button>
                       <button class="btn">Calibration</button>
@@ -113,7 +114,6 @@
         
                 var c = new cc(); c.fetch( { success: function() { 
                      var m = c.at(0);
-                     console.log('Chosing '+m.id);
                      that.camera( m.id, m ); 
                      
                 } } );
@@ -122,7 +122,6 @@
                 var that = this;
                 if( model) {
                     that.v = new view({ camera: model, el: $('body') } );  
-                    that.navigate( id );
 
                 } else
                 {       

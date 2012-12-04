@@ -1,0 +1,14 @@
+% layout 'experiment';
+% title 'SimCAM Experiment Runner';
+
+<h1>Getting Started</h1>
+
+
+% content_for javascript => begin
+    <script src="js/tracker.js"></script>
+
+    <script type="text/javascript">
+    </script>
+% end;
+
+

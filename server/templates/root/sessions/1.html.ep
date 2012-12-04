@@ -1,0 +1,64 @@
+<div class="row">
+   <h1>Entrance Task</h2>
+
+    <p>Please take the best picture of the object below. </p>
+</div>
+
+<div class="row-fluid" id="dof_view">
+</div>
+
+<div class="row">
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+     <input type="hidden" name="position" />
+     <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+    </fieldset> 
+   
+  </form>
+</div>
+
+<!-- Depth of Field -->
+
+<!-- Fragment Shader -->
+
+
+% content_for javascript => begin
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+   <script src="/js/libs/three.js"></script>
+  <script type="text/javascript" src="/js/views/dof_camera_view.js"></script>
+
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); 
+
+
+                 var m = Backbone.Model.extend({ url: '/camera/2'} );
+                 var model = new m( {  });
+                 model.fetch({ success: function() {  }});
+
+                this.camera =  m;
+                this.grid = new m();
+
+
+                 var n =  new dof_camera_view({el : $('#dof_view'), models: { camera : this.camera, grid: this.grid} });
+            },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+            }
+            });
+
+        new v({el : $('body') });
+
+    </script>
+% end;
+
+

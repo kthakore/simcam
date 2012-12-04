@@ -1,6 +1,6 @@
 
 
-var main_camera_view = Backbone.View.extend({
+var dof_camera_view = Backbone.View.extend({
 
     initialize: function() {
         var that = this;
@@ -13,8 +13,8 @@ var main_camera_view = Backbone.View.extend({
 				this.controls.rotateSpeed = 1.0;
 				this.controls.zoomSpeed = 1.2;
 				this.controls.panSpeed = 0.8;
-				this.controls.noZoom = false;
-				this.controls.noPan = false;
+				this.controls.noZoom = true;
+				this.controls.noPan = true;
 				this.controls.staticMoving = true;
 				this.controls.dynamicDampingFactor = 0.3;
 
@@ -56,7 +56,7 @@ var main_camera_view = Backbone.View.extend({
 //					cam_obj.castShadow = false;
 //					cam_obj.receiveShadow = false;
             var material = new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture("img/grid.gif")
+            map: THREE.ImageUtils.loadTexture("/img/grid.gif")
             });
 
             material.map.needsUpdate = true;
@@ -75,7 +75,7 @@ var main_camera_view = Backbone.View.extend({
 					that.scene.add( cam_obj );
 
 					that.objects.push( cam_obj );
-            cam_obj.model.trigger( 'init', cam_obj.model, cam_obj ); 
+            //cam_obj.model.trigger( 'init', cam_obj.model, cam_obj ); 
 
 
                     } );
@@ -104,6 +104,7 @@ var main_camera_view = Backbone.View.extend({
 				this.renderer.shadowMapSoft = true;
 
 				this.el.appendChild(this.renderer.domElement );
+                $(this.el).find('canvas').addClass('working_canvas');
 
 				/*
 				renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -115,6 +116,7 @@ var main_camera_view = Backbone.View.extend({
                 */
                 $(window).on('resize', function() { that.on_resize(); } )
                 this.animate();
+                that.on_resize();
     },
     events : {
        'mousemove canvas' : 'on_canvas_mmove',
@@ -126,9 +128,10 @@ var main_camera_view = Backbone.View.extend({
 
 
 				event.preventDefault();
+                var p = $(this.el).find('canvas').position();
 
-			    this.mouse.x = ( event.clientX / $(this.el).innerWidth() ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			    this.mouse.x = ( (event.clientX - p.left) / $(this.el).innerWidth() ) * 2 - 1;
+				this.mouse.y = - ( (event.clientY -p.top)/ $(this.el).innerHeight() ) * 2 + 1;
 
 				//
 

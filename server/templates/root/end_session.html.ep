@@ -1,0 +1,13 @@
+% layout 'experiment';
+% title 'SimCAM Experiment Runner';
+
+<h1>Session Ended</h1>
+<span><%= $user->email %></span>
+
+% content_for javascript => begin
+    <script src="js/tracker.js"></script>
+    <script type="text/javascript">
+    </script>
+% end;
+
+
