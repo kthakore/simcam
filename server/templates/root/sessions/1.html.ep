@@ -1,13 +1,13 @@
 <div class="row">
    <h1>Entrance Task</h2>
 
-    <p>Select the ideal focus and apeture to see the grey cube. </p>
+    <p>Select the ideal focus and aperture to see the grey cube. </p>
 </div>
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
 
 <div class="row-fluid well pull-left" >
 <div class="span6">
-    <label>Select the Apeture:</label> <div id="aperture"> </div><input type="text" name="apeture" id="aperture_amount" />
+    <label>Select the Aperture:</label> <div id="aperture"> </div><input type="text" name="apeture" id="aperture_amount" />
 </div>
 
 
