@@ -7,13 +7,13 @@ var dof_camera_view = Backbone.View.extend({
                 this.mouse =  new THREE.Vector2(), this.offset = new THREE.Vector3();
 
   				this.camera = new THREE.PerspectiveCamera( 35, $(this.el).innerWidth() / window.innerHeight, 1, 10000 );
-                this.camera.position.set(65,65,65);
+                this.camera.position.set(15,7.5,15);
 
 				this.controls = new THREE.OrbitControls( this.camera );
 				this.controls.rotateSpeed = 1.0;
-				this.controls.zoomSpeed = 1.2;
-				this.controls.panSpeed = 0.8;
-				this.controls.noZoom = true;
+				this.controls.zoomSpeed = 0;
+				this.controls.panSpeed = 0;
+				this.controls.userZoom = true;
 				this.controls.noPan = true;
 				this.controls.staticMoving = true;
 				this.controls.dynamicDampingFactor = 0.3;
@@ -41,44 +41,45 @@ var dof_camera_view = Backbone.View.extend({
 
 				this.scene.add( light );
 
-                var jsonLoader = new THREE.JSONLoader();
-                jsonLoader.load( "/3d_objs/camera.js", function( geometry ) {  
 
-                    var cam_obj = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x2200cc } ) );
+            this.material_depth = new THREE.MeshDepthMaterial();
 
-					cam_obj.material.ambient = cam_obj.material.color;
-
-					cam_obj.position.set(0,0,15);
-
-					cam_obj.scale.set(1,1,1);
-                    cam_obj.rotation.set( 0 ,0,  0 );
-                    cam_obj.model = that.options.models.camera;
-//					cam_obj.castShadow = false;
-//					cam_obj.receiveShadow = false;
             var material = new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture("/img/grid.gif")
+            map: THREE.ImageUtils.loadTexture("/img/gridsquare.gif")
             });
+            var hi_material = new THREE.MeshLambertMaterial({ color: 0x000000});
+
+
 
             material.map.needsUpdate = true;
 
-            var cube = new THREE.Mesh(
-                    new THREE.CubeGeometry( 8, 5, 0.1 ),
-                    material
-                    );
-            cube.model = that.options.models.grid;
-            cube.model.trigger( 'init', cube.model, cube ); 
-            cube.overdraw = true;
-           that.scene.add( cube ); that.objects.push( cube );
-            
-            cube.position.set(0,0,0);
+            for( i = 0; i < 20; i++ ){
 
-					that.scene.add( cam_obj );
+                  for ( k = 0; k < 20; k++ ){
 
-					that.objects.push( cam_obj );
-            //cam_obj.model.trigger( 'init', cam_obj.model, cam_obj ); 
+                        var c_m = material;
 
+                        if( i == 5 && k == 5) {
+                            c_m = hi_material;
+                        }
+                        var cube = new THREE.Mesh(
+                                new THREE.CubeGeometry( 5, 5, 5 ),
+                                c_m
+                                );
+                        cube.model = that.options.models.grid;
+                        cube.model.trigger( 'init', cube.model, cube ); 
+                        cube.overdraw = true;
+                        that.scene.add( cube ); that.objects.push( cube );
+                        var x = -1 * i * 10;
+                        var z = -1 * k * 10;
 
-                    } );
+                        x += 50; y = 0; z += 50;
+
+                        cube.position.set(x,y,z);
+                }
+
+            }
+
                     
 				this.plane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
 				xplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0xCC0000, opacity: 0.25, transparent: true, wireframe: true } ) );
@@ -104,24 +105,71 @@ var dof_camera_view = Backbone.View.extend({
 				this.renderer.shadowMapSoft = true;
 
 				this.el.appendChild(this.renderer.domElement );
+
                 $(this.el).find('canvas').addClass('working_canvas');
 
-				/*
-				renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				this.scene.matrixAutoUpdate = false;
+                this.postprocessing = { enabled  : true };
+
+
+				this.initPostprocessing();
+
+
+				/*renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
 				renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 
-				window.addEventListener( 'resize', onWindowResize, false );
-                */
+				window.addEventListener( 'resize', onWindowResize, false );*/
                 $(window).on('resize', function() { that.on_resize(); } )
                 this.animate();
                 that.on_resize();
     },
+    initPostprocessing : function() {
+                postprocessing = this.postprocessing;
+            	postprocessing.scene = new THREE.Scene();
+
+                
+				postprocessing.camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2,  window.innerHeight / 2, window.innerHeight / - 2, -10000, 10000 );
+                postprocessing.camera.position.set(15,7.5,15);
+
+				postprocessing.scene.add( postprocessing.camera );
+
+                var width = $(this.el).innerWidth(); var height = $(this.el).innerHeight();
+
+				var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
+				postprocessing.rtTextureDepth = new THREE.WebGLRenderTarget( width, height, pars );
+				postprocessing.rtTextureColor = new THREE.WebGLRenderTarget( width, height, pars );
+
+				var bokeh_shader = THREE.BokehShader;
+
+				postprocessing.bokeh_uniforms = THREE.UniformsUtils.clone( bokeh_shader.uniforms );
+
+				postprocessing.bokeh_uniforms[ "tColor" ].value = postprocessing.rtTextureColor;
+				postprocessing.bokeh_uniforms[ "tDepth" ].value = postprocessing.rtTextureDepth;
+				postprocessing.bokeh_uniforms[ "focus" ].value = 1.1;
+				postprocessing.bokeh_uniforms[ "aspect" ].value = width / height;
+
+
+				postprocessing.materialBokeh = new THREE.ShaderMaterial( {
+
+					uniforms: postprocessing.bokeh_uniforms,
+					vertexShader: bokeh_shader.vertexShader,
+					fragmentShader: bokeh_shader.fragmentShader
+
+				} );
+
+				postprocessing.quad = new THREE.Mesh( new THREE.PlaneGeometry( width, height ), postprocessing.materialBokeh );
+				postprocessing.quad.position.z = - 500;
+				postprocessing.scene.add( postprocessing.quad );
+
+                this.postprocessing = postprocessing;
+
+    },
     events : {
-       'mousemove canvas' : 'on_canvas_mmove',
-       'mousedown canvas' : 'on_canvas_mdown',
-       'mouseup canvas' : 'on_canvas_mup',
+//       'mousemove canvas' : 'on_canvas_mmove',
+//       'mousedown canvas' : 'on_canvas_mdown',
+//       'mouseup canvas' : 'on_canvas_mup',
     },
     on_canvas_mmove : function( event ) {
                 
@@ -272,13 +320,43 @@ var dof_camera_view = Backbone.View.extend({
     render : function () {
 
 				this.controls.update();
+                var renderer = this.renderer;
+                var scene = this.scene;
+                var camera = this.camera;
 
-				this.renderer.render( this.scene, this.camera );
+                var postprocessing = this.postprocessing;
+
+            	if ( postprocessing.enabled ) {
+
+					renderer.clear();
+
+					// Render scene into texture
+
+					scene.overrideMaterial = null;
+					renderer.render( scene, camera, postprocessing.rtTextureColor, true );
+
+					// Render depth into texture
+
+					scene.overrideMaterial = this.material_depth;
+					renderer.render( scene, camera, postprocessing.rtTextureDepth, true );
+
+					// Render bokeh composite
+
+					renderer.render( postprocessing.scene, postprocessing.camera );
 
 
-    }
+				} else {
+
+					renderer.clear();
+					renderer.render( scene, camera );
+
+				}
+
+
+    },
    
     //PUBLIC METHODS:
+   
 
     //add_obj( type, update_callback )
 

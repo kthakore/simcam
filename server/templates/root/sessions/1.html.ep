@@ -1,15 +1,33 @@
 <div class="row">
    <h1>Entrance Task</h2>
 
-    <p>Please take the best picture of the object below. </p>
+    <p>Select the ideal focus and apeture to see the grey cube. </p>
+</div>
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+
+<div class="row-fluid" >
+<div class="span6">
+    <label>Select the Apeture:</label> <div id="aperture"> </div><input type="text" name="apeture" id="aperture_amount" />
 </div>
 
-<div class="row-fluid" id="dof_view">
+
+<div class="span6">
+    <label>Select the Focus:</label> <div id="focus"> </div><input type="text" name="focus" id="focus_amount" />
+</div>
+
+</div>
+
+
+<div class="row-fluid" style="text-align:center">
+<center class="span12">
+    <iframe src="/iframes/depth_of_field.html" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="640"  height="640">
+    </iframe>
+</center>
 </div>
 
 <div class="row">
-  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
      <input type="hidden" name="position" />
+
      <div class="control-group">
           <!-- Button -->
           <div class="controls">
@@ -18,10 +36,8 @@
           </div>
         </div>
 
-    </fieldset> 
-   
-  </form>
 </div>
+  </form>
 
 <!-- Depth of Field -->
 
@@ -29,35 +45,46 @@
 
 
 % content_for javascript => begin
+    <script type="text/javascript" src="/js/libs/jquery-ui-1.9.2.custom.min.js"></script>
+
     <script src="/js/tracker.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
-   <script src="/js/libs/three.js"></script>
-  <script type="text/javascript" src="/js/views/dof_camera_view.js"></script>
 
-    <script type="text/javascript">
-        var v = Backbone.View.extend({ 
-            initialize: function() { console.log('start'); 
+    <script>
+        $(function() {
 
+            $(window.frames[0]).on('load', function() {
+              
+                    var pp  = window.frames[0].main_view.dofcv.postprocessing; 
+    
+                    var focus = pp.bokeh_uniforms.focus;
+                    var aperture = pp.bokeh_uniforms.aperture;
 
-                 var m = Backbone.Model.extend({ url: '/camera/2'} );
-                 var model = new m( {  });
-                 model.fetch({ success: function() {  }});
+                        $( "#focus_amount" ).val( focus.value );
+                        $('#focus').slider({
+                    range: "max",
+                    min: 0.001,
+                    max: 2.000,
+                    value: focus.value,
+                    step: 0.001,
+                    slide: function( event, ui ) {
+                        $( "#focus_amount" ).val( ui.value );
+                        focus.value = ui.value;
+                    } });
 
-                this.camera =  m;
-                this.grid = new m();
-
-
-                 var n =  new dof_camera_view({el : $('#dof_view'), models: { camera : this.camera, grid: this.grid} });
-            },
-            events : { 'submit form': 'validate' },
-            validate : function() {
-
-                console.log('Validating form');
-            }
-            });
-
-        new v({el : $('body') });
-
+                        $('#aperture_amount').val( aperture.value );
+                        $('#aperture').slider({
+                    range: "max",
+                    min: 0.001,
+                    max: 0.999,
+                    value: aperture.value,
+                    step: 0.001,
+                    slide: function( event, ui ) {
+                        $( "#aperture_amount" ).val( ui.value );
+                        aperture.value =ui.value;
+                    }  });
+            })
+           });
     </script>
 % end;
 

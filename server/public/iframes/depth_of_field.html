@@ -1,0 +1,56 @@
+<html>
+<head>
+    <title>Marble Soccer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" href="/css/custom-theme/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
+    <link type="text/css" href="/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+<body style="padding:0; margin:0">
+
+<div id="dof">
+
+</div>
+
+    <script src="/js/libs/jquery.min.js"></script>
+
+    <script src="/js/libs/underscore-min.js"></script>
+    <script src="/js/libs/backbone-min.js"></script>
+    <script src="/js/libs/bootstrap.min.js"></script>
+
+
+   <script src="/js/libs/three.js"></script>
+  <script type="text/javascript" src="/js/libs/shaders/BokehShader.js"></script>
+  <script type="text/javascript" src="/js/views/dof_camera_view.js"></script>
+
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { 
+
+                 var m = Backbone.Model.extend({ url: '/camera/2'} );
+                 var model = new m( {  });
+                 model.fetch({ success: function() {  }});
+
+                this.camera =  m;
+                this.grid = new m();
+
+
+                 this.dofcv =   new dof_camera_view({el : $('#dof'), models: { camera : this.camera, grid: this.grid} });
+            },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+            }
+            });
+
+        $(function(){
+        window.main_view = new v({el : $('body') });
+        });
+
+    </script>
+
+</body>
+</html>

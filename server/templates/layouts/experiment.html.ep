@@ -3,6 +3,7 @@
   <head>
     <title><%= title %></title>
     <!-- Bootstrap -->
+    <link type="text/css" href="/css/custom-theme/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
   <body>
