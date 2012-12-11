@@ -5,7 +5,7 @@
 </div>
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
 
-<div class="row-fluid" >
+<div class="row-fluid well pull-left" >
 <div class="span6">
     <label>Select the Apeture:</label> <div id="aperture"> </div><input type="text" name="apeture" id="aperture_amount" />
 </div>

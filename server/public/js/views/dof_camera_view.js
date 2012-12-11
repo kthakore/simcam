@@ -147,7 +147,9 @@ var dof_camera_view = Backbone.View.extend({
 
 				postprocessing.bokeh_uniforms[ "tColor" ].value = postprocessing.rtTextureColor;
 				postprocessing.bokeh_uniforms[ "tDepth" ].value = postprocessing.rtTextureDepth;
-				postprocessing.bokeh_uniforms[ "focus" ].value = 1.1;
+				postprocessing.bokeh_uniforms[ "focus" ].value = 0.800;
+				postprocessing.bokeh_uniforms[ "aperture" ].value = 0.400;
+
 				postprocessing.bokeh_uniforms[ "aspect" ].value = width / height;
 
 
