@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Depth of Field Shader</title>
+		
+		<!-- Stylesheet -->
+		<link type="text/css" href="src/jquery/jquery-ui-1.8.17.custom.css" rel="stylesheet" type="text/css" />	
+		<link type="text/css" href="style.css" rel="stylesheet" type="text/css" />
+		
+		<!-- JQuery Includes -->
+		<script type="text/javascript" src="src/jquery/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="src/jquery/jquery-ui-1.8.17.custom.min.js"></script>
+		
+		<!-- Nutty Software Open WebGL Framework Includes -->
+		<script type="text/javascript" src="src/ca/nutty/Entity/Entity.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Entity/Light.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Entity/Material.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Geometry/PolygonMesh.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Geometry/Cube.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Geometry/Cylinder.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Geometry/Rectangle.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Geometry/Sphere.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Render/SamplerState.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Render/Texture.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLFrameBufferObject.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLShader.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLShaderProgram.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLTexture.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLTexture2D.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLTextureCube.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/GL/GLVertexBufferObject.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Http/HttpRequest.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Http/HttpResponse.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Math/Matrix.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Math/Point.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Math/Quaternion.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Math/ViewMatrix.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Resource/ResourceManager.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Resource/ResourceItem.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Shader/BaseShader.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Shader/ImageShader.js"></script>
+		<script type="text/javascript" src="src/ca/nutty/Scene/BaseScene.js"></script>
+		
+		<!-- App Includes -->
+		<script type="text/javascript" src="src/app/BasicShader.js"></script>
+		<script type="text/javascript" src="src/app/DepthOfFieldScene.js"></script>
+		<script type="text/javascript" src="src/app/DepthOfFieldSceneGen.js"></script>
+		<script type="text/javascript" src="src/app/DepthShader.js"></script>
+		<script type="text/javascript" src="src/app/DofBlurShader.js"></script>
+		<script type="text/javascript" src="src/app/DofImageShader.js"></script>
+		<script type="text/javascript" src="src/app/MainApp.js"></script>
+		
+		<!-- Initialize Scene -->
+		<script type="text/javascript">
+			CurrentScene = new DepthOfFieldScene();
+		</script>
+	</head>
+
+	<body onload="AppLoad();" onunload="AppStop();">
+				<div id="DivStart">
+					<br />
+					<button id="BtnStartWebGL" onclick="AppStart();">Start Second Entrance Task</button>
+					<br />
+					<p id="DivNoWebGL">Sorry, it appears you don't have support for WebGL.</p>
+					<br />
+				</div>
+			
+				<div id="WebGLDemo">
+					<!-- WebGL Canvas -->
+					<canvas id="Canvas" width="650" height="487">
+					</canvas>
+					
+					<!-- Loading Progress -->
+					<div id="DivLoading">
+						<span>Loading </span><span id="TxtLoadingProgress"></span><span>%</span>
+					</div>
+					
+					<!-- Controls -->
+					<div id="DivControls">
+						<!-- Dof Properties -->
+						<div>
+							<h4>Focal Length</h4>
+							<div id="FocalLengthSlider" class="Slider"><span id="FocalLengthSliderTxt" class="SliderTextValue"></span></div>
+						</div>
+						
+						<div>
+							<h4>Focus Distance</h4>
+							<div id="FocusDistanceSlider" class="Slider"><span id="FocusDistanceSliderTxt" class="SliderTextValue"></span></div>
+						</div>
+						
+						<div style="display:none">
+							<h4>F-Stop</h4>
+							<div id="FStopSlider" class="Slider"><span id="FStopSliderTxt" class="SliderTextValue"></span></div>
+						</div>
+						
+						<!-- View State -->
+						<div style="display:none">
+							<h4>View State</h4>
+							<select id="CboxViewState">
+								<option>Camera</option>
+								<option>Depth</option>
+							</select>
+						</div>
+					</div>
+				</div>
+    <script type="text/javascript">
+        $(function() { AppStart();  })
+    </script>
+	</body>
+</html>

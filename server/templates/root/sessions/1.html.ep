@@ -1,6 +1,7 @@
 <div class="row">
-   <h1>Entrance Task</h2>
+   <h2>Entrance Task</h2>
 
+    <h3>Sub Task 1</h3>
     <p>Select the ideal focus and aperture to see the grey cube. </p>
 </div>
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
@@ -24,6 +25,24 @@
     </iframe>
 </center>
 </div>
+
+
+<div class="row">
+    <h3>Sub Task 2</h3>
+    <p>Consider the following environment.</p>
+
+<div class="row-fluid" style="text-align:center">
+<center class="span12">
+    <iframe src="/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="800"  height="640">
+    </iframe>
+    <label> Source: <a href="http://devmaster.net/posts/3021/shader-effects-depth-of-field">DevMaster.net, Nathaniel Meyer</a></label>
+</center>
+</div>
+
+<div class="row">
+    <p>What is the happens when the Focal Length is increased?</p>
+</div>
+
 
 <div class="row">
      <input type="hidden" name="position" />
