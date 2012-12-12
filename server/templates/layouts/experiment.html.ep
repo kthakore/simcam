@@ -17,6 +17,7 @@
 
     <%= content_for 'javascript' %>
 
+    <%= content_for 'javascript_extend' %>
 
   </body>
 </html>
