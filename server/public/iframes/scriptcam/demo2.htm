@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>
+			ScriptCam - use your webcam in Javascript JQuery
+		</title>
+		<script language="JavaScript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script language="JavaScript" src="//ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+		<script language="JavaScript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+		<script language="JavaScript" src="scriptcam.js"></script>
+		<link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+		<link href="bootstrap.min.css" rel="stylesheet">
+		<style>
+			#webcam {
+				float:left;
+			}
+			.ui-slider {
+				background:none;
+				background-image:url('trackslider.png');
+				border:0;
+				height:107px;
+				margin-top:16px;
+			}
+			.ui-slider .ui-slider-handle {
+				width:14px;
+				height:32px;
+				margin-left:7px;
+				margin-bottom:-16px;
+				background:url(volumeslider.png) no-repeat; 
+			}
+			#setupPanel {
+				width:400px;
+				height:30px;
+				margin:5px;
+			}
+		</style>
+		<script>
+			$(document).ready(function() {
+				$("#webcam").scriptcam({ 
+					appID:'C5DDD6FE-53',
+					onError:onError,
+					promptWillShow:promptWillShow,
+					showMicrophoneErrors:false,
+					onWebcamReady:onWebcamReady,
+                    useMicrophone: false,
+					timeLeft:timeLeft,
+					fileName:'demo1',
+					connected:showRecord
+				});
+				setVolume(0);
+			});
+			function showRecord() {
+				$( "#recordStartButton" ).attr( "disabled", false );
+			}
+			function startRecording() {
+				$( "#recordStartButton" ).attr( "disabled", true );
+				$( "#recordStopButton" ).attr( "disabled", false );
+				$.scriptcam.startRecording();
+			}
+			function closeCamera() {
+				$( "#slider" ).slider( "option", "disabled", true );
+				$( "#recordStopButton" ).attr( "disabled", true );
+				$.scriptcam.closeCamera();
+//				window.location='demo2.htm';
+			}
+			function onError(errorId,errorMsg) {
+				alert(errorMsg);
+			}
+			function onWebcamReady(cameraNames,camera,microphoneNames,microphone,volume) {
+				$( "#slider" ).slider( "option", "disabled", false );
+				$( "#slider" ).slider( "option", "value", volume );
+				$.each(cameraNames, function(index, text) {
+					$('#cameraNames').append( $('<option></option>').val(index).html(text) )
+				}); 
+				$('#cameraNames').val(camera);
+				$.each(microphoneNames, function(index, text) {
+					$('#microphoneNames').append( $('<option></option>').val(index).html(text) )
+				}); 
+				$('#microphoneNames').val(microphone);
+			}
+			function promptWillShow() {
+				alert('A security dialog will be shown. Please click on ALLOW. Also ensure your camera can see your face.');
+			}
+			function timeLeft(value) {
+				$('#timeLeft').val(value);
+			}
+			function changeCamera() {
+				$.scriptcam.changeCamera($('#cameraNames').val());
+			}
+		</script>
+	</head>
+	<body>
+		<div id="webcam">
+		</div>
+		<br clear="both"/>
+		<div id="setupPanel">
+			<img src="webcamlogo.png" style="vertical-align:text-top"/>
+			<select id="cameraNames" size="1" onChange="changeCamera()" style="width:145px;font-size:10px;height:25px;">
+			</select>
+		</div>
+		<hr style="margin-top:0px;margin-bottom:6px;"/>
+		<span style="padding-left:25px;padding-right:25px;">
+		Time left:
+		<input type="text" id="timeLeft" style="width:50px;font-size:10px;">&nbsp;
+		</span>
+	</body>
+</html>
