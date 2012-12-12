@@ -32,3 +32,48 @@
     </div>
 </div>
 
+% content_for javascript_extend => begin
+
+<% if($session->milestone > 0 ) { %>
+
+<div id="webcam_modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Session Recording</h3>
+  </div>
+  <div class="modal-body" style="overflow:none">
+        <iframe id="webcam_iframe" src="/iframes/scriptcam/demo2.htm" width="400" height="410"></iframe>
+  </div>
+  <div class="modal-footer">
+    <a href="#" data-toggle="modal" data-target="#webcam_modal" class="btn">Close</a>
+  </div>
+</div>
+
+
+
+<script type="text/javascript">
+$(function(){
+    var wmodal = $('#webcam_modal').modal();
+
+    var webcam_iframe;
+
+    var wm = wmodal.find('iframe');
+    if( wm ) {
+    
+        wm.on('load', function() {
+            var content_window = wm[0].contentWindow;
+            content_window.init('<%= $user->id %>_<%=$session->milestone%>');
+            content_window.callback =  function( stat, errorID, errorMsg ) {
+                $('#webcam_modal').modal('hide');
+            };
+        });
+
+    }
+});
+</script>
+
+
+<% } %>
+
+% end;
+

@@ -33,7 +33,7 @@
 
 <div class="row-fluid" style="text-align:center">
 <center class="span12">
-    <iframe src="/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="800"  height="640">
+    <iframe src="/iframes/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="800"  height="640">
     </iframe>
     <label> Source: <a href="http://devmaster.net/posts/3021/shader-effects-depth-of-field">DevMaster.net, Nathaniel Meyer</a></label>
 </center>

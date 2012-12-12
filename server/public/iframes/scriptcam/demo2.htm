@@ -37,7 +37,13 @@
 		</style>
 		<script>
 			$(document).ready(function() {
-				$("#webcam").scriptcam({ 
+		
+            window.init = function (filename) {
+                var d = new Date();
+                filename = filename +'_'+ d.getTime(); 
+
+                console.log( 'Running init for: '+filename);
+        		$("#webcam").scriptcam({ 
 					appID:'C5DDD6FE-53',
 					onError:onError,
 					promptWillShow:promptWillShow,
@@ -45,13 +51,26 @@
 					onWebcamReady:onWebcamReady,
                     useMicrophone: false,
 					timeLeft:timeLeft,
-					fileName:'demo1',
+					fileName:filename,
 					connected:showRecord
 				});
-				setVolume(0);
+
+
+            }
+            window.begin = function() {
+                startRecording();
+            }
+
 			});
+
 			function showRecord() {
 				$( "#recordStartButton" ).attr( "disabled", false );
+
+                startRecording();
+
+                if( window.callback ){
+                    window.callback();
+                }
 			}
 			function startRecording() {
 				$( "#recordStartButton" ).attr( "disabled", true );
@@ -63,13 +82,19 @@
 				$( "#recordStopButton" ).attr( "disabled", true );
 				$.scriptcam.closeCamera();
 //				window.location='demo2.htm';
-			}
+
+                if( window.callback ){
+                    window.callback('closed');
+                }			
+            }
 			function onError(errorId,errorMsg) {
 				alert(errorMsg);
+                 if( window.callback ){
+                    window.callback('error', errorId, errorMsg);
+                }			
+
 			}
 			function onWebcamReady(cameraNames,camera,microphoneNames,microphone,volume) {
-				$( "#slider" ).slider( "option", "disabled", false );
-				$( "#slider" ).slider( "option", "value", volume );
 				$.each(cameraNames, function(index, text) {
 					$('#cameraNames').append( $('<option></option>').val(index).html(text) )
 				}); 
@@ -78,6 +103,7 @@
 					$('#microphoneNames').append( $('<option></option>').val(index).html(text) )
 				}); 
 				$('#microphoneNames').val(microphone);
+
 			}
 			function promptWillShow() {
 				alert('A security dialog will be shown. Please click on ALLOW. Also ensure your camera can see your face.');
