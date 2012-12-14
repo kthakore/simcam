@@ -33,15 +33,74 @@
 
 <div class="row-fluid" style="text-align:center">
 <center class="span12">
-    <iframe src="/iframes/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="800"  height="640">
+    <iframe src="/iframes/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view_2" width="800"  height="640">
     </iframe>
     <label> Source: <a href="http://devmaster.net/posts/3021/shader-effects-depth-of-field">DevMaster.net, Nathaniel Meyer</a></label>
 </center>
 </div>
 
 <div class="row">
-    <p>What is the happens when the Focal Length is increased?</p>
+    <p>What is the happens when the Focal Length is decreased?</p>
 </div>
+
+ <div class="control-group">
+          <label class="control-label">Question 1:</label>
+          <div class="controls">
+
+            <!-- Multiple Radios -->
+            <label class="radio">
+              <input type="radio" value="1" name="question_1">
+              The emphasis of the focused region is increased, because the subject magnification is increased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="2" name="question_1">
+              The emphasis of the focused region is decreased, because the subject magnification is decreased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="3" name="question_1">
+              The emphasis of the focused region is increased, because the depth of field is decreased.
+            </label>
+             <label class="radio">
+              <input type="radio" value="4" name="question_1">
+              The emphasis of the focused region is increased, because the depth of field is increased.
+            </label>
+
+
+          </div>
+
+ </div>
+<div class="row">
+    <p>What is the happens when the focus distance is increased?</p>
+</div>
+
+ <div class="control-group">
+          <label class="control-label">Question 2:</label>
+          <div class="controls">
+
+            <!-- Multiple Radios -->
+            <label class="radio">
+              <input type="radio" value="1" name="question_2">
+              Further objects are sharper, because the subject magnification is increased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="2" name="question_2">
+              Further objects are sharper, because the depth of field is decreased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="3" name="question_2">
+              Further objects are sharper, because the near plane is further.
+            </label>
+             <label class="radio">
+              <input type="radio" value="4" name="question_2">
+              Further objects are sharper, because the far plane is further.
+            </label>
+
+
+          </div>
+
+ </div>
+
+
 
 
 <div class="row">
