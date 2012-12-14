@@ -46,3 +46,4 @@ CREATE TABLE Camera (
         v REAL
 );
 
+insert into Camera values (0,0.0,0.4,10000.0,'job_images/a63b500296abc9594c0a183b9292c7c5c243cdff.png',35.0,'job_images/a63b500296abc9594c0a183b9292c7c5c243cdff.png','a63b500296abc9594c0a183b9292c7c5c243cdff','','',15.0,'','','','','','',1,'','',400.0,320.0);
