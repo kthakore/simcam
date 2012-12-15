@@ -6,7 +6,7 @@ var dof_camera_view = Backbone.View.extend({
         var that = this;
                 this.mouse =  new THREE.Vector2(), this.offset = new THREE.Vector3();
 
-  				this.camera = new THREE.PerspectiveCamera( 35, $(this.el).innerWidth() / window.innerHeight, 1, 10000 );
+  				this.camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 10000 );
                 this.camera.position.set(15,7.5,15);
 
 				this.controls = new THREE.OrbitControls( this.camera );
@@ -99,7 +99,7 @@ var dof_camera_view = Backbone.View.extend({
 
 				this.renderer = new THREE.WebGLRenderer( { antialias: true, clearColor: 0x888888, clearAlpha: 255  } );
 				this.renderer.sortObjects = false;
-				this.renderer.setSize( $(this.el).innerWidth(), window.innerHeight );
+				this.renderer.setSize( window.innerWidth, window.innerHeight );
 
 				this.renderer.shadowMapEnabled = true;
 				this.renderer.shadowMapSoft = true;
@@ -135,9 +135,9 @@ var dof_camera_view = Backbone.View.extend({
 
 				postprocessing.scene.add( postprocessing.camera );
 
-                var width = $(this.el).innerWidth(); var height = $(this.el).innerHeight();
+                var width = window.innerWidth; var height = window.innerHeight;
 
-				var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat };
+				var pars = { minFilter: THREE.NearestFilter, magFilter: THREE.NearestFilter, format: THREE.RGBFormat };
 				postprocessing.rtTextureDepth = new THREE.WebGLRenderTarget( width, height, pars );
 				postprocessing.rtTextureColor = new THREE.WebGLRenderTarget( width, height, pars );
 
@@ -307,10 +307,10 @@ var dof_camera_view = Backbone.View.extend({
     },
     on_resize : function (event ) {
 
-				this.camera.aspect = $(this.el).innerWidth() / window.innerHeight;
+				this.camera.aspect =window.innerWidth / window.innerHeight;
 				this.camera.updateProjectionMatrix();
 
-				this.renderer.setSize( $(this.el).innerWidth(), window.innerHeight );
+				this.renderer.setSize( window.innerWidth, window.innerHeight );
 
 
     },

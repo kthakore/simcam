@@ -6,11 +6,8 @@
 
 
 </head>
-<body style="padding:0; margin:0">
+<body style="padding:0; margin:0; width:100%; height:100%;">
 
-<div id="dof" style="width:100%; height:100%">
-
-</div>
 
     <script src="/js/libs/jquery.min.js"></script>
 
@@ -34,7 +31,7 @@
                 this.grid = new m();
 
 
-                 this.dofcv =   new dof_camera_view({el : $('#dof'), models: { camera : this.camera, grid: this.grid} });
+                 this.dofcv =   new dof_camera_view({el : $('body'), models: { camera : this.camera, grid: this.grid} });
             },
             events : { 'submit form': 'validate' },
             validate : function() {
