@@ -22,7 +22,7 @@
       </div>
     </div>
 
-<div class="container-fluid" style="padding:50px;" >
+<div class="container" style="padding:50px;" >
    <div class="row">
     <div class="progress progress-striped">
       <div class="bar" style="width: <%=100*($session->milestone/7)%>%;"></div>
@@ -53,7 +53,9 @@
 
 <script type="text/javascript">
 $(function(){
-    var wmodal = $('#webcam_modal').modal();
+
+
+/*    var wmodal = $('#webcam_modal').modal();
 
     var webcam_iframe;
 
@@ -69,6 +71,7 @@ $(function(){
         });
 
     }
+*/
 });
 </script>
 
