@@ -15,6 +15,8 @@ has 'schema' =>
 sub startup {
     my $self = shift;
 
+    $self->config(hypnotoad => {listen => ['http://*:5000']});
+
     $self->mode('production');
 
 # Router
