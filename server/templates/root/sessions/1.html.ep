@@ -65,6 +65,8 @@
 <div class="row">
 	<p>
 		A is a matrix that performs the transformation.  The transformation matrix is described by the pinhole camera model.
+	</p>
+	<p class="well">
 		NOTE: Although while out of scope for this tutorial to review linear algebra and matrices transformation have a look <a href="https://www.khanacademy.org/math/linear-algebra">here</a>. 
 	</p>
 </div>
@@ -77,7 +79,16 @@
 
     <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform.
 		In this model the camera matrix (A) is defined with several parameters. These parameters are the intrinsic parameters of the camera. </p>
-    
+		
+	<h4> Intrinsic Parameters </h4>
+</div>
+<div class="row" style="text-align: center"> 
+        <div>		
+		<span><img src="/images/image08.gif" /></span>
+		</div>
+</div>
+<div class="row">	
+		<p></p>
 </div>
     <% if( $user->type eq 'D' ) { %> 
 

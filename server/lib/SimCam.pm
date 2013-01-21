@@ -6,6 +6,7 @@ use Mojolicious::Plugin::Session;
 use Mojolicious::Plugin::Authentication;
 use Digest::SHA qw(sha1_hex);
 use Authen::Passphrase::SaltedSHA512;
+use Data::Dumper;
 use DateTime;
 
 has 'schema' =>
@@ -22,7 +23,7 @@ sub startup {
 # Router
     $self->plugin(
         'authentication' => {
-            session     => { 'stash_key' => 'simcam' },
+            session     => { 'stash_key' => 'simcam', 'expires' => 2592000 },
             'load_user' => sub {
 
                 my $self   = shift;
@@ -97,6 +98,22 @@ sub startup {
     $r->post('/save')->to('camera#save');
     $r->get('/camera/:id')->to('camera#get_camera');
     $r->get('/cameras')->to('camera#cameras');
+
+
+    $r->any('/parse' => sub {
+            my $self = shift;
+    $self->res->headers->header( 'Access-Control-Allow-Origin' => '*' );
+    $self->res->headers->header(
+        'Access-Control-Allow-Methods' => 'PUT, GET, DELETE, POST, OPTIONS' );
+    $self->res->headers->header( 'Access-Control-Max-Age' => '1728000' );
+    $self->res->headers->header(
+        'Access-Control-Allow-Headers' => 'Content-Type' );
+
+            my $req = $self->req;
+            my $json = $req->json;
+            warn Dumper $req;
+            return $self->render( {json => {} } );
+        });
 
     # TODO:
     # $r->post('/calibrate');
