@@ -8,7 +8,8 @@
     <li id="WebGL">WebGL: <span id="webgl_check"> </span>  </li>
     </ul>
 
-    <p>Google Chrome is recomeneted if the required features are not supported. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
+    <p>If your browser doesn't support these technologies please schedule a time to get access to our 
+    in lab comuputer. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
 
 </div>
 
@@ -28,16 +29,21 @@
   </form>
 </div>
 
+<!-- Depth of Field -->
+
+<!-- Fragment Shader -->
+
+
 % content_for javascript => begin
     <script src="/js/libs/modernizr.js"></script>
     <script type="text/javascript"> 
 
         if( Modernizr.webgl ) {
             $('#webgl_check').html( 'Available' );
-         } else {  $('#webgl_check').html('<b style="color:red">Not Available</b>' ); }
+         } else {  $('#webgl_check').html('Not Available' ); }
         if( Modernizr.canvas ) {
             $('#canvas_check').html( 'Available' );
-         } else {  $('#canvas_check').html('<b style="color:red">Not Available</b>' ); }
+         } else {  $('#canvas_check').html('Not Available' ); }
 
     </script>
     <script src="/js/tracker.js"></script>

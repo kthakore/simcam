@@ -1,168 +1,96 @@
 <div class="row">
-   <h2>Entrance Task</h2>
 
-    <h3>Sub Task 1</h3>
-    <p>Select the ideal focus and aperture to see the grey cube. </p>
-</div>
-  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+    <h1>Introduction</h1>
 
-<div class="row-fluid well pull-left" >
-<div class="span6">
-    <label>Select the Aperture:</label> <div id="aperture"> </div><input type="text" name="apeture" id="aperture_amount" />
-</div>
-
-
-<div class="span6">
-    <label>Select the Focus:</label> <div id="focus"> </div><input type="text" name="focus" id="focus_amount" />
-</div>
+    <p>This tutorial will introduce you the concept of cameras, transformation, camera distortions and calibration. </p>
 
 </div>
-
-
-<div class="row-fluid" style="text-align:center">
-<center class="span12">
-    <iframe src="/iframes/depth_of_field.html" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="640"  height="640">
-    </iframe>
-</center>
-</div>
-
-
 <div class="row">
-    <h3>Sub Task 2</h3>
-    <p>Consider the following environment.</p>
 
-<div class="row-fluid" style="text-align:center">
-<center class="span12">
-    <iframe src="/iframes/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view_2" width="800"  height="640">
-    </iframe>
-    <label> Source: <a href="http://devmaster.net/posts/3021/shader-effects-depth-of-field">DevMaster.net, Nathaniel Meyer</a></label>
-</center>
+    <h2>The Camera</h2>
+
+    <p> 
+      The concept of a camera has been around for a while. You may be familiar with cameras
+      and capturing images with them. We will look a bit closer at exactly what a camera does.</p>
+<!--    <div class="span4"> <img src="/images/session_1_camera.gif" /> <br /> <center><span style="clear:both" class="small"> <a href="http://www.cs.columbia.edu/~jebara/htmlpapers/SFM/node6.html">source</a> </span></center> </div> -->
+
+
+    <p>A camera "looks" at a far away object (The Big Ben) and shows it to you on a screen: </p> 
+
 </div>
-
-<div class="row">
-    <p>What is the happens when the Focal Length is decreased?</p>
-</div>
-
- <div class="control-group">
-          <label class="control-label">Question 1:</label>
-          <div class="controls">
-
-            <!-- Multiple Radios -->
-            <label class="radio">
-              <input type="radio" value="1" name="question_1">
-              The emphasis of the focused region is increased, because the subject magnification is increased.
-            </label>
-            <label class="radio">
-              <input type="radio" value="2" name="question_1">
-              The emphasis of the focused region is decreased, because the subject magnification is decreased.
-            </label>
-            <label class="radio">
-              <input type="radio" value="3" name="question_1">
-              The emphasis of the focused region is increased, because the depth of field is decreased.
-            </label>
-             <label class="radio">
-              <input type="radio" value="4" name="question_1">
-              The emphasis of the focused region is increased, because the depth of field is increased.
-            </label>
-
-
-          </div>
-
- </div>
-<div class="row">
-    <p>What is the happens when the focus distance is increased?</p>
-</div>
-
- <div class="control-group">
-          <label class="control-label">Question 2:</label>
-          <div class="controls">
-
-            <!-- Multiple Radios -->
-            <label class="radio">
-              <input type="radio" value="1" name="question_2">
-              Further objects are sharper, because the subject magnification is increased.
-            </label>
-            <label class="radio">
-              <input type="radio" value="2" name="question_2">
-              Further objects are sharper, because the depth of field is decreased.
-            </label>
-            <label class="radio">
-              <input type="radio" value="3" name="question_2">
-              Further objects are sharper, because the near plane is further.
-            </label>
-             <label class="radio">
-              <input type="radio" value="4" name="question_2">
-              Further objects are sharper, because the far plane is further.
-            </label>
-
-
-          </div>
-
- </div>
-
-
-
-
-<div class="row">
-     <input type="hidden" name="position" />
-
-     <div class="control-group">
-          <!-- Button -->
-          <div class="controls">
-            <input type="reset" class="btn btn-danger" value="Reset" />
-            <input type="submit" class="btn btn-success" value="Submit" />
-          </div>
+<div class="row" style="text-align: center"> 
+        <div>
+          <img src="/images/camera_2.jpg" /><br /> <center><span style="clear:both" class="small"> <a href="http://www.usingcellphones.com/">source</a> </span></center> 
         </div>
-
 </div>
-  </form>
 
-<!-- Depth of Field -->
+    <p>The first thing we would notice is that the final image (the screen) doesn't have a depth. Of course you can move closer to the Big Ben, but in the screen it only gets bigger.
+       Lights and shading in the final image give an illusion of depth, but the final image it self is not a 3D object. This means at somepoint the camera translated the Big Ben
+       light to a flat image. This transformation can be understand 
+    </p>
 
-<!-- Fragment Shader -->
 
+
+    
+<div class="row">
+    <h3>Spatial Coordinates</h3>
+    <p>
+        Because the camera works with the positions of objects, we need to have a way to understand positions. 
+    </p>
+    <h4>Vectors</h4>
+    <p>
+        Represent a point in space. 
+    </p>
+</div>
+
+
+
+<div class="row">
+    <h3>Transforms</h3>
+    <p>
+        The camera performs a transform of the 3D coordinates. 
+    </p>
+</div>
+
+
+
+<div class="row">
+
+    <h3>Pin hole Camera Model</h3>
+
+    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform. This transform, transforms the 3D coordinates to 2D coordinates. </p>
+    
+</div>
+    <% if( $user->type eq 'D' ) { %> 
+
+<!--    Default  -->
+    <% } elsif ( $user->type eq 'S' ) { %>
+
+<!--    Simulator  -->
+    <% } else {  %>
+
+<!--    Simulator hints -->
+    <% } %>
+
+</div> 
 
 % content_for javascript => begin
-    <script type="text/javascript" src="/js/libs/jquery-ui-1.9.2.custom.min.js"></script>
-
+    <script src="js/libs/three.js"></script>
     <script src="/js/tracker.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); },
+            events : { 'submit form': 'validate' },
+            validate : function() {
 
-    <script>
-        $(function() {
+                console.log('Validating form');
+                return false;
+            }
+            });
 
-            $(window.frames[0]).on('load', function() {
-              
-                    var pp  = window.frames[0].main_view.dofcv.postprocessing; 
-    
-                    var focus = pp.bokeh_uniforms.focus;
-                    var aperture = pp.bokeh_uniforms.aperture;
+        new v({el : $('body') });
 
-                        $( "#focus_amount" ).val( focus.value );
-                        $('#focus').slider({
-                    range: "max",
-                    min: 0.001,
-                    max: 2.000,
-                    value: focus.value,
-                    step: 0.001,
-                    slide: function( event, ui ) {
-                        $( "#focus_amount" ).val( ui.value );
-                        focus.value = ui.value;
-                    } });
-
-                        $('#aperture_amount').val( aperture.value );
-                        $('#aperture').slider({
-                    range: "max",
-                    min: 0.001,
-                    max: 0.999,
-                    value: aperture.value,
-                    step: 0.001,
-                    slide: function( event, ui ) {
-                        $( "#aperture_amount" ).val( ui.value );
-                        aperture.value =ui.value;
-                    }  });
-            })
-           });
     </script>
 % end;
 
