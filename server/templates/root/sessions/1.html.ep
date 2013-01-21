@@ -35,21 +35,38 @@
 <div class="row">
     <h3>Spatial Coordinates</h3>
     <p>
-        Because the camera works with the positions of objects, we need to have a way to understand positions. 
+        The camera looks and draws the positions of objects, we need to have a way to understand positions. The cartesian coordinate system is one way to describe positions of objects in a space.  
     </p>
-    <h4>Vectors</h4>
-    <p>
-        Represent a point in space. 
-    </p>
+</div>
+<div class="row" style="text-align: center"> 
+        <div>
+          <img src="/images/image10.png" /> <img src="/images/image13.png" /><br /> <center><span style="clear:both" class="small"> <a href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system">source</a> </span></center> 
+        </div>
+</div>
+<div class="row">
+	<p class="well">NOTE: You can refresh your memory of the cartesian coordinate system <a href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system">here</a>.</p
 </div>
 
 
 
+
 <div class="row">
-    <h3>Transforms</h3>
+    <h3>Camera Transform</h3>
     <p>
-        The camera performs a transform of the 3D coordinates. 
-    </p>
+        Cameras transform the 3D cartesian coordinates to 2D cartesian coordinates. <span> Mathematically it can be described as: <img src="/images/image14.gif" /> </span>.
+		Expanded: 
+	</p>
+</div>
+<div class="row" style="text-align: center"> 
+        <div>		
+		<span><img src="/images/image04.gif" /></span>
+		</div>
+</div>
+<div class="row">
+	<p>
+		A is a matrix that performs the transformation.  The transformation matrix is described by the pinhole camera model.
+		NOTE: Although while out of scope for this tutorial to review linear algebra and matrices transformation have a look <a href="https://www.khanacademy.org/math/linear-algebra">here</a>. 
+	</p>
 </div>
 
 
@@ -58,7 +75,8 @@
 
     <h3>Pin hole Camera Model</h3>
 
-    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform. This transform, transforms the 3D coordinates to 2D coordinates. </p>
+    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform.
+		In this model the camera matrix (A) is defined with several parameters. These parameters are the intrinsic parameters of the camera. </p>
     
 </div>
     <% if( $user->type eq 'D' ) { %> 
