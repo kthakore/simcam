@@ -5,6 +5,8 @@
     <p>This tutorial will introduce you the concept of cameras, transformation, camera distortions and calibration. </p>
 
 </div>
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+
 <div class="row">
 
     <h2>The Camera</h2>
@@ -12,15 +14,13 @@
     <p> 
       The concept of a camera has been around for a while. You may be familiar with cameras
       and capturing images with them. We will look a bit closer at exactly what a camera does.</p>
-<!--    <div class="span4"> <img src="/images/session_1_camera.gif" /> <br /> <center><span style="clear:both" class="small"> <a href="http://www.cs.columbia.edu/~jebara/htmlpapers/SFM/node6.html">source</a> </span></center> </div> -->
-
 
     <p>A camera "looks" at a far away object (The Big Ben) and shows it to you on a screen: </p> 
 
 </div>
 <div class="row" style="text-align: center"> 
         <div>
-          <img src="/images/camera_2.jpg" /><br /> <center><span style="clear:both" class="small"> <a href="http://www.usingcellphones.com/">source</a> </span></center> 
+          <img src="/images/image09.jpg" /><br /> <center><span style="clear:both" class="small"> <a href="http://www.usingcellphones.com/">source</a> </span></center> 
         </div>
 </div>
 
@@ -105,18 +105,23 @@
 			<h6>Tangential Distortion</h6>
 			<p></p>
 </div>
-    <% if( $user->type eq 'D' ) { %> 
 
-<!--    Default  -->
-    <% } elsif ( $user->type eq 'S' ) { %>
 
-<!--    Simulator  -->
-    <% } else {  %>
 
-<!--    Simulator hints -->
-    <% } %>
+<div class="row">
+     <input type="hidden" name="position" />
 
-</div> 
+     <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+</div>
+  </form>
+
 
 % content_for javascript => begin
     <script src="js/libs/three.js"></script>

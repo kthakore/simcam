@@ -1,6 +1,6 @@
 <div class="row">
     <h1>Welcome</h1>
-    <p>Welcome to SimCam. To participate in this experiment your broswer needs to support the following technologies: </p>
+    <p>Welcome to SimCam. To participate in this experiment your browser needs to support the following technologies: </p>
 
     <h4>Required Technologies</h4>
     <ul id="tech_check_list">
@@ -8,7 +8,7 @@
     <li id="WebGL">WebGL: <span id="webgl_check"> </span>  </li>
     </ul>
 
-    <p>Google Chrome is recomeneted if the required features are not supported. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
+    <p>Google Chrome is recommended if the required technologies are not supported. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
 
 </div>
 
