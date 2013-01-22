@@ -80,15 +80,30 @@
     <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform.
 		In this model the camera matrix (A) is defined with several parameters. These parameters are the intrinsic parameters of the camera. </p>
 		
-	<h4> Intrinsic Parameters </h4>
+	<h4>Intrinsic Parameters </h4>
+	<p>The intrinsic parameters can be divided into two sets of parameters.</p>
+	<h5>Linear Intrinsic Parameters</h5>
+	<p>The linear intrinsic parameters are components of the camera matrix (A) seen below.</p>
 </div>
 <div class="row" style="text-align: center"> 
         <div>		
 		<span><img src="/images/image08.gif" /></span>
 		</div>
 </div>
+
 <div class="row">	
-		<p></p>
+		   <p>
+		     Where the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>) are the focal lengths of the camera. 
+             And the (<span><img src="/images/c_x.gif" /></span>,<span><img src="/images/c_y.gif" /></span>) are the center point of the final image that is made. 
+	         The focal lengths describe where the camera can focus. 
+	         If you have a webcam, see if you can find the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>)  in the environment below.  
+			</p>
+			<h5>Non-linear Intrinsic Parameters</h5>
+			<p>Of course real cameras are not as simple as described in the pinhole camera model. Real lens systems are susceptible to two distortions.</p>
+			<h6>Radial Distortion</h6>
+			<p></p>
+			<h6>Tangential Distortion</h6>
+			<p></p>
 </div>
     <% if( $user->type eq 'D' ) { %> 
 
