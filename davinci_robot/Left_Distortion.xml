@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<Left_Distortion type_id="opencv-matrix">
+  <rows>4</rows>
+  <cols>1</cols>
+  <dt>f</dt>
+  <data>
+    -1.74628079e-001 1.28863946e-001 4.66650538e-003 6.00916799e-004</data></Left_Distortion>
+</opencv_storage>
