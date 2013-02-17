@@ -14,7 +14,7 @@ sub startup {
   my $self = shift;
 
 
-  $self->mode('production');
+  $self->mode('development');
 
     $self->plugin(
         'authentication' => {
@@ -62,6 +62,15 @@ sub startup {
 
   # Normal route to controller
   $r->get('/')->to('front#index');
+
+
+  # API METHODS
+
+  # POST IMAGE IN Base64 or uploads (NI)
+  $r->post('/api/image')->to('api#image');
+
+
+
 }
 
 1;
