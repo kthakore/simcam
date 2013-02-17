@@ -36,7 +36,7 @@ sub store_base64image {
     $uri =~ s/(^.+?,)//;
 
     my $d = MIME::Base64::decode_base64($uri);
-    my $file_name = sha1_hex( $urit );
+    my $file_name = sha1_hex( $uri );
     my $file_loc = 'public/uploads/'.$file_name.'_in.png';
     File::Slurp::write_file( $file_loc, $d );
 
