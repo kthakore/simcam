@@ -5,6 +5,10 @@ use MIME::Base64;
 use Mojo::JSON;
 use DateTime;
 use File::Slurp;
+use Capture::Tiny;
+
+
+my $IMAGE_LOCATION = 'public/uploads/';
 
 sub image {
    my $self = shift;
@@ -37,11 +41,31 @@ sub store_base64image {
 
     my $d = MIME::Base64::decode_base64($uri);
     my $file_name = sha1_hex( $uri );
-    my $file_loc = 'public/uploads/'.$file_name.'_in.png';
+    my $file_loc = $IMAGE_LOCATION.$file_name;
     File::Slurp::write_file( $file_loc, $d );
+   
+    $self->imagemagick_convert(  $file_loc, $file_loc.'_in.png' );   
+    return $file_name;
 
-    return $file_loc;
+}
 
+sub imagemagick_convert {
+    my $self = shift;
+    my $first = shift; 
+    my $second = shift;
+
+    my ($merged, @result) = Capture::Tiny::capture_merged sub {
+
+       `convert $first $second`;
+
+    };
+
+    if( $merged ){
+        $self->app->log->error( "Api|imagemagick_convert error: $merged" ) if $merged;
+        return -1;
+    }
+
+    return 1;
 }
 
 1;
