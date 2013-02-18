@@ -63,6 +63,17 @@ sub startup {
   # Normal route to controller
   $r->get('/')->to('front#index');
 
+  $r->post('/login')->to('front#login');
+
+  $r->get('/logout')->to('root#logout');
+
+
+  $r->get('/session/:num/start')->to('session#start');
+  $r->get('/session/:num/end')->to('session#end');
+
+  $r->get('/session/:num')->to('session#run');
+  $r->post('/session/:num')->to('session#save');
+
 
   # API METHODS
 
