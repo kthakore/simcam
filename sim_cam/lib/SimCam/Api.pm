@@ -85,13 +85,14 @@ sub imagemagick_convert {
 
 sub get_diff {
     my $self = shift;
-    my $first = shift;
-    my $second = shift;
+    my $first = $self->param('first');
+    my $second = $self->param('second');
 
     my $first_file_loc = $IMAGE_LOCATION.$first.'_in.png';
     my $second_file_loc = $IMAGE_LOCATION.$second.'_in.png';
     my $out_file_loc = $IMAGE_LOCATION.$first.'_'.$second.'_diff.png';
 
+     $self->app->log->info(" ../simcamCV/diff  $first_file_loc $second_file_loc $out_file_loc");
     my ($merged, @result) = Capture::Tiny::capture_merged sub {
 
        `../simcamCV/diff $first_file_loc $second_file_loc $out_file_loc`;
