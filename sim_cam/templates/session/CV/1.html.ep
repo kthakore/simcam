@@ -124,7 +124,6 @@
 
 
 % content_for javascript => begin
-    <script src="js/libs/three.js"></script>
     <script src="/js/tracker.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">

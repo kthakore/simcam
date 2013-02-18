@@ -71,12 +71,15 @@ sub run {
             }
             return $self->redirect_to( '/session/'.$user->current_session );
         } 
+        my $dir = 'templates/session/'. $user->study.'/';
+        my @files = <$dir/*.html.ep>;
+        my $count = scalar @files;
 
         my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
         
         if( $session ) {
 
-            $self->render({ user => $user, session => $session} );
+            $self->render({ user => $user, session => $session, sessions => $count} );
 
         } else {
             $self->app->log->info("Redirecting session $s_num to start");
