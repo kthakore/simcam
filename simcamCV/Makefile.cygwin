@@ -1,0 +1,20 @@
+CC = g++
+CFLAGS = -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/include/opencv" -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/include/opencv2"  -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/modules/core/include"  -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/modules/imgproc/include"  -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/modules/features2d/include"  -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/modules/flann/include" -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/modules/calib3d/include" -I"/cygdrive/c/Users/kthakore/Documents/Development/opencv/modules/highgui/include"   -L"/cygdrive/c/Users/kthakore/Documents/Development/opencv/build/x86/mingw/bin" -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_core
+
+all: check calibrate noise distort diff
+
+check:
+	$(CC) -o check check.c $(CFLAGS)
+
+calibrate:
+	$(CC) -o calibrate calibrate.c $(CFLAGS)
+
+noise:
+	$(CC) -o noise noise.cpp $(CFLAGS)
+
+distort:
+	$(CC) -o distort distort.c $(CFLAGS)
+
+diff:
+	$(CC) -o diff diff.c $(CFLAGS)
+
