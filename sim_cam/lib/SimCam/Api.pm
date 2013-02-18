@@ -105,7 +105,7 @@ sub get_diff {
                               status=> 500 );
     }
 
-    return $self->render_static( 'uploads/'.$first.'_'.$second.'_diff.png' ;
+    return $self->render_static( 'uploads/'.$first.'_'.$second.'_diff.png') ;
 
 }
 
