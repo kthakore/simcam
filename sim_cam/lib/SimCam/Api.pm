@@ -10,7 +10,7 @@ use Capture::Tiny;
 
 my $IMAGE_LOCATION = 'public/uploads/';
 
-sub image {
+sub create_image {
    my $self = shift;
    my $params = $self->req->json;
 
@@ -30,6 +30,21 @@ sub image {
        return $self->render( { json => { message => 'Invalid format'}, text=> 'Invalid params', status => 400 } );
    }
 
+}
+
+sub get_image {
+    my $self = shift;
+    my $id = $self->param('id');
+
+    my $loc =  $IMAGE_LOCATION.$id.'_in.png';
+
+    if( -e $loc ){
+
+        return $self->render_static( 'uploads/'.$id  );
+
+    } 
+
+    return $self->render({ json => {message => 'Invalid Argument'}, text => 'Invalid Argument', status => 400 });
 }
 
 sub store_base64image {

@@ -78,7 +78,9 @@ sub startup {
   # API METHODS
 
   # POST IMAGE IN Base64 or uploads (NI)
-  $r->post('/api/image')->to('api#image');
+  $r->post('/api/image')->to('api#create_image');
+  $r->get('/api/image/:id')->to('api#get_image');
+
 
 
 
