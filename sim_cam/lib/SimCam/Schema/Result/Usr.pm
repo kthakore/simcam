@@ -121,13 +121,13 @@ Related object: L<SimCam::Schema::Result::Session>
 __PACKAGE__->has_many(
   "sessions",
   "SimCam::Schema::Result::Session",
-  { "foreign.usr" => "self.id" },
+  { "foreign.usr_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-17 15:59:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZbfUb6sCZn8EkF5GN9H30Q
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-18 11:32:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CSGc0DKezAmvyS0YsvZdrA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

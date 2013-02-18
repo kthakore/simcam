@@ -49,7 +49,7 @@ __PACKAGE__->table("Sessions");
   is_auto_increment: 1
   is_nullable: 0
 
-=head2 usr
+=head2 usr_id
 
   data_type: 'integer'
   is_foreign_key: 1
@@ -81,7 +81,7 @@ __PACKAGE__->table("Sessions");
 __PACKAGE__->add_columns(
   "id",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "usr",
+  "usr_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "start_time",
   { data_type => "datetime", is_nullable => 0 },
@@ -118,7 +118,7 @@ Related object: L<SimCam::Schema::Result::Usr>
 __PACKAGE__->belongs_to(
   "usr",
   "SimCam::Schema::Result::Usr",
-  { id => "usr" },
+  { id => "usr_id" },
   {
     is_deferrable => 0,
     join_type     => "LEFT",
@@ -128,8 +128,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-17 15:59:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qTlxI+tGNpI61ZMnJjCVIQ
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-18 11:32:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0tpJTYxZxE5xBK91ZlkoZA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

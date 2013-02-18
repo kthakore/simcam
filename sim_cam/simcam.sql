@@ -11,12 +11,12 @@ CREATE TABLE Usrs (
 
 CREATE TABLE Sessions (
         id INTEGER NOT NULL PRIMARY KEY,
-        usr INTEGER,
+        usr_id INTEGER,
         start_time DATETIME NOT NULL,
         end_time DATETIME,
         milestone INTEGER NOT NULL default 0,
         json_store TEXT,
-        FOREIGN KEY (usr) REFERENCES Usrs(id)  
+        FOREIGN KEY (usr_id) REFERENCES Usrs(id)  
         );
 
 /*
@@ -52,7 +52,8 @@ insert into Camera values (0,0.0,0.4,10000.0,'job_images/a63b500296abc9594c0a183
 
 CREATE TABLE Versions (
     code FLOAT,
+    message TEXT,
     created DATETIME
 );
 
-insert into Versions values ( 0.001, datetime('now') );
+insert into Versions values ( 0.002, "Storing messages with versions. Changing foreign key forat for sessions.",  datetime('now') );

@@ -48,6 +48,11 @@ __PACKAGE__->table("Versions");
   data_type: 'float'
   is_nullable: 1
 
+=head2 message
+
+  data_type: 'text'
+  is_nullable: 1
+
 =head2 created
 
   data_type: 'datetime'
@@ -58,13 +63,15 @@ __PACKAGE__->table("Versions");
 __PACKAGE__->add_columns(
   "code",
   { data_type => "float", is_nullable => 1 },
+  "message",
+  { data_type => "text", is_nullable => 1 },
   "created",
   { data_type => "datetime", is_nullable => 1 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-17 19:29:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:VZGOPqmCOvglpRw/t0q82g
+# Created by DBIx::Class::Schema::Loader v0.07033 @ 2013-02-18 11:32:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UrLgWGJasvwoVecCOqEFuQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
