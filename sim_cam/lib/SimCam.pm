@@ -48,7 +48,7 @@ sub startup {
                     return $usr->id();
                 }
                 else {
-                    warn 'not validate';
+                    $self->app->log->info('Login user not found.');
                     return undef;
                 }
               }
@@ -81,7 +81,19 @@ sub startup {
   $r->post('/api/image')->to('api#create_image');
   $r->get('/api/image/:id')->to('api#get_image');
 
+  # DIFF IMAGES 
+  $r->get('/api/diff/:first/:second')->to('api#get_diff');
 
+  # CHECK GRID IN IMAGE
+  $r->get('/api/check/:image')->to('api#get_check');
+
+  # DISTORT AN IMAGE
+  $r->get('/api/distort/:image')->to('api#get_distort');
+
+  # CALIBRATE IMAGES
+  $r->get('/api/calibrate')->to('api#get_calibrate'); #EXPECTS LIST OF IMAGES
+
+ 
 
 
 }

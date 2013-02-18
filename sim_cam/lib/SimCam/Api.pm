@@ -83,4 +83,43 @@ sub imagemagick_convert {
     return 1;
 }
 
+sub get_diff {
+    my $self = shift;
+    my $first = shift;
+    my $second = shift;
+
+    my $first_file_loc = $IMAGE_LOCATION.$first.'_in.png';
+    my $second_file_loc = $IMAGE_LOCATION.$second.'_in.png';
+    my $out_file_loc = $IMAGE_LOCATION.$first.'_'.$second.'_diff.png';
+
+    my ($merged, @result) = Capture::Tiny::capture_merged sub {
+
+       `../simcamCV/diff $first_file_loc $second_file_loc $out_file_loc`;
+
+    };
+
+    if( $merged ){
+        $self->app->log->error( "Api|get_diff error: $merged" ) if $merged;
+        return $self->render( text => 'Error differencing images: '. $merged, 
+                              json => { message => 'Error differencing images: '. $merged }, 
+                              status=> 500 );
+    }
+
+    return $self->render_static( 'uploads/'.$first.'_'.$second.'_diff.png' ;
+
+}
+
+sub get_check {
+
+}
+
+sub get_distort {
+
+
+}
+
+sub get_calibrate {
+
+}
+
 1;
