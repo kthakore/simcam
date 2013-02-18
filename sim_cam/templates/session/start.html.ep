@@ -1,0 +1,69 @@
+% layout 'experiment';
+% title 'SimCAM Experiment Runner';
+
+<h1>Getting Started</h1>
+<span><%= $user->email %></span>
+
+  <form class="form-horizontal" action="/session/0" method="post">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Entry Questionnaire </legend>
+      </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Name</label>
+          <div class="controls">
+            <input type="text" placeholder="Bob Smith" name="name" class="input-xlarge">
+            <p class="help-block">Your Name</p>
+          </div>
+        </div>
+
+    <div class="control-group">
+          <label class="control-label">Knowledge of Camera Calibration</label>
+          <div class="controls">
+      <!-- Inline Radios -->
+      <label class="radio inline">
+        <input type="radio" value="1" name="proficiency" checked="checked">
+        1
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="2" name="proficiency">
+        2
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="3" name="proficiency">
+        3
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="4" name="proficiency">
+        4
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="5" name="proficiency">
+        5
+      </label>
+  </div>
+        </div>
+
+  <div class="control-group">
+          <label class="control-label">Submit</label>
+
+          <!-- Button -->
+          <div class="controls">
+            <input type="submit" class="btn btn-success" name="submit" value="Submit" />
+          </div>
+        </div>
+
+    </fieldset>
+        
+  </form>
+
+
+% content_for javascript => begin
+    <script src="js/tracker.js"></script>
+    <script type="text/javascript">
+    </script>
+% end;
+
+

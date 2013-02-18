@@ -1,0 +1,146 @@
+<div class="row">
+
+    <h1>Introduction</h1>
+
+    <p>This tutorial will introduce you the concept of cameras, transformation, camera distortions and calibration. </p>
+
+</div>
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+
+<div class="row">
+
+    <h2>The Camera</h2>
+
+    <p> 
+      The concept of a camera has been around for a while. You may be familiar with cameras
+      and capturing images with them. We will look a bit closer at exactly what a camera does.</p>
+
+    <p>A camera "looks" at a far away object (The Big Ben) and shows it to you on a screen: </p> 
+
+</div>
+<div class="row" style="text-align: center"> 
+        <div>
+          <img src="/images/image09.jpg" /><br /> <center><span style="clear:both" class="small"> <a href="http://www.usingcellphones.com/">source</a> </span></center> 
+        </div>
+</div>
+
+    <p>The first thing we would notice is that the final image (the screen) doesn't have a depth. Of course you can move closer to the Big Ben, but in the screen it only gets bigger.
+       Lights and shading in the final image give an illusion of depth, but the final image it self is not a 3D object. This means at somepoint the camera translated the Big Ben
+       light to a flat image. This transformation can be understand 
+    </p>
+
+
+
+    
+<div class="row">
+    <h3>Spatial Coordinates</h3>
+    <p>
+        The camera looks and draws the positions of objects, we need to have a way to understand positions. The cartesian coordinate system is one way to describe positions of objects in a space.  
+    </p>
+</div>
+<div class="row" style="text-align: center"> 
+        <div>
+          <img src="/images/image10.png" /> <img src="/images/image13.png" /><br /> <center><span style="clear:both" class="small"> <a href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system">source</a> </span></center> 
+        </div>
+</div>
+<div class="row">
+	<p class="well">NOTE: You can refresh your memory of the cartesian coordinate system <a href="http://en.wikipedia.org/wiki/Cartesian_coordinate_system">here</a>.</p
+</div>
+
+
+
+
+<div class="row">
+    <h3>Camera Transform</h3>
+    <p>
+        Cameras transform the 3D cartesian coordinates to 2D cartesian coordinates. <span> Mathematically it can be described as: <img src="/images/image14.gif" /> </span>.
+		Expanded: 
+	</p>
+</div>
+<div class="row" style="text-align: center"> 
+        <div>		
+		<span><img src="/images/image04.gif" /></span>
+		</div>
+</div>
+<div class="row">
+	<p>
+		A is a matrix that performs the transformation.  The transformation matrix is described by the pinhole camera model.
+	</p>
+	<p class="well">
+		NOTE: Although while out of scope for this tutorial to review linear algebra and matrices transformation have a look <a href="https://www.khanacademy.org/math/linear-algebra">here</a>. 
+	</p>
+</div>
+
+
+
+<div class="row">
+
+    <h3>Pin hole Camera Model</h3>
+
+    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform.
+		In this model the camera matrix (A) is defined with several parameters. These parameters are the intrinsic parameters of the camera. </p>
+		
+	<h4>Intrinsic Parameters </h4>
+	<p>The intrinsic parameters can be divided into two sets of parameters.</p>
+	<h5>Linear Intrinsic Parameters</h5>
+	<p>The linear intrinsic parameters are components of the camera matrix (A) seen below.</p>
+</div>
+<div class="row" style="text-align: center"> 
+        <div>		
+		<span><img src="/images/image08.gif" /></span>
+		</div>
+</div>
+
+<div class="row">	
+		   <p>
+		     Where the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>) are the focal lengths of the camera. 
+             And the (<span><img src="/images/c_x.gif" /></span>,<span><img src="/images/c_y.gif" /></span>) are the center point of the final image that is made. 
+	         The focal lengths describe where the camera can focus. 
+	         If you have a webcam, see if you can find the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>)  in the environment below.  
+			</p>
+			<h5>Non-linear Intrinsic Parameters</h5>
+			<p>Of course real cameras are not as simple as described in the pinhole camera model. Real lens systems are susceptible to two distortions.</p>
+			<h6>Radial Distortion</h6>
+			<p></p>
+			<h6>Tangential Distortion</h6>
+			<p></p>
+</div>
+
+
+
+<div class="row">
+     <input type="hidden" name="position" />
+
+     <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+</div>
+  </form>
+
+
+% content_for javascript => begin
+    <script src="js/libs/three.js"></script>
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+                return false;
+            }
+            });
+
+        new v({el : $('body') });
+
+    </script>
+% end;
+
+

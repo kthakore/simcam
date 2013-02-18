@@ -1,0 +1,169 @@
+<div class="row">
+   <h2>Entrance Task</h2>
+
+    <h3>Sub Task 1</h3>
+    <p>Select the ideal focus and aperture to see the grey cube. </p>
+</div>
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+
+<div class="row-fluid well pull-left" >
+<div class="span6">
+    <label>Select the Aperture:</label> <div id="aperture"> </div><input type="text" name="apeture" id="aperture_amount" />
+</div>
+
+
+<div class="span6">
+    <label>Select the Focus:</label> <div id="focus"> </div><input type="text" name="focus" id="focus_amount" />
+</div>
+
+</div>
+
+
+<div class="row-fluid" style="text-align:center">
+<center class="span12">
+    <iframe src="/iframes/depth_of_field.html" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="640"  height="640">
+    </iframe>
+</center>
+</div>
+
+
+<div class="row">
+    <h3>Sub Task 2</h3>
+    <p>Consider the following environment.</p>
+
+<div class="row-fluid" style="text-align:center">
+<center class="span12">
+    <iframe src="/iframes/depth_of_field/index.src.htm" allowfullscreen webkitallowfullscreen mozallowfullscreeni  allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view_2" width="800"  height="640">
+    </iframe>
+    <label> Source: <a href="http://devmaster.net/posts/3021/shader-effects-depth-of-field">DevMaster.net, Nathaniel Meyer</a></label>
+</center>
+</div>
+
+<div class="row">
+    <p>What is the happens when the Focal Length is decreased?</p>
+</div>
+
+ <div class="control-group">
+          <label class="control-label">Question 1:</label>
+          <div class="controls">
+
+            <!-- Multiple Radios -->
+            <label class="radio">
+              <input type="radio" value="1" name="question_1">
+              The emphasis of the focused region is increased, because the subject magnification is increased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="2" name="question_1">
+              The emphasis of the focused region is decreased, because the subject magnification is decreased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="3" name="question_1">
+              The emphasis of the focused region is increased, because the depth of field is decreased.
+            </label>
+             <label class="radio">
+              <input type="radio" value="4" name="question_1">
+              The emphasis of the focused region is increased, because the depth of field is increased.
+            </label>
+
+
+          </div>
+
+ </div>
+<div class="row">
+    <p>What is the happens when the focus distance is increased?</p>
+</div>
+
+ <div class="control-group">
+          <label class="control-label">Question 2:</label>
+          <div class="controls">
+
+            <!-- Multiple Radios -->
+            <label class="radio">
+              <input type="radio" value="1" name="question_2">
+              Further objects are sharper, because the subject magnification is increased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="2" name="question_2">
+              Further objects are sharper, because the depth of field is decreased.
+            </label>
+            <label class="radio">
+              <input type="radio" value="3" name="question_2">
+              Further objects are sharper, because the near plane is further.
+            </label>
+             <label class="radio">
+              <input type="radio" value="4" name="question_2">
+              Further objects are sharper, because the far plane is further.
+            </label>
+
+
+          </div>
+
+ </div>
+
+
+
+
+<div class="row">
+     <input type="hidden" name="position" />
+
+     <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+</div>
+  </form>
+
+<!-- Depth of Field -->
+
+<!-- Fragment Shader -->
+
+
+% content_for javascript => begin
+    <script type="text/javascript" src="/js/libs/jquery-ui-1.9.2.custom.min.js"></script>
+
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+
+    <script>
+        $(function() {
+
+            $(window.frames[0]).on('load', function() {
+              
+                    var pp  = window.frames[0].main_view.dofcv.postprocessing; 
+    
+                    var focus = pp.bokeh_uniforms.focus;
+                    var aperture = pp.bokeh_uniforms.aperture;
+
+                        $( "#focus_amount" ).val( focus.value );
+                        $('#focus').slider({
+                    range: "max",
+                    min: 0.001,
+                    max: 2.000,
+                    value: focus.value,
+                    step: 0.001,
+                    slide: function( event, ui ) {
+                        $( "#focus_amount" ).val( ui.value );
+                        focus.value = ui.value;
+                    } });
+
+                        $('#aperture_amount').val( aperture.value );
+                        $('#aperture').slider({
+                    range: "max",
+                    min: 0.001,
+                    max: 0.999,
+                    value: aperture.value,
+                    step: 0.001,
+                    slide: function( event, ui ) {
+                        $( "#aperture_amount" ).val( ui.value );
+                        aperture.value =ui.value;
+                    }  });
+            })
+           });
+    </script>
+% end;
+
+

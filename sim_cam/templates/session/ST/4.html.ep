@@ -1,0 +1,41 @@
+<div class="row">
+
+    <h1>Real Lenses and Camera</h1>
+
+    <p> 
+    This tutorial hopes to teach you what is camera calibration and how to apply it. 
+    </p>
+
+    <% if( $user->type eq 'D' ) { %> 
+
+    Default 
+    <% } elsif ( $user->type eq 'S' ) { %>
+
+    Simulator 
+    <% } else {  %>
+
+    Simulator hints 
+    <% } %>
+
+</div> 
+
+% content_for javascript => begin
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+                return false;
+            }
+            });
+
+        new v({el : $('body') });
+
+    </script>
+% end;
+
+

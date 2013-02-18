@@ -1,0 +1,148 @@
+<div class="row">
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+    <fieldset>
+      <div id="legend" class="">
+        <legend class="">Entry Questionnaire </legend>
+      </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">Name</label>
+          <div class="controls">
+            <input type="text" placeholder="Bob Smith" name="name" class="input-xlarge">
+            <p class="help-block">Your Name</p>
+          </div>
+        </div>
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Gender</label>
+          <div class="controls">
+            <select name="gender" class="input-xlarge">
+      <option>Male</option>
+      <option>Female</option></select>
+          </div>
+
+        </div>
+  <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Age</label>
+          <div class="controls">
+            <select name="age" class="input-xlarge">
+                <% foreach( 10..70) { %>
+                  <option><%=$_%></option>
+                <% } %>
+            </select>
+          </div>
+    </div>
+  <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">How long have you been awake?</label>
+          <div class="controls">
+            <input name="awake" type="text" placeholder="" class="input-xlarge">
+          </div>
+    </div>
+    <div class="control-group">
+
+          <!-- Text input-->
+          <label class="control-label" for="input01">What is your profession?</label>
+          <div class="controls">
+            <input name="profession" type="text" placeholder="" class="input-xlarge">
+            <p class="help-block"></p>
+          </div>
+        </div>
+
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">What is your education level?</label>
+          <div class="controls">
+            <select name="education_level" class="input-xlarge">
+      <option>High School</option>
+      <option>Post Graduate Diploma</option>
+      <option>Bachelors</option>
+      <option>Graduate</option>
+      <option></option></select>
+          </div>
+
+        </div>
+
+    <div class="control-group">
+
+          <!-- Select Basic -->
+          <label class="control-label">Have you participated in an internet-based course/training before? </label>
+          <div class="controls">
+            <select name="training_before" class="input-xlarge">
+      <option>Yes</option>
+      <option>No</option></select>
+          </div>
+
+        </div>
+ <div class="control-group">
+          <label class="control-label">If you answered YES to the above question: what was your overall learning experience? (1=poor, 7=excellent</label>
+          <div class="controls">
+      <!-- Inline Radios -->
+      <label class="radio inline">
+        <input type="radio" value="1" name="impression" checked="checked">
+        1
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="2" name="impression">
+        2
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="3" name="impression">
+        3
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="4" name="impression">
+        4
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="5" name="impression">
+        5
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="6" name="impression">
+        6
+      </label>
+      <label class="radio inline">
+        <input type="radio" value="7" name="impression">
+        7
+      </label>
+  </div>
+        </div>
+
+    <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+    </fieldset> 
+  </form>
+</div>
+
+% content_for javascript => begin
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+            }
+            });
+
+        new v({el : $('body') });
+
+    </script>
+% end;
+
+

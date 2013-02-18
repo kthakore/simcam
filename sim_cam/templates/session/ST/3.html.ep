@@ -1,0 +1,104 @@
+<div class="row">
+
+    <h1>Introduction</h1>
+
+    <p>This tutorial will introduce you the concept of cameras, transformation, camera distortions and calibration. </p>
+
+</div>
+<div class="row">
+
+    <h2>The Camera</h2>
+
+    <p> 
+      The concept of a camera has been around for a while. You may be familiar with cameras
+      and capturing images with them. We will look a bit closer at exactly what a camera does.</p>
+<!--    <div class="span4"> <img src="/images/session_1_camera.gif" /> <br /> <center><span style="clear:both" class="small"> <a href="http://www.cs.columbia.edu/~jebara/htmlpapers/SFM/node6.html">source</a> </span></center> </div> -->
+
+
+    <p>A camera "looks" at a far away object (The Big Ben) and shows it to you on a screen: </p> 
+
+</div>
+<div class="row" style="text-align: center"> 
+        <div>
+          <img src="/images/camera_2.jpg" /><br /> <center><span style="clear:both" class="small"> <a href="http://www.usingcellphones.com/">source</a> </span></center> 
+        </div>
+</div>
+
+    <p>The first thing we would notice is that the final image (the screen) doesn't have a depth. Of course you can move closer to the Big Ben, but in the screen it only gets bigger.
+       Lights and shading in the final image give an illusion of depth, but the final image it self is not a 3D object. This means at somepoint the camera translated the Big Ben
+       light to a flat image. This transformation can be understand 
+    </p>
+
+
+
+    
+<div class="row">
+    <h3>Spatial Coordinates</h3>
+    <p>
+        Because the camera works with the positions of objects, we need to have a way to understand positions. 
+    </p>
+    <h4>Vectors</h4>
+    <p>
+        Represent a point in space. 
+    </p>
+</div>
+
+
+
+<div class="row">
+    <h3>Transforms</h3>
+    <p>
+        The camera performs a transform of the 3D coordinates. 
+    </p>
+</div>
+
+
+
+<div class="row">
+
+    <h3>Pin hole Camera Model</h3>
+
+    <p>The pinhole camera is a common model used to describe a camera. In this model the camera is described as a mathematical function called the perspective transform. This transform, transforms the 3D coordinates to 2D coordinates. </p>
+    
+</div>
+    <% if( $user->type eq 'D' ) { %> 
+
+<!--    Default  -->
+    <% } elsif ( $user->type eq 'S' ) { %>
+
+<!--    Simulator  -->
+    <% } else {  %>
+
+<!--    Simulator hints -->
+    <% } %>
+
+</div> 
+
+% content_for javascript => begin
+    <% if( $user->type eq 'S' or $user->type eq 'SH' ) { %>
+        		<script src="js/libs/three.js"></script>
+
+    <script type="text/javascript" src="js/views/main_camera_view.js"></script>
+    <script type="text/javascript" src="js/views/side_camera_view.js"></script>
+
+
+    <% } %>
+    <script src="/js/tracker.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+        var v = Backbone.View.extend({ 
+            initialize: function() { console.log('start'); },
+            events : { 'submit form': 'validate' },
+            validate : function() {
+
+                console.log('Validating form');
+                return false;
+            }
+            });
+
+        new v({el : $('body') });
+
+    </script>
+% end;
+
+
