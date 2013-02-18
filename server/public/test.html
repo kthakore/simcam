@@ -1,6 +1,10 @@
 <html>
 
-<head></head>
+<head>
+<script type='text/javascript' src="https://raw.github.com/HumbleSoftware/js-imagediff/master/imagediff.min.js"></script>
+<script type='text/javascript' src='http://code.jquery.com/jquery-1.9.1.js'> </script>
+
+</head>
 
 <body>
 
@@ -8,11 +12,11 @@
 style="border:1px solid #000000;">
 </canvas>
 
-<canvas id="myCanvas2" width="200" height="200"
+<canvas id="myCanvas2" width="400" height="320"
 style="border:1px solid #000000;">
 </canvas>
 
-<canvas id="myCanvas3" width="200" height="200"
+<canvas id="myCanvas3" width="400" height="320"
 style="border:1px solid #000000;">
 </canvas>
 
@@ -21,26 +25,39 @@ style="border:1px solid #000000;">
 var c=document.getElementById("myCanvas");
 var ctx=c.getContext("2d");
 var distorted = new Image();
-distorted.src = 'http://simcam.dyndns.org:3000/job_images/8f7e5ae3f206e79bdbc7ea2966e5ed504f0aded5.png';
+distorted.src = '/job_images/8f7e5ae3f206e79bdbc7ea2966e5ed504f0aded5.png';
 
 var c2=document.getElementById("myCanvas2");
 var ctx2=c2.getContext("2d");
-ctx2.fillStyle="#FF0000";
-ctx2.fillRect(0,0,75,150);
+var distorted2 = new Image();
+distorted2.src = '/job_images/afa03732abec053abec296ba0473eba95c4e5a3b.png';
 
 
 var c3=document.getElementById("myCanvas3");
 var ctx3 = c3.getContext("2d");
 
+var dist_load = false;
+var dist_load2 = true;
+
 
 
 $(distorted).load( function() {
-ctx.drawImage( distorted, 0,0 );
-    
-    var id = imagediff.diff( c, c2 );
-ctx3.putImageData( id  , 0 ,0 );
+    console.log( 'Loaded');
+    dist_load = true;
+	ctx.drawImage( distorted, 0,0 );
 
 });
+
+$(distorted2).load( function() {
+    console.log( 'Loaded');
+    dist_load2 = true;
+		ctx2.drawImage( distorted2, 0,0 );
+    
+	    var id = imagediff.diff( c, c2 );
+	ctx3.putImageData( id  , 0 ,0 );
+
+} );
+
 
 </script>
 </body>
