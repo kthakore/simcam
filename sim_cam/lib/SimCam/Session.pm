@@ -22,7 +22,7 @@ sub start {
         my $schema = $self->app->schema();
         my $se_rs = $schema->resultset('Session');
 
-        my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
+        my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
 
         if( $session ) {
             #session already exists just show it then
@@ -66,7 +66,7 @@ sub run {
             return $self->redirect_to( '/session/'.$user->current_session );
         } 
 
-        my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
+        my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
         
         if( $session ) {
 
@@ -104,7 +104,7 @@ sub save {
         my $schema = $self->app->schema;
         my $rs_session = $schema->resultset('Session');
 
-        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session })->next();
+        my $session = $rs_session->search({ usr_id => $user->id, milestone => $user->current_session })->next();
 
         my $js = Mojo::JSON->decode( $session->json_store() );
 
@@ -134,7 +134,7 @@ sub end {
         my $schema = $self->app->schema;
         my $rs_session = $schema->resultset('Session');
 
-        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session });
+        my $session = $rs_session->search({ usr_id => $user->id, milestone => $user->current_session });
 
         $session->update({ end_time => DateTime->now() } );
 
@@ -175,7 +175,7 @@ sub start {
         my $schema = $self->app->schema();
         my $se_rs = $schema->resultset('Session');
 
-        my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
+        my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
 
         if( $session ) {
             #session already exists just show it then
@@ -219,7 +219,7 @@ sub run {
             $user->current_session( $s_num )->update();
         } 
 
-        my $session = $se_rs->search({ usr => $user->id, milestone => $s_num})->next();
+        my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
         
         if( $session ) {
 
@@ -287,7 +287,7 @@ sub end {
         my $schema = $self->app->schema;
         my $rs_session = $schema->resultset('Session');
 
-        my $session = $rs_session->search({ usr => $user->id, milestone => $user->current_session });
+        my $session = $rs_session->search({ usr_id => $user->id, milestone => $user->current_session });
 
         $session->update({ end_time => DateTime->now() } );
 
