@@ -55,5 +55,5 @@ CREATE TABLE Versions (
     message TEXT,
     created DATETIME
 );
-
-insert into Versions values ( 0.002, "Storing messages with versions. Changing foreign key forat for sessions.",  datetime('now') );
+insert into Versions values ( 0.001, "First version.",  datetime('now') );
+insert into Versions values ( 0.002, "Storing messages with versions. Changing foreign key format for sessions.",  datetime('now') );
