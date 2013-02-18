@@ -1,0 +1,47 @@
+<html>
+
+<head></head>
+
+<body>
+
+<canvas id="myCanvas" width="400" height="320"
+style="border:1px solid #000000;">
+</canvas>
+
+<canvas id="myCanvas2" width="200" height="200"
+style="border:1px solid #000000;">
+</canvas>
+
+<canvas id="myCanvas3" width="200" height="200"
+style="border:1px solid #000000;">
+</canvas>
+
+<script>
+
+var c=document.getElementById("myCanvas");
+var ctx=c.getContext("2d");
+var distorted = new Image();
+distorted.src = 'http://simcam.dyndns.org:3000/job_images/8f7e5ae3f206e79bdbc7ea2966e5ed504f0aded5.png';
+
+var c2=document.getElementById("myCanvas2");
+var ctx2=c2.getContext("2d");
+ctx2.fillStyle="#FF0000";
+ctx2.fillRect(0,0,75,150);
+
+
+var c3=document.getElementById("myCanvas3");
+var ctx3 = c3.getContext("2d");
+
+
+
+$(distorted).load( function() {
+ctx.drawImage( distorted, 0,0 );
+    
+    var id = imagediff.diff( c, c2 );
+ctx3.putImageData( id  , 0 ,0 );
+
+});
+
+</script>
+</body>
+</html>
