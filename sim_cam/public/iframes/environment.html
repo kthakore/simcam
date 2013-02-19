@@ -37,7 +37,7 @@
         }
         .bottom_bar{
             position: absolute;
-            bottom: -120px;
+            bottom: -95px;
             left:0px;
             right:0px;
             margin-top: 2px;
@@ -95,16 +95,17 @@
     </head>
     <body>
         <div class="container-fluid">
-            <div class="row-fluid canvas_row">
-                <canvas class="main_viewer span8" style="height:100%; background-color:grey">
+                <canvas class="main_viewer" style="height:100%; width:100%; background-color:grey; position:absolute; top:0px; left:0px;">
                 </canvas>
 
-                <canvas class="camera_viewer span4" style="height:100%; background-color:red">
-
+                <canvas class="camera_viewer" style="width: 24.5%; background-color:red; position:absolute; top:0px; right:0px;">
+                Not initialized
                 </canvas>
+    
 
         <div class="sidemenu">
           <div class="well sidebar-nav">
+            <div class=" icon-chevron-left" style="margin-left:-22px"></div>
             <ul class="nav nav-list">
               <li class="nav-header">Sidebar</li>
               <li class="active"><a href="#">Link</a></li>
@@ -125,7 +126,7 @@
             </ul>
           </div><!--/.well -->
         </div>
-                </div>
+            
             <div class="row-fluid bottom_bar" >
               <h4 class="span12" style="height:20px;">Captured Images</h4>
               <div class="span12 bottom_bar_image_holder"> 
