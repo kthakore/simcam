@@ -6,7 +6,7 @@
 
     <style>
         body {
-            overflow-x: hidden;
+            overflow: hidden;
         }
         .sidemenu {
             position: absolute;
@@ -15,6 +15,19 @@
             width:250px;
             height:100%;
             z-index:4;
+        -webkit-transition-property: right;
+           -moz-transition-property: right;
+             -o-transition-property: right;
+                transition-property: right;
+        -webkit-transition-duration: 0.2s;
+           -moz-transition-duration: 0.2s;
+             -o-transition-duration: 0.2s;
+                transition-duration: 0.2s;
+        -webkit-transition-timing-function: ease-in;
+           -moz-transition-timing-function: ease-in;
+             -o-transition-timing-function: ease-in;
+                transition-timing-function: ease-in;            
+
         }
         .sidemenu:hover {
             right: 0px;
@@ -24,14 +37,34 @@
         }
         .bottom_bar{
             position: absolute;
-            bottom: -50px;
+            bottom: -120px;
             left:0px;
             right:0px;
             margin-top: 2px;
             background: #f1f1f1;
             border-top: 1px solid #e8e8e8;
             overflow-x: scroll;
+            height:125px;;
             white-space:nowrap;
+        -webkit-transition-property: bottom;
+           -moz-transition-property: bottom;
+             -o-transition-property: bottom;
+                transition-property: bottom;
+        -webkit-transition-duration: 0.2s;
+           -moz-transition-duration: 0.2s;
+             -o-transition-duration: 0.2s;
+                transition-duration: 0.2s;
+        -webkit-transition-timing-function: ease-in;
+           -moz-transition-timing-function: ease-in;
+             -o-transition-timing-function: ease-in;
+                transition-timing-function: ease-in;            
+
+        }
+
+        .bottom_bar:hover{
+           bottom: 0px;
+
+
         }
         .bottom_bar_img{
             border:2px solid grey; 
@@ -53,7 +86,7 @@
                 transition-timing-function: ease-in;            
         }
         .bottom_bar_img_holder {
-            height:60px;
+            height: 60px;
         }
         .bottom_bar_img:hover {
             height: 55px;
@@ -94,90 +127,8 @@
         </div>
                 </div>
             <div class="row-fluid bottom_bar" >
+              <h4 class="span12" style="height:20px;">Captured Images</h4>
               <div class="span12 bottom_bar_image_holder"> 
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-   <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
-                <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
                 <img src="/uploads/b76b801e290e31483f80106331b04f8b587584da_in.png" class="bottom_bar_img" />
               </div> 
             </div>
