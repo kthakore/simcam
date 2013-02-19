@@ -1,0 +1,50 @@
+<html>
+<head>
+    <title>foo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+
+</head>
+<body style="padding:0; margin:0; width:100%; height:100%;">
+
+
+    <script src="/js/libs/jquery-1.9.1.min.js"></script>
+
+    <script src="/js/libs/underscore-min.js"></script>
+    <script src="/js/libs/backbone.js"></script>
+    <script src="/js/libs/three.js"></script>
+
+    <script>
+
+        var iframe_model_constructor = Backbone.Model.extend({
+            
+        });
+
+        var iframe_view_constructor = Backbone.View.extend({
+
+        });
+
+
+       var iframe_router_constructor = Backbone.Router.extend({
+            initialize: function() {
+                "use strict";
+                var that;
+                that = this;
+                that.view = new iframe_view_constructor();
+                that.model = new iframe_model_constructor();
+            },
+            routes : {
+                "" : "default"
+            },
+            default : function() {
+
+            }
+        });
+
+        var main_app = new iframe_router_constructor();
+        Backbone.history.start();
+    </script>
+
+</body>
+</html>

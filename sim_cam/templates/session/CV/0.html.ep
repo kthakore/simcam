@@ -1,6 +1,6 @@
 <div class="row">
-    <h1>Welcome</h1>
-    <p>Welcome to SimCam. To participate in this experiment your browser needs to support the following technologies: </p>
+    <h1>Welcome to SimCam Content Validity Study</h1>
+    <p>To participate in this experiment your browser needs to support the following technologies: </p>
 
     <h4>Required Technologies</h4>
     <ul id="tech_check_list">
@@ -10,6 +10,10 @@
 
     <p>Google Chrome is recommended if the required technologies are not supported. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
 
+   <h1>Objective</h1>
+   <p> </p>
+   <h1>Instructions</h1>
+   <p> </p>
 </div>
 
 <div class="row">
