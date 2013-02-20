@@ -119,9 +119,9 @@ sub get_check {
 	my $image = $self->store_base64image( $image ); 
    }
 
-   my $run = '../simcamCV/check public/uploads/'.$image.'_in.png public/uploads/'.$image.'_check.png'; 
+    my $run = '../simcamCV/check public/uploads/'.$image.'_in.png public/uploads/'.$image.'_check.png'; 
 
-      $self->app->log->info( $run );
+    $self->app->log->info( $run );
     my $result;
     my ($merged, @result) = Capture::Tiny::capture_merged sub {
        $result = system split(' ', $run);

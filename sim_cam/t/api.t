@@ -33,4 +33,27 @@ warn $img2;
 
 $t->get_ok('/api/diff/'.$img.'/'.$img2)->status_is(200);
 
+
+my $check_fail = $t->get_ok('/api/check/'.$img2 )->status_is(200);
+
+my $result = $t->json_is('/api/check/'.$img2);
+
+$result = $check_fail->tx->res->body;
+
+is( $result, 'Result: 0, Image: '.$img2.' ' );
+
+
+#seed a checkable image
+`cp t/data/check_pass.png public/uploads/check_pass_in.png`;
+
+my $check_pass = $t->get_ok('/api/check/check_pass' )->status_is(200);
+
+$result = $check_pass->tx->res->body;
+
+is( $result, 'Result: 256, Image: check_pass ' );
+
+`rm public/uploads/check_pass*`;
+
+
+
 done_testing();

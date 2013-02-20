@@ -41,7 +41,6 @@ int main (int argc, char * argv[] )
 	int found = cvFindChessboardCorners( image, board_sz, corners,
 			&corner_count );
 
-	printf("Corners_count %d\n", corner_count );
 
 	// Get subpixel accuracy on those corners
 	cvCvtColor( image, gray_image, CV_BGR2GRAY );
@@ -51,7 +50,6 @@ int main (int argc, char * argv[] )
 	// Draw it
 	cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
 	cvSaveImage( loc2, image );
-	printf(" FOUND:  %d\n", found );
 
 	if( found )
 	{
