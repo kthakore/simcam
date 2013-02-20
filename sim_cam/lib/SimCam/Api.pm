@@ -148,6 +148,8 @@ sub get_distort {
    my $self = shift;
    my $image = $self->param('image'); 
 
+   
+
 }
 
 sub get_calibrate {
@@ -159,6 +161,77 @@ sub get_calibrate {
 
 
 
+}
+
+sub run_distort {
+    my $self = shift;
+    my $params = shift;
+
+    my $t1= $params->{t1} || 0.0;
+    my $t2= $params->{t2} || 0.0;
+    my $r1= $params->{r1} || 0.0;
+    my $r2= $params->{r2} || 0.0;
+    my $r3= $params->{r3} || 0.0;
+
+    my $Distortion = '<?xml version="1.0"?>
+        <opencv_storage>
+        <Distortion type_id="opencv-matrix">
+        <rows>5</rows>
+        <cols>1</cols>
+        <dt>f</dt>
+        <data>
+        '. $r1 .' '.$r2.' '.$t1.' '.$t2.' '.$r3.
+        '</data></Distortion>
+        </opencv_storage>';
+
+
+    my $fy = $params->{fy} || $params->{far} || 3000;
+    my $fx = $params->{fx} || $params->{far} || 3000;
+    my $cy = $params->{cy} || $params->{u} /2 || 300;
+    my $cx = $params->{cx} || $params->{v} /2 || 240;
+
+    my $image = $params->{image} || 'in.png';
+
+
+    my $Intrinsics = '<?xml version="1.0"?>
+        <opencv_storage>
+        <Intrinsics type_id="opencv-matrix">
+        <rows>3</rows>
+        <cols>3</cols>
+        <dt>f</dt>
+        <data>
+        '.$fx.' 0. '.$cx.' 0. '.$fy.' '.$cy.' 0.
+        0. 1.</data></Intrinsics>
+        </opencv_storage>';
+
+    my $job_id = $image.'_distort_'.$fx.'_'.$fy.'_'.$cx.'_'.$cy.'_'.$r1.'_'.$r2.'_'.$t1.'_'.$t2.'_'.$r3;
+
+    my $dist_path = 'public/uploads/'.$job_id.'_dist.xml';
+    my $int_path = 'public/uploads/'.$job_id.'_int.xml';
+
+    File::Slurp::write_file( $dist_path, $Distortion );
+    File::Slurp::write_file( $int_path, $Intrinsics );
+
+   
+    my $out_image = 'public/uploads/'.$job_id.'.png';
+
+    my $run  = "../simcamCV/distort $dist_path $image $out_image $int_path";
+
+    $self->app->log->info( $run );
+
+    my( $stdout, $stderr, @result) = Capture::Tiny::capture {
+        
+        `$run`
+    };
+
+    if( -f $out_image )
+    {
+        return { success => 1, out => $out_image, distortions_xml => $dist_path, intrinsics_xml => $int_path, job_id => $job_id };
+    }
+    else
+    {
+        return { success => 0, result => { out => $stdout, err => $stderr, res => \@result } , job_id => $job_id};  
+    }
 }
 
 1;
