@@ -15,28 +15,28 @@ int main(int argc, char * argv[])
 	int corner_count;
 	int successes = 0;
 	int step, frame = 0;
- 
-    int total = argc - 1 ; 
-    int start = 1;
-  
-    const char* loc = argv[start] ;
-	
-	board_w = 8; // Board width in squares
-	board_h = 5; // Board height 
+
+	int total = argc - 1 ; 
+	int start = 1;
+
+	const char* loc = argv[start] ;
+
+	board_w = 7; // Board width in squares
+	board_h = 4; // Board height 
 	n_boards = total; // Number of boards
 	int board_n = board_w * board_h;
 	CvSize board_sz = cvSize( board_w, board_h );
 	// Allocate Sotrage
 	CvMat* image_points		= cvCreateMat( n_boards*board_n, 2, CV_32FC1 );
 	CvMat* object_points		= cvCreateMat( n_boards*board_n, 3, CV_32FC1 );
-	CvMat* point_counts			= cvCreateMat( n_boards, 1, CV_32SC1 );
+	CvMat* point_counts		= cvCreateMat( n_boards, 1, CV_32SC1 );
 	CvMat* intrinsic_matrix		= cvCreateMat( 3, 3, CV_32FC1 );
 	CvMat* distortion_coeffs	= cvCreateMat( 5, 1, CV_32FC1 );
 
 	CvPoint2D32f* corners = new CvPoint2D32f[ board_n ];
 
-    IplImage *image = cvLoadImage( loc );
-    //IplImage *image = cvQueryFrame(capture);
+	IplImage *image = cvLoadImage( loc );
+	//IplImage *image = cvQueryFrame(capture);
 
 	IplImage *gray_image = cvCreateImage( cvGetSize( image ), 8, 1 );
 
@@ -45,61 +45,60 @@ int main(int argc, char * argv[])
 
 	while( start < total ){
 		// Skp every board_dt frames to allow user to move chessboard
-//		if( frame++ % board_dt == 0 ){
-			// Find chessboard corners:
-			int found = cvFindChessboardCorners( image, board_sz, corners,
+		//		if( frame++ % board_dt == 0 ){
+		// Find chessboard corners:
+		int found = cvFindChessboardCorners( image, board_sz, corners,
 				&corner_count, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS );
-            
-             printf("At: %s\n", loc);
 
 
-			// Get subpixel accuracy on those corners
-			cvCvtColor( image, gray_image, CV_BGR2GRAY );
- 			cvFindCornerSubPix( gray_image, corners, corner_count, cvSize( 11, 11 ), 
+		// Get subpixel accuracy on those corners
+		cvCvtColor( image, gray_image, CV_BGR2GRAY );
+		cvFindCornerSubPix( gray_image, corners, corner_count, cvSize( 11, 11 ), 
 				cvSize( -1, -1 ), cvTermCriteria( CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 30, 0.1 ));
 
-			// Draw it
-			cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
-            if( found )
-            {            cvSaveImage( "/tmp/grid_save.png", image);   }
+		// Draw it
+		cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
+		if( found )
+		{            
+			cvSaveImage( "/tmp/grid_save.png", image);  
+		}
 
-			// If we got a good board, add it to our data
-			if( corner_count == board_n ){
-				step = successes*board_n;
-				for( int i=step, j=0; j < board_n; ++i, ++j ){
-					CV_MAT_ELEM( *image_points, float, i, 0 ) = corners[j].x;
-					CV_MAT_ELEM( *image_points, float, i, 1 ) = corners[j].y;
-					CV_MAT_ELEM( *object_points, float, i, 0 ) = j/board_w;
-					CV_MAT_ELEM( *object_points, float, i, 1 ) = j%board_w;
-					CV_MAT_ELEM( *object_points, float, i, 2 ) = 0.0f;
-				}
-				CV_MAT_ELEM( *point_counts, int, successes, 0 ) = board_n;
-				successes++;
+		// If we got a good board, add it to our data
+		if( corner_count == board_n ){
+			step = successes*board_n;
+			for( int i=step, j=0; j < board_n; ++i, ++j ){
+				CV_MAT_ELEM( *image_points, float, i, 0 ) = corners[j].x;
+				CV_MAT_ELEM( *image_points, float, i, 1 ) = corners[j].y;
+				CV_MAT_ELEM( *object_points, float, i, 0 ) = j/board_w;
+				CV_MAT_ELEM( *object_points, float, i, 1 ) = j%board_w;
+				CV_MAT_ELEM( *object_points, float, i, 2 ) = 0.0f;
 			}
-//		} 
+			CV_MAT_ELEM( *point_counts, int, successes, 0 ) = board_n;
+			successes++;
+		}
+		//		} 
 
- 
-    if( start < total )
-    {
-        start++; 
-    }
-    else if ( start == total )
-    {
-        start = 1;
-      //  return -1;
-    }
 
-    loc = argv[start] ;
+		if( start < total )
+		{
+			start++; 
+		}
+		else if ( start == total )
+		{
+			start = 1;
+			//  return -1;
+		}
 
-	    image = cvLoadImage( loc );
-    //image = cvQueryFrame( capture);
+		loc = argv[start] ;
+
+		image = cvLoadImage( loc );
 	} // End collection while loop
 
 	// Allocate matrices according to how many chessboards found
 	CvMat* object_points2 = cvCreateMat( successes*board_n, 3, CV_32FC1 );
 	CvMat* image_points2 = cvCreateMat( successes*board_n, 2, CV_32FC1 );
 	CvMat* point_counts2 = cvCreateMat( successes, 1, CV_32SC1 );
-	
+
 	// Transfer the points into the correct size matrices
 	for( int i = 0; i < successes*board_n; ++i ){
 		CV_MAT_ELEM( *image_points2, float, i, 0) = CV_MAT_ELEM( *image_points, float, i, 0 );
@@ -125,29 +124,12 @@ int main(int argc, char * argv[])
 
 	// Calibrate the camera
 	cvCalibrateCamera2( object_points2, image_points2, point_counts2, cvGetSize( image ), 
-		intrinsic_matrix, distortion_coeffs, NULL, NULL, CV_CALIB_FIX_ASPECT_RATIO ); 
+			intrinsic_matrix, distortion_coeffs, NULL, NULL, CV_CALIB_FIX_ASPECT_RATIO ); 
 
 	// Save the intrinsics and distortions
 	cvSave( "/tmp/Intrinsics.xml", intrinsic_matrix );
 	cvSave( "/tmp/Distortion.xml", distortion_coeffs );
-/*	// Example of loading these matrices back in
-	CvMat *intrinsic = (CvMat*)cvLoad( "Intrinsics.xml" );
-	CvMat *distortion = (CvMat*)cvLoad( "Distortion.xml" );
 
-	// Build the undistort map that we will use for all subsequent frames
-	IplImage* mapx = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
-	IplImage* mapy = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
-	cvInitUndistortMap( intrinsic, distortion, mapx, mapy );
-
-	// Run the camera to the screen, now showing the raw and undistorted image
-
-	while( image ){
-		IplImage *t = cvCloneImage( image );
-		cvRemap( t, image, mapx, mapy ); // undistort image
-		cvReleaseImage( &t );
-
-	}
-*/
 
 	return 1;
 }

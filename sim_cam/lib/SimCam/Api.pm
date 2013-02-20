@@ -111,15 +111,53 @@ sub get_diff {
 }
 
 sub get_check {
+   my $self = shift;
+   my $image = $self->param('image'); 
+   my $type = $self->param('type');
+
+   if( $type && $type eq 'base64' ){
+	my $image = $self->store_base64image( $image ); 
+   }
+
+   my $run = '../simcamCV/check public/uploads/'.$image.'_in.png public/uploads/'.$image.'_check.png'; 
+
+      $self->app->log->info( $run );
+    my $result;
+    my ($merged, @result) = Capture::Tiny::capture_merged sub {
+       $result = system split(' ', $run);
+    };
+
+    if( $merged ){
+        $self->app->log->error( "Api|get_check error: $merged" ) if $merged;
+        return $self->render( text => 'Error checking image: '. $merged, 
+                              json => { message => 'Error checking images: '. $merged }, 
+                              status=> 500 );
+    }
+
+
+    return $self->render( html => '<a href="uploads/'.$image.'_check.png" />', 
+			  text => "Result: $result, Image: $image ", 
+			  json => { image => $image.'_check.png', result => $result}   );
+
+
+
 
 }
 
 sub get_distort {
-
+   my $self = shift;
+   my $image = $self->param('image'); 
 
 }
 
 sub get_calibrate {
+   my $self = shift;
+   my $json = $self->req->json; 
+ 
+
+   my @images = $json->{images};
+
+
 
 }
 

@@ -94,19 +94,8 @@ sub check {
     my $params = $self->req->json;
     my $image = $params->{image};
     
-    unlink '/tmp/found.png';
 
-    my $checked = system '../simcamCV/check', 'public/'.$image; 
-
-    if( -f '/tmp/found.png' )
-    {
-        $checked = 1;
-        `mv /tmp/found.png public/found_$image`;
-    }
-    else {
-        $checked = 0;
-    }
-
+    my $checked = system '../simcamCV/check', 'public/'.$image,  'public/found_'.$image; 
     $self->render({ json => { checked => $checked, image => 'found_'.$image } });
 
 }
