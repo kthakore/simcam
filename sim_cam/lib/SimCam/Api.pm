@@ -10,6 +10,30 @@ use Capture::Tiny;
 
 my $IMAGE_LOCATION = 'public/uploads/';
 
+sub image_location {
+   my $self = shift;
+   my $image = shift;
+
+   my $loc = $IMAGE_LOCATION.$image;
+   my $log = $self->app->log();
+   $log->info('Looking for image at: '.$loc );
+   if ( -e $loc ){
+	$log->info( 'Found image: '.$image );
+	return $image
+   } elsif ( -e $loc. '.png' ) {
+	$log->info( 'Found image: '.$image.'.png' );
+
+	return $image.'.png';
+   } elsif ( -e $loc. '_in.png' ){
+	$log->info( 'Found image: '.$image.'_in.png' );
+
+	return $image.'_in.png';
+   }
+	$log->info( 'Not Found image: '.$image );
+
+
+}
+
 sub create_image {
    my $self = shift;
    my $params = $self->req->json;
@@ -36,23 +60,12 @@ sub get_image {
     my $self = shift;
     my $id = $self->param('id');
 
-    my $loc =  $IMAGE_LOCATION.$id;
+	
+    if( my $located = $self->image_location( $id ) ) {
+      return  $self->render_static( 'uploads/'. $located );
+    }     
 
-    if( -e $loc ){
-
-        return $self->render_static( 'uploads/'.$id  );
-
-    } elsif( -e $loc . '.png' ){
-
-	return $self->render_static( 'uploads/'.$id.'.png' );
-
-    } elsif( -e $loc . '_in.png' ){
-
-	return $self->render_static( 'uploads/'.$id.'_in.png' );
-
-    }
-
-
+        
 
     return $self->render({ json => {message => 'Invalid Argument'}, text => 'Invalid Argument', status => 400 });
 }
@@ -217,6 +230,9 @@ sub run_distort {
 
     my $image = $params->{image};
     my $image_path = 'public/uploads/'. $image .'_in.png';
+    if( my $located = $self->image_location( $image ) ) {
+      $image_path = 'public/uploads/'. $located;
+    } 
 
     my $fy = $params->{fy} || $params->{far} || 1000;
     my $fx = $params->{fx} || $params->{near} || 1000;
@@ -238,7 +254,7 @@ sub run_distort {
         0. 1.</data></Intrinsics>
         </opencv_storage>';
 
-    my $job_id = $image.'_distort_'.$fx.'_'.$fy.'_'.$cx.'_'.$cy.'_'.$r1.'_'.$r2.'_'.$t1.'_'.$t2.'_'.$r3;
+    my $job_id = $image.'_distort_'.sha1_hex($image.'_'.$fx.'_'.$fy.'_'.$cx.'_'.$cy.'_'.$r1.'_'.$r2.'_'.$t1.'_'.$t2.'_'.$r3);
 
     my $dist_path = 'public/uploads/'.$job_id.'_dist.xml';
     my $int_path = 'public/uploads/'.$job_id.'_int.xml';
