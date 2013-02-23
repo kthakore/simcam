@@ -14,7 +14,7 @@ sub cleanup {
     my $obj = $self->param('obj');
     my $rmed = "rm public/$obj";
     warn $rmed;
-    `$rmed`;
+    #`$rmed`;
     $self->render({json => { } });
 
 }
@@ -120,7 +120,7 @@ sub distort {
     $params->{image} = $self->_get_image( $params->{image} );
 
     my $distorted =   $self->_run_distort( $params );
-    unlink( $params->{image});
+    #unlink( $params->{image});
     $self->render({ json => $distorted } );
    
 }
@@ -136,7 +136,7 @@ sub combine {
 
     my $noise_res =  $self->_run_noise( $params );
 
-    unlink( $params->{image});
+    #unlink( $params->{image});
 
     $params->{image} =  'public/'.$noise_res->{out};
     my $dist_res = $self->_run_distort( $params );

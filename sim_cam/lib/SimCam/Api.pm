@@ -36,13 +36,23 @@ sub get_image {
     my $self = shift;
     my $id = $self->param('id');
 
-    my $loc =  $IMAGE_LOCATION.$id.'_in.png';
+    my $loc =  $IMAGE_LOCATION.$id;
 
     if( -e $loc ){
 
         return $self->render_static( 'uploads/'.$id  );
 
-    } 
+    } elsif( -e $loc . '.png' ){
+
+	return $self->render_static( 'uploads/'.$id.'.png' );
+
+    } elsif( -e $loc . '_in.png' ){
+
+	return $self->render_static( 'uploads/'.$id.'_in.png' );
+
+    }
+
+
 
     return $self->render({ json => {message => 'Invalid Argument'}, text => 'Invalid Argument', status => 400 });
 }
@@ -146,8 +156,29 @@ sub get_check {
 
 sub get_distort {
    my $self = shift;
-   my $image = $self->param('image'); 
+   my $params = $self->req->json;
 
+   $params->{t1} = $self->param('t1') unless $params->{t1};
+   $params->{t2} = $self->param('t2') unless $params->{t2};
+   $params->{t3} = $self->param('t3') unless $params->{t3};
+   $params->{r1} = $self->param('r1') unless $params->{r1};
+   $params->{r2} = $self->param('r2') unless $params->{r2};
+   $params->{r3} = $self->param('r3') unless $params->{r3};
+   $params->{t1} = $self->param('t1') unless $params->{t1};
+   $params->{t1} = $self->param('t1') unless $params->{t1};
+   $params->{cx} = $self->param('cx') unless $params->{cx};
+   $params->{cy} = $self->param('cy') unless $params->{cy};
+   $params->{fx} = $self->param('fx') unless $params->{fx};
+   $params->{fy} = $self->param('fy') unless $params->{fy};
+   $params->{image} = $self->param('image');
+
+   my $result = $self->run_distort($params);
+  
+   return $self->respond_to( {
+     json => sub { $self->render_json( $result );  },
+     any =>  sub { $self->render_static( 'uploads/'.$result->{out} ); }
+ 
+   });
    
 
 }
@@ -184,14 +215,17 @@ sub run_distort {
         '</data></Distortion>
         </opencv_storage>';
 
+    my $image = $params->{image};
+    my $image_path = 'public/uploads/'. $image .'_in.png';
 
-    my $fy = $params->{fy} || $params->{far} || 3000;
-    my $fx = $params->{fx} || $params->{far} || 3000;
-    my $cy = $params->{cy} || $params->{u} /2 || 300;
-    my $cx = $params->{cx} || $params->{v} /2 || 240;
+    my $fy = $params->{fy} || $params->{far} || 1000;
+    my $fx = $params->{fx} || $params->{near} || 1000;
 
-    my $image = $params->{image} || 'in.png';
-
+    my $rune = 'identify -format "%[width] %[height]" '. $image_path;
+    my( $merged, $s, @r)  = Capture::Tiny::capture { `$rune`; };
+    my @size = split( ' ', $r[0] ); 
+    my $cy = $params->{cy} || $size[0] / 2 || 0;
+    my $cx = $params->{cx} || $size[1] / 2 || 0;
 
     my $Intrinsics = '<?xml version="1.0"?>
         <opencv_storage>
@@ -212,10 +246,10 @@ sub run_distort {
     File::Slurp::write_file( $dist_path, $Distortion );
     File::Slurp::write_file( $int_path, $Intrinsics );
 
-   
+  
     my $out_image = 'public/uploads/'.$job_id.'.png';
 
-    my $run  = "../simcamCV/distort $dist_path $image $out_image $int_path";
+    my $run  = "../simcamCV/distort $dist_path $image_path $out_image $int_path";
 
     $self->app->log->info( $run );
 
@@ -226,7 +260,7 @@ sub run_distort {
 
     if( -f $out_image )
     {
-        return { success => 1, out => $out_image, distortions_xml => $dist_path, intrinsics_xml => $int_path, job_id => $job_id };
+        return { success => 1, out => $job_id.'.png', distortions_xml => $job_id.'_dist.xml', intrinsics_xml => $job_id.'_int.xml', job_id => $job_id };
     }
     else
     {

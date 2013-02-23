@@ -7,30 +7,34 @@
 
 int main( int argc, char * argv[] )
 {
-    const char* distortions = argc > 1 ? argv[1] : "Distortions.xml";
+	if( argc < 4 )
+		fprintf( stderr, "Invalid amount of parameters");
+	const char* distortions = argv[1];
 
-    const char* in_image = argc > 2 ? argv[2] : "in.png";
+	const char* in_image = argv[2];
 
-    const char* out_image = argc > 3 ? argv[3] : "out.png";
+	const char* out_image = argv[3];
 
-    const char* intrinsics = argc > 4 ? argv[4] : "Intrinsics.xml";
+	const char* intrinsics = argv[4];
 
-
-    CvMat *intrinsic = (CvMat*)cvLoad( intrinsics);
-    CvMat *distortion = (CvMat*)cvLoad( distortions );
+	printf( std
 
 
-    IplImage *image = cvLoadImage( in_image );
+	CvMat *intrinsic = (CvMat*)cvLoad( intrinsics);
+	CvMat *distortion = (CvMat*)cvLoad( distortions );
 
-    cvSaveImage( out_image , image);
 
-    IplImage* mapx = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
+	IplImage *image = cvLoadImage( in_image );
+
+	cvSaveImage( out_image , image);
+
+	IplImage* mapx = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
 	IplImage* mapy = cvCreateImage( cvGetSize( image ), IPL_DEPTH_32F, 1 );
 	cvInitUndistortMap( intrinsic, distortion, mapx, mapy );
 	IplImage *t = cvCloneImage( image );
-		cvRemap( t, image, mapx, mapy ); // undistort image
-		cvReleaseImage( &t );
+	cvRemap( t, image, mapx, mapy ); // undistort image
+	cvReleaseImage( &t );
 
-     cvSaveImage( out_image , image);
+	cvSaveImage( out_image , image);
 
 }
