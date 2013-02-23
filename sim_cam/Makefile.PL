@@ -10,8 +10,8 @@ WriteMakefile(
         'Digest::SHA' =>  0,
         'MIME::Base64' => 0,
         'File::Slurp'  => 0,
-        'Capture::Tiny' => 0
-
+        'Capture::Tiny' => 0,
+	'XML::Simple' => 0
         },
         test      => {TESTS => 't/*.t'}
                                    );

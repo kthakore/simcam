@@ -16,8 +16,10 @@ int main(int argc, char * argv[])
 	int successes = 0;
 	int step, frame = 0;
 
-	int total = argc - 1 ; 
-	int start = 1;
+	const char* intrinsics_path = argv[1];
+	const char* distortions_path = argv[2];
+	int total = argc - 3 ; 
+	int start = 3;
 
 	const char* loc = argv[start] ;
 
@@ -127,8 +129,8 @@ int main(int argc, char * argv[])
 			intrinsic_matrix, distortion_coeffs, NULL, NULL, CV_CALIB_FIX_ASPECT_RATIO ); 
 
 	// Save the intrinsics and distortions
-	cvSave( "/tmp/Intrinsics.xml", intrinsic_matrix );
-	cvSave( "/tmp/Distortion.xml", distortion_coeffs );
+	cvSave( intrinsics_path, intrinsic_matrix );
+	cvSave( distortions_path, distortion_coeffs );
 
 
 	return 1;

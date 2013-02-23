@@ -6,6 +6,8 @@ use Mojo::JSON;
 use DateTime;
 use File::Slurp;
 use Capture::Tiny;
+use XML::Simple;
+use Data::Dumper;
 
 
 my $IMAGE_LOCATION = 'public/uploads/';
@@ -31,6 +33,7 @@ sub image_location {
    }
 	$log->info( 'Not Found image: '.$image );
 
+   return;
 
 }
 
@@ -157,10 +160,11 @@ sub get_check {
                               status=> 500 );
     }
 
-
-    return $self->render( html => '<a href="uploads/'.$image.'_check.png" />', 
-			  text => "Result: $result, Image: $image ", 
-			  json => { image => $image.'_check.png', result => $result}   );
+   return $self->respond_to( {
+     json => sub { $self->render_json( $result );  },
+     text =>  sub { $self->render_static( 'uploads/'.$image.'_check.png' ); }
+ 
+   });
 
 
 
@@ -201,8 +205,78 @@ sub get_calibrate {
    my $json = $self->req->json; 
  
 
-   my @images = $json->{images};
+   my @images = $self->param('images');
 
+   foreach my $image ( @images ) {
+
+       if( my $location = $self->image_location( $image ) ){
+	  $image = $IMAGE_LOCATION.$location	
+	} else {
+
+	    return $self->render({ json => {message => 'Invalid Argument: '.$image.' not found'}, text => 'Invalid Argument: '.$image.' not found', status => 400 });
+	}
+   
+   }
+
+   if( scalar @images < 4 ){
+	    return $self->render({ json => {message => 'Invalid Argument: need more then 4 images'}, text => 'Invalid Argument: need more then 4 images', status => 400 });
+
+   }
+
+   my $job_id = sha1_hex( join(' ', @images ) );
+
+   my $output = 'public/uploads/'. $job_id;
+   my $int    = $output .'_int.xml';
+   my $dist   = $output .'_dist.xml';
+
+   my @run = ( '../simcamCV/calibrate', $int, $dist, (@images) );
+
+   my $run  = join(' ', @run);
+
+    $self->app->log->info( $run );
+
+    my( $stdout, $stderr, @result) = Capture::Tiny::capture {
+        
+        `$run`
+    };
+
+    if( $stderr ){
+        $self->app->log->error( "Api|get_calibrate error: $stderr" );
+        return $self->render( text => 'Error calibrating image: '. $stderr, 
+                              json => { message => 'Error calibrating images: '. $stderr }, 
+                              status=> 500 );
+    }
+
+    # CHeck if xml files exist
+
+    if( -e $int && -e $dist ){
+        my $xs = XML::Simple->new();
+            my $d_data = $xs->XMLin("/tmp/Distortion.xml");
+            my $f_data = $xs->XMLin("/tmp/Intrinsics.xml");
+
+
+            my $d_cv_data = $d_data->{Distortion}->{data};
+
+            $d_cv_data =~ s/\s/ /g;
+
+            my $i_cv_data = $f_data->{Intrinsics}->{data};
+
+            $i_cv_data =~ s/\s/ /g;
+          
+            my @d_array = split(' ', $d_cv_data ); 
+            my @f_array = split(' ', $i_cv_data );
+           
+            my $fo = { distortion => \@d_array, intrinsics => \@f_array};
+
+	return	$self->render({
+		text => Dumper $fo,
+		json => $fo
+	});
+    }
+   else {
+	$self->render({ json => { message => "Couldn't calibrate"}, text => "Couldn't calibrate", status => 400 } );
+
+   }
 
 
 }

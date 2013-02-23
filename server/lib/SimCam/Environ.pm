@@ -40,7 +40,8 @@ sub calibrate {
         $self->render({ json => { message => "Need at least 2 found pattern images to calibrate"}, status => 400 } );
     }
     else {
-        my @run = ('../simcamCV/calibrate', @{$checked_images} );
+        my @run = ('../simcamCV/calibrate', ( "/tmp/Intrinsics.xml", "/tmp/Distortion.xml", @{$checked_images}) );
+        $self->app->log->info( join(' ', @run ) );
 
         my $status = system @run;
 
