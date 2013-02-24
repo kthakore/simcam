@@ -93,9 +93,7 @@
 
 
 <div class="row-fluid" style="text-align:center">
-<center class="span12" style="padding:5px">
-    <iframe src="/iframes/environment.html" allowfullscreen webkitallowfullscreen mozallowfullscreen allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" width="100%" height="640px" >
-    </iframe>
+<center id="environment" class="span12" style="padding:5px">
 </center>
 </div>
 
@@ -133,6 +131,7 @@
 
 % content_for javascript => begin
     <script src="/js/tracker.js"></script>
+    <script src="/js/environment.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
         var v = Backbone.View.extend({ 
@@ -146,6 +145,9 @@
             });
 
         new v({el : $('body') });
+
+	var simcam = new SimCamApp({ element: $('#environment'), pinhole: true });
+	Backbone.history.start();
 
     </script>
 % end;
