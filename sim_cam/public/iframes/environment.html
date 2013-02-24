@@ -95,12 +95,12 @@
     </head>
     <body>
         <div class="container-fluid">
-                <canvas class="main_viewer" style="height:100%; width:100%; background-color:grey; position:absolute; top:0px; left:0px;">
-                </canvas>
+                <iframe id="main_viewer" src="/iframes/main_viewer.html" allowfullscreen webkitallowfullscreen mozallowfullscreen allowfullscreen webkitallowfullscreen mozallowfullscreen frameborder="0"  id="dof_view" style="height:100%; width:100%; background-color:grey; position:absolute; top:0px; left:0px;">
+                </iframe>
 
-                <canvas class="camera_viewer" style="width: 24.5%; background-color:red; position:absolute; top:0px; right:0px;">
+                <iframe id="camera_viewer" src="/iframes/camera_viewer.html" frameborder="0" style="width: 24.5%; background-color:red; position:absolute; top:0px; right:0px;">
                 Not initialized
-                </canvas>
+                </iframe>
     
 
         <div class="sidemenu">
