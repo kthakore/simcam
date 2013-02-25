@@ -146,7 +146,12 @@
 
         new v({el : $('body') });
 
-	var simcam = new SimCamApp({ element: $('#environment'), pinhole: true });
+	var simcam = new SimCamApp({ element: $('#environment'), 
+                                     mode: { 
+                                        pinhole: true, 
+                                        learning_environment: true 
+                                         }
+                                   });
 	Backbone.history.start();
 
     </script>
