@@ -1,17 +1,29 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, tpl, ScratchService, console, PageView, google */
+/*global $, _, jQuery, Backbone, console, PageView */
 /*jshint globalstrict: true*/
 
-var SimCamMainCanvasView = Backbone.View.extend({
+var SimCam = {
+    "Template" : {},
+    "Constructor" : {
+        "Collection": {},
+        "Model"  :    {},
+        "View"   :    {},
+        "Router" :    {}
+    }
+};
+
+SimCam.Template.MainFrame = '<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="640px" ></iframe>';
+
+SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
 
     }
 });
 
-var SimCamSideCanvasView = Backbone.View.extend({
+SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
 
@@ -19,27 +31,27 @@ var SimCamSideCanvasView = Backbone.View.extend({
 
 });
 
-var SimCamSideMenuView = Backbone.View.extend({
+SimCam.Constructor.View.SideMenu = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
     }
 });
 
-var SimCamBottomImageView = Backbone.View.extend({
-    initialize: function (options) {
-        "use strict";
-
-    }
-});
-
-var SimCamBottomView = Backbone.View.extend({
+SimCam.Constructor.View.BottomBarImage = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
 
     }
 });
 
-var SimCamView = Backbone.View.extend({
+SimCam.Constructor.View.BottomBar = Backbone.View.extend({
+    initialize: function (options) {
+        "use strict";
+
+    }
+});
+
+SimCam.Constructor.View.Main = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
         var that, main_viewer_frame, camera_viewer_frame, mv_body, cv_body, side_el, bottom_el, popovers;
@@ -55,11 +67,11 @@ var SimCamView = Backbone.View.extend({
         bottom_el = that.$('.bottom_bar');
         side_el   = that.$('.sidemenu');
 
-        that.bottom_bar_viewer = new SimCamBottomView({ el: bottom_el, mode: that.mode });
-        that.side_bar_viewer = new SimCamSideMenuView({ el: side_el, mode: that.mode });
+        that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode });
+        that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode });
 
-        that.main_viewer = new SimCamMainCanvasView({ el: mv_body, mode: that.mode });
-        that.camera_viewer = new SimCamSideCanvasView({ el: cv_body, mode: that.mode });
+        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode });
+        that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode });
 
         main_viewer_frame.on('load', function () { that.main_viewer.trigger('load'); });
         camera_viewer_frame.on('load', function () { that.camera_viewer.trigger('load'); });
@@ -86,7 +98,7 @@ var SimCamView = Backbone.View.extend({
     }
 });
 
-var SimCamApp = Backbone.Router.extend({
+SimCam.Constructor.Router.App = Backbone.Router.extend({
     version : 0.01,
     initialize: function (options) {
         "use strict";
@@ -95,7 +107,7 @@ var SimCamApp = Backbone.Router.extend({
 
         that.element = options.element;
 
-        env_frame = $('<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="640px" ></iframe>');
+        env_frame = $(SimCam.Template.MainFrame);
 
         env_frame.load(function () { that.on_env_frame_load(options, env_frame); });
 
@@ -118,11 +130,18 @@ var SimCamApp = Backbone.Router.extend({
         that = this;
         env_frame_body = $(env_frame[0].contentDocument).find('body');
 
-        that.view = new SimCamView({ el : env_frame_body, mode: options.mode });
+        that.view = new SimCam.Constructor.View.Main({ el : env_frame_body, mode: options.mode });
 	    that.view.render();
 
 
     }
 });
 
+
+SimCam.initialize = function (options) {
+    "use strict";
+    var app;
+    app = new SimCam.Constructor.Router.App(options);
+    Backbone.history.start();
+};
 
