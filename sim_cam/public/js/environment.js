@@ -14,6 +14,9 @@ var SimCam = {
     }
 };
 
+/*Model Constructors*/
+
+SimCam.Constructor.Model.Generic = Backbone.Model.extend({});
 
 /*Templates*/
 
@@ -144,7 +147,6 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
         rel_data_toggle = $(cur_target.parents('.popover').prevAll('[data-toggle="popover"]')[0]);
         rel_data_toggle.popover('toggle');
-        
     },
     render : function () {
         "use strict";
@@ -164,6 +166,10 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
         that = this;
 
         that.element = options.element;
+
+        options.app = that;
+
+        that.models = { camera: new SimCam.Constructor.Model.Generic() };
 
         env_frame = $(SimCam.Template.MainFrame);
 
