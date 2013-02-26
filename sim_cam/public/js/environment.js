@@ -42,29 +42,30 @@ SimCam.Template.SideMenu = {
 SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     initialize: function () {
         "use strict";
-        var that = this;
+        var that, light;
+        that = this;
         that.mouse =  new THREE.Vector2();
         that.offset = new THREE.Vector3();
 
-        this.camera = new THREE.PerspectiveCamera(35, $(this.el).innerWidth() / window.innerHeight, 1, 10000);
-        this.camera.position.set(65,65,65);
+        that.camera = new THREE.PerspectiveCamera(35, that.$el.innerWidth() / window.innerHeight, 1, 10000);
+        that.camera.position.set(65, 65, 65);
 
-        this.controls = new THREE.OrbitControls( this.camera );
-        this.controls.rotateSpeed = 1.0;
-        this.controls.zoomSpeed = 1.2;
-        this.controls.panSpeed = 0.8;
-        this.controls.noZoom = false;
-        this.controls.noPan = false;
-        this.controls.staticMoving = true;
-        this.controls.dynamicDampingFactor = 0.3;
+        that.controls = new THREE.OrbitControls(that.camera);
+        that.controls.rotateSpeed = 1.0;
+        that.controls.zoomSpeed = 1.2;
+        that.controls.panSpeed = 0.8;
+        that.controls.noZoom = false;
+        that.controls.noPan = false;
+        that.controls.staticMoving = true;
+        that.controls.dynamicDampingFactor = 0.3;
 
-        this.scene = new THREE.Scene();
-        this.objects = $([]);
+        that.scene = new THREE.Scene();
+        that.objects = $([]);
 
-        this.scene.add( new THREE.AmbientLight( 0x505050 ) );
+        that.scene.add(new THREE.AmbientLight(0x505050));
 
-        var light = new THREE.SpotLight( 0xffffff, 1.5 );
-        light.position.set( 0, 500, 2000 );
+        light = new THREE.SpotLight(0xffffff, 1.5);
+        light.position.set(0, 500, 2000);
         light.castShadow = true;
 
         light.shadowCameraNear = 200;
