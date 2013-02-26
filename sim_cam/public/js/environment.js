@@ -42,7 +42,7 @@ SimCam.Template.SideMenu = {
 SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     initialize: function () {
         "use strict";
-        var that, light;
+        var that, light, jsonLoader, xplane, yplane, zplane;
         that = this;
         that.mouse =  new THREE.Vector2();
         that.offset = new THREE.Vector3();
@@ -69,7 +69,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         light.castShadow = true;
 
         light.shadowCameraNear = 200;
-        light.shadowCameraFar = this.camera.far;
+        light.shadowCameraFar = that.camera.far;
         light.shadowCameraFov = 50;
 
         light.shadowBias = -0.00022;
@@ -77,96 +77,96 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
         light.shadowMapWidth = 2048;
         light.shadowMapHeight = 2048;
-        this.lights = $([]);
-        this.lights.push( light );
+        that.lights = $([]);
+        that.lights.push(light);
 
-        this.scene.add( light );
+        that.scene.add(light);
 
-        var jsonLoader = new THREE.JSONLoader();
-        jsonLoader.load( "/3d_objs/camera.js", function( geometry ) {  
+        jsonLoader = new THREE.JSONLoader();
+        jsonLoader.load("/3d_objs/camera.js", function (geometry) {
+            var cam_obj, material, cube;
+            cam_obj = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color: 0x2200cc}));
 
-                var cam_obj = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: 0x2200cc } ) );
+            cam_obj.material.ambient = cam_obj.material.color;
 
-                cam_obj.material.ambient = cam_obj.material.color;
+            cam_obj.position.set(0, 0, 15);
 
-                cam_obj.position.set(0,0,15);
+            cam_obj.scale.set(1, 1, 1);
+            cam_obj.rotation.set(0, 0, 0);
+            console.log(that.options.app.models.camera);
+            cam_obj.model = that.options.app.models.camera;
+            //					cam_obj.castShadow = false;
+            //					cam_obj.receiveShadow = false;
+            material = new THREE.MeshLambertMaterial({
+                map: THREE.ImageUtils.loadTexture("img/grid.gif")
+            });
 
-                cam_obj.scale.set(1,1,1);
-                cam_obj.rotation.set( 0 ,0,  0 );
-                console.log( that.options.app.models.camera );
-                cam_obj.model = that.options.app.models.camera;
-                //					cam_obj.castShadow = false;
-                //					cam_obj.receiveShadow = false;
-                var material = new THREE.MeshLambertMaterial({
-map: THREE.ImageUtils.loadTexture("img/grid.gif")
-});
+            material.map.needsUpdate = true;
 
-                material.map.needsUpdate = true;
+            cube = new THREE.Mesh(
+                new THREE.CubeGeometry(8, 5, 0.1),
+                material
+            );
+            cube.model = that.options.app.models.grid;
+            cube.model.trigger('init', cube.model, cube);
+            cube.overdraw = true;
+            that.scene.add(cube);
+            that.objects.push(cube);
 
-                var cube = new THREE.Mesh(
-                    new THREE.CubeGeometry( 8, 5, 0.1 ),
-                    material
-                    );
-                cube.model = that.options.app.models.grid;
-                cube.model.trigger( 'init', cube.model, cube ); 
-                cube.overdraw = true;
-                that.scene.add( cube ); that.objects.push( cube );
+            cube.position.set(0, 0, 0);
 
-                cube.position.set(0,0,0);
+            that.scene.add(cam_obj);
 
-                that.scene.add( cam_obj );
-
-                that.objects.push( cam_obj );
-                cam_obj.model.trigger( 'init', cam_obj.model, cam_obj ); 
-
-
-                } );
-
-this.plane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4), new THREE.MeshBasicMaterial( { color: 0x000000, opacity: 0.25, transparent: true, wireframe: true } ) );
-var xplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0xCC0000, opacity: 0.25, transparent: true, wireframe: true } ) );
-var yplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0x00CC00, opacity: 0.25, transparent: true, wireframe: true } ) );
-var zplane = new THREE.Mesh( new THREE.PlaneGeometry( 4000, 4000, 4, 4 ), new THREE.MeshBasicMaterial( { color: 0x0000CC, opacity: 0.25, transparent: true, wireframe: true } ) );
-
-yplane.rotation.set( 0, 1.57079633, 0 );
-zplane.rotation.set( 1.57079633, 0, 0 );
+            that.objects.push(cam_obj);
+            cam_obj.model.trigger('init', cam_obj.model, cam_obj);
 
 
-this.scene.add(xplane); this.scene.add(yplane); this.scene.add(zplane);
+        });
 
-this.plane.visible = false;
-this.scene.add(this.plane );
+        that.plane = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000, 4, 4), new THREE.MeshBasicMaterial({ color: 0x000000, opacity: 0.25, transparent: true, wireframe: true }));
+        xplane = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000, 4, 4), new THREE.MeshBasicMaterial({ color: 0xCC0000, opacity: 0.25, transparent: true, wireframe: true }));
+        yplane = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000, 4, 4), new THREE.MeshBasicMaterial({ color: 0x00CC00, opacity: 0.25, transparent: true, wireframe: true }));
+        zplane = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000, 4, 4), new THREE.MeshBasicMaterial({ color: 0x0000CC, opacity: 0.25, transparent: true, wireframe: true }));
 
-this.projector = new THREE.Projector();
+        yplane.rotation.set(0, 1.57079633, 0);
+        zplane.rotation.set(1.57079633, 0, 0);
 
-this.renderer = new THREE.WebGLRenderer( { antialias: true, clearColor: 0x888888, clearAlpha: 255, canvas: this.$('canvas')[0]  } );
-this.renderer.sortObjects = false;
-this.renderer.setSize( $(this.el).innerWidth(), window.innerHeight );
+        that.scene.add(xplane);
+        that.scene.add(yplane);
+        that.scene.add(zplane);
 
-this.renderer.shadowMapEnabled = true;
-this.renderer.shadowMapSoft = true;
+        that.plane.visible = false;
+        that.scene.add(that.plane);
 
-//this.el.appendChild(this.renderer.domElement );
+        that.projector = new THREE.Projector();
 
-/*
-   renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
-   renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
-   renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+        that.renderer = new THREE.WebGLRenderer({antialias: true, clearColor: 0x888888, clearAlpha: 255, canvas: that.$('canvas')[0]});
+        that.renderer.sortObjects = false;
+        that.renderer.setSize(that.$el.innerWidth(), window.innerHeight);
+
+        that.renderer.shadowMapEnabled = true;
+        that.renderer.shadowMapSoft = true;
+
+        //that.el.appendChild(that.renderer.domElement );
+
+        /*
+           renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+           renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+           renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
 
 
-   window.addEventListener( 'resize', onWindowResize, false );
-   */
-$(window).on('resize', function() { that.on_resize(); } )
-this.animate();
-},
-    events : {
-       'mousemove canvas' : 'on_canvas_mmove',
-       'mousedown canvas' : 'on_canvas_mdown',
-       'mouseup canvas' : 'on_canvas_mup',
+           window.addEventListener( 'resize', onWindowResize, false );
+           */
+        $(window).on('resize', function () {that.on_resize(); });
+        this.animate();
     },
-    on_canvas_mmove : function( event ) {
+    events : {
+        'mousemove canvas' : 'on_canvas_mmove',
+        'mousedown canvas' : 'on_canvas_mdown',
+        'mouseup canvas' : 'on_canvas_mup'
+    },
+    on_canvas_mmove : function (event) {
                 
-
-
 				event.preventDefault();
 
 			    this.mouse.x = ( event.clientX / $(this.el).innerWidth() ) * 2 - 1;
