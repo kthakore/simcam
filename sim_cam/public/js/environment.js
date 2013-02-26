@@ -59,7 +59,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         "use strict";
         var that;
         that = this;
-
+        that.app = options.app;
         that.render(options.mode);
     },
     events : {
@@ -82,6 +82,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         that = this;
         template = SimCam.Template.SideMenu.Pinhole;
         that.$('.body').html(template);
+
     }
 });
 
@@ -115,11 +116,11 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         bottom_el = that.$('.bottom_bar');
         side_el   = that.$('.sidemenu');
 
-        that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode });
-        that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode });
+        that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode, app: options.app });
+        that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
 
-        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode });
-        that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode });
+        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app });
+        that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
 
         main_viewer_frame.on('load', function () { that.main_viewer.trigger('load'); });
         camera_viewer_frame.on('load', function () { that.camera_viewer.trigger('load'); });
@@ -167,8 +168,6 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
-        options.app = that;
-
         that.models = { camera: new SimCam.Constructor.Model.Generic() };
 
         env_frame = $(SimCam.Template.MainFrame);
@@ -194,7 +193,7 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
         that = this;
         env_frame_body = $(env_frame[0].contentDocument).find('body');
 
-        that.view = new SimCam.Constructor.View.Main({ el : env_frame_body, mode: options.mode });
+        that.view = new SimCam.Constructor.View.Main({ el : env_frame_body, mode: options.mode, app: that });
 	    that.view.render();
 
 
