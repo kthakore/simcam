@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, console, PageView */
+/*global $, _, jQuery, Backbone, console, alert */
 /*jshint globalstrict: true*/
 
 var SimCam = {
@@ -14,8 +14,27 @@ var SimCam = {
     }
 };
 
+
+/*Templates*/
+
 SimCam.Template.MainFrame = '<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="640px" ></iframe>';
 
+SimCam.Template.SideMenu = {
+    "Pinhole" : '<h5>Pinhole Camera Model</h5>' +
+                '<li class="nav-header">Field of View</li>' +
+                '<li><a href="javascript:void(0)"><input type="text" name="fov" class="span1 pinhole_sidemenu_input"/></a></li>' +
+                '<li class="nav-header">Sensor Size in Pixels</li>' +
+                '<li><a href="javascript:void(0)">X: <input type="text" name="u" class="span1 pinhole_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">Y: <input type="text" name="v" class="span1 pinhole_sidemenu_input"/></a></li>' +
+                '<li class="nav-header">Aspect Ratio</li>' +
+                '<li><a href="javascript:void(0)"><input type="text" name="aspect_ratio" class="span1 pinhole_sidemenu_input"/></a></li>' +
+                '<li style="width=100%; height=100%; background-color:red"></li>'
+
+
+};
+
+
+/*View Constructors*/
 SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
@@ -31,9 +50,35 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
 });
 
+
 SimCam.Constructor.View.SideMenu = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
+        var that;
+        that = this;
+
+        that.render(options.mode);
+    },
+    events : {
+    },
+    render: function (mode) {
+        "use strict";
+        var that;
+        that = this;
+        switch (mode.type) {
+        case 'pinhole':
+            that.render_pinhole();
+            break;
+        default:
+            console.error('SideMenu: Mode not implemented');
+        }
+    },
+    render_pinhole: function () {
+        "use strict";
+        var that, template;
+        that = this;
+        template = SimCam.Template.SideMenu.Pinhole;
+        that.$('.body').html(template);
     }
 });
 
@@ -78,17 +123,28 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
         if (that.mode.learning_environment) {
             popovers = that.$('[data-toggle="popover"]');
-            popovers.popover();
+            popovers.popover({ html: true});
             popovers.popover('toggle');
         }
 
     },
     events: {
-        'load' : 'on_load'
+        'load' : 'on_load',
+        'click .close_popover' : 'on_click_close_popover'
     },
     on_load : function () {
         "use strict";
 
+    },
+    on_click_close_popover: function (e) {
+        "use strict";
+        var that, cur_target, rel_data_toggle;
+        that = this;
+        cur_target = $(e.currentTarget);
+
+        rel_data_toggle = $(cur_target.parents('.popover').prevAll('[data-toggle="popover"]')[0]);
+        rel_data_toggle.popover('toggle');
+        
     },
     render : function () {
         "use strict";
@@ -98,6 +154,8 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
     }
 });
 
+
+/*Router Constuctor*/
 SimCam.Constructor.Router.App = Backbone.Router.extend({
     version : 0.01,
     initialize: function (options) {
