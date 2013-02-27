@@ -131,6 +131,8 @@
 
 % content_for javascript => begin
     <script src="/js/tracker.js"></script>
+    <script src="/js/libs/three.js"></script>
+
     <script src="/js/environment.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
@@ -146,13 +148,12 @@
 
         new v({el : $('body') });
 
-	    var simcam = new SimCamApp({ element: $('#environment'), 
+	    var simcam = SimCam.initialize({ element: $('#environment'), 
                                      mode: { 
-                                           pinhole: true, 
-                                           learning_environment: true 
+                                           'type': 'pinhole', 
+                                           'learning_environment': true 
                                         }
                                    });
-   	    Backbone.history.start();
 
     </script>
 % end;

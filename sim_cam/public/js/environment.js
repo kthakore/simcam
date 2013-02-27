@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, console, alert, THREE */
+/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame */
 /*jshint globalstrict: true*/
 
 var SimCam = {
@@ -49,7 +49,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         that.mouse =  new THREE.Vector2();
         that.offset = new THREE.Vector3();
 
-        that.camera = new THREE.PerspectiveCamera(35, that.$el.innerWidth() / window.innerHeight, 1, 10000);
+        that.camera = new THREE.PerspectiveCamera(35, that.$el.innerWidth() / that.$el.innerHeight(), 1, 10000);
         that.camera.position.set(45, 45, 45);
 
         that.controls = new THREE.OrbitControls(that.camera, that.$('canvas')[0]);
@@ -99,7 +99,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
             //					cam_obj.castShadow = false;
             //					cam_obj.receiveShadow = false;
             material = new THREE.MeshLambertMaterial({
-                map: THREE.ImageUtils.loadTexture("img/grid.gif")
+                map: THREE.ImageUtils.loadTexture("/img/grid.gif")
             });
 
             material.map.needsUpdate = true;
@@ -241,9 +241,11 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
             if (this.INTERSECTED !== intersects[0].object) {
 
-                if (this.INTERSECTED) this.INTERSECTED.material.color.setHex(this.INTERSECTED.currentHex);
+                if (this.INTERSECTED) {
+                    this.INTERSECTED.material.color.setHex(this.INTERSECTED.currentHex);
+                }
 
-                this.INTERSECTED = intersects[ 0 ].object;
+                this.INTERSECTED = intersects[0].object;
                 this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
 
                 this.plane.position.copy(this.INTERSECTED.position);
@@ -256,7 +258,9 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
         } else {
 
-            if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+            if (this.INTERSECTED) {
+                this.INTERSECTED.material.color.setHex(this.INTERSECTED.currentHex);
+            }
 
             this.INTERSECTED = null;
 
@@ -266,96 +270,97 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
 
     },
-    on_canvas_mdown : function(event ) {
+    on_canvas_mdown : function (event) {
+        "use strict";
+        var that, vector, ray, intersects;
+        that = this;
 
-				event.preventDefault();
+        event.preventDefault();
 
-				var vector = new THREE.Vector3( this.mouse.x, this.mouse.y, 0.5 );
-				this.projector.unprojectVector( vector, this.camera );
+        vector = new THREE.Vector3(that.mouse.x, that.mouse.y, 0.5);
+        that.projector.unprojectVector(vector, that.camera);
 
-				var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
+        ray = new THREE.Ray(that.camera.position, vector.subSelf(that.camera.position).normalize());
 
-				var intersects = ray.intersectObjects( this.objects );
+        intersects = ray.intersectObjects(that.objects);
 
-				if ( intersects.length > 0 ) {
+        if (intersects.length > 0) {
 
-					this.controls.enabled = false;
+            that.controls.enabled = false;
 
-					this.SELECTED = intersects[ 0 ].object;
+            that.SELECTED = intersects[0].object;
 
-					var intersects = ray.intersectObject( this.plane );
-					this.offset.copy( intersects[ 0 ].point ).subSelf( this.plane.position );
+            intersects = ray.intersectObject(that.plane);
+            that.offset.copy(intersects[0].point).subSelf(that.plane.position);
 
-					this.el.style.cursor = 'move';
+            that.el.style.cursor = 'move';
 
-				}
+        }
 
-
-    },
-    on_canvas_mup : function(event ) {
-				event.preventDefault();
-
-				this.controls.enabled = true;
-
-				if ( this.INTERSECTED ) {
-
-					this.plane.position.copy( this.INTERSECTED.position );
-
-					this.SELECTED = null;
-
-				}
-
-				this.el.style.cursor = 'auto';
 
     },
-    on_resize : function (event ) {
+    on_canvas_mup : function (event) {
+        "use strict";
+        event.preventDefault();
+        this.controls.enabled = true;
 
-				this.camera.aspect = $(this.el).innerWidth() / window.innerHeight;
-				this.camera.updateProjectionMatrix();
+        if (this.INTERSECTED) {
+            this.plane.position.copy(this.INTERSECTED.position);
+            this.SELECTED = null;
+        }
 
-				this.renderer.setSize( $(this.el).innerWidth(), window.innerHeight );
+        this.el.style.cursor = 'auto';
+
+    },
+    on_resize : function (event) {
+        "use strict";
+        this.camera.aspect = this.$el.innerWidth() / this.$el.innerHeight();
+        this.camera.updateProjectionMatrix();
+
+        this.renderer.setSize(this.$el.innerWidth(), this.$el.innerHeight());
 
 
     },
     animate : function () {
-                var that = this; 
-				requestAnimationFrame( function() { that.animate() } );
-				that.render();
-    }, 
+        "use strict";
+        var that = this;
+        requestAnimationFrame(function () {that.animate(); });
+        that.render();
+    },
     render : function () {
         "use strict";
         var that;
         that = this;
 
-        if (that.rendered === undefined && that.objects.length >0 ) {
+        if (that.rendered === undefined && that.objects.length > 0) {
             that.rendered = true;
             that.trigger('rendered');
         }
-    
 	    that.controls.update();
-        that.renderer.render( that.scene, that.camera );
+        that.renderer.render(that.scene, that.camera);
     }
 });
 
 SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
-    initialize: function(options) {
-        var that = this;
-        console.log(options.app.models.camera.toJSON()); 
+    initialize: function (options) {
+        "use strict";
+        var that, light, cc, material, cube, cv;
+        that = this;
         that.options = options;
 
-        var cc = options.app.models.camera.toJSON(); 
-        this.camera = new THREE.PerspectiveCamera( cc.fov, cc.ar , cc.near, cc.far );
-        this.camera.position.set(0,0,15);
+        cc = options.app.models.camera.toJSON();
+        that.camera = new THREE.PerspectiveCamera(cc.fov, cc.ar, cc.near, cc.far);
+        that.camera.position.set(0, 0, 15);
 
-        this.scene = new THREE.Scene();
-        this.scene.add( new THREE.AmbientLight( 0x505050 ) );
+        that.scene = new THREE.Scene();
+        that.scene.add(new THREE.AmbientLight(0x505050));
 
-        var light = new THREE.SpotLight( 0xffffff, 1.5 );
-        light.position.set( 0, 500, 2000 );
+        light = new THREE.SpotLight(0xffffff, 1.5);
+        light.position.set(0, 500, 2000);
         light.castShadow = true;
 
         light.shadowCameraNear = 200;
-        light.shadowCameraFar = this.camera.far;
+        light.shadowCameraFar = that.camera.far;
         light.shadowCameraFov = 50;
 
         light.shadowBias = -0.00022;
@@ -363,70 +368,73 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         light.shadowMapWidth = 2048;
         light.shadowMapHeight = 2048;
-        this.scene.add( light);
+        that.scene.add(light);
 
-        var material = new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture("img/grid.gif")
+        material = new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture("/img/grid.gif")
         });
 
         material.map.needsUpdate = true;
 
-        var cube = new THREE.Mesh(
-            new THREE.CubeGeometry( 8, 5, 0.1 ),
-            material
-            );
+        cube = new THREE.Mesh(new THREE.CubeGeometry(8, 5, 0.1), material);
         cube.overdraw = true;
-        that.scene.add( cube ); 
-        this.grid = cube;
-        this.camera.lookAt( this.grid );
-        this.camera.rotation.set(0,0,0);
-        var cv = this.$('canvas');
+        that.scene.add(cube);
+        that.grid = cube;
+        that.camera.lookAt(that.grid);
+        that.camera.rotation.set(0, 0, 0);
+        cv = that.$('canvas');
 
-        this.renderer = new THREE.WebGLRenderer( { antialias: true, clearColor: 0x888888, clearAlpha: 255, canvas: that.$('canvas')[0]} );
-        this.renderer.sortObjects = false;
-        this.renderer.setSize( cv.innerHeight(), cv.innerWidth());
+        that.renderer = new THREE.WebGLRenderer({antialias: true, clearColor: 0x888888, clearAlpha: 255, canvas: that.$('canvas')[0]});
+        that.renderer.sortObjects = false;
+        that.renderer.setSize(cv.innerHeight(), cv.innerWidth());
 
-           $(window).on('resize', function() { that.on_resize(); } )
+        $(window).on('resize', function () { that.on_resize(); });
 
-        this.animate();
-        that.on_resize(); 
+        that.animate();
+        that.on_resize();
     },
     events : {
     },
-    on_resize : function( ) {
-        var that = this;
+    on_resize : function () {
+        "use strict";
+        var that, width, cv;
+        that = this;
 
-        var width = that.$el.innerWidth();
-        var cv = this.$el;
-        if( this.renderer ) { 
-            this.renderer.setSize( width* this.camera.aspect, width);
+        width = that.$el.innerWidth();
+        cv = that.$el;
+        if (that.renderer) {
+            that.renderer.setSize(width * that.camera.aspect, width);
         }
 
     },
-    animate : function() {
-        var that = this; 
-        requestAnimationFrame( function() { that.animate() } );
-        this.render();
+    animate : function () {
+        "use strict";
+        var that = this;
+        requestAnimationFrame(function () { that.animate(); });
+        that.render();
 
     },
-    render : function() {
-
-        this.renderer.render( this.scene, this.camera );
-
-
+    render : function () {
+        "use strict";
+        var that = this;
+        that.renderer.render(that.scene, that.camera);
     },
-    update_grid : function( model, obj ) {
-        var that = this;
-        var grid = that.options.app.models.grid;
-        that.grid.position.copy( grid.get('position') );
-        that.grid.rotation.copy( grid.get('rotation') );
-    }, 
-    update_cam : function( model, obj) { 
-        var that = this;
-        var cam = that.options.app.models.camera;
+    update_grid : function (model, obj) {
+        "use strict";
+        var that, grid;
+        that = this;
+        grid = that.options.app.models.grid;
+        that.grid.position.copy(grid.get('position'));
+        that.grid.rotation.copy(grid.get('rotation'));
+    },
+    update_cam : function (model, obj) {
+        "use strict";
+        var that, cam;
+        that = this;
+        cam = that.options.app.models.camera;
 
-        that.camera.position.copy( cam.get('position') );
-        that.camera.rotation.copy( cam.get('rotation') );
+        that.camera.position.copy(cam.get('position'));
+        that.camera.rotation.copy(cam.get('rotation'));
 
 
     }
@@ -489,9 +497,8 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode, app: options.app });
         that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
 
-        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function(t){that.on_main_viewer_render(t);} });
+        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
         that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
-        
 
         main_viewer_frame.on('load', function () { that.main_viewer.trigger('load'); });
         camera_viewer_frame.on('load', function () { that.camera_viewer.trigger('load'); });
@@ -507,21 +514,25 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         'load' : 'on_load',
         'click .close_popover' : 'on_click_close_popover'
     },
-    on_main_viewer_render : function (t){
+    on_main_viewer_render : function (t) {
         "use strict";
         var that;
         that = this;
-        _.each( t.objects, function( o,i ) {
-            var elem, loc ;
+        _.each(t.objects, function (o, i) {
+            var elem, loc, placement;
             loc = t.to_screen_xy(i);
-            elem = $('<p style="position:absolute; z-index:4; top: '+ loc.y +'px; left: '+ loc.x +'px;" data-toggle="popover" ></p>');
+            elem = $('<p style="position:absolute; z-index:4; top: ' + loc.y + 'px; left: ' + loc.x + 'px;" data-toggle="popover" ></p>');
             that.$el.append(elem);
-            elem.popover({ 
-                            'placement':'top',
-                            'html': true,
-                            'title': '3D element',
-                            'content': 'Click and drag to move. Hold shift and drag to rotate. <input type="button" class="close_popover btn" value="close">'
-                        });
+            placement = 'top';
+            if (i % 2) {
+                placement = 'bottom';
+            }
+            elem.popover({
+                'placement' : placement,
+                'html': true,
+                'title': '3D element',
+                'content': 'Click and drag to move. Hold shift and drag to rotate. <input type="button" class="close_popover btn" value="close">'
+            });
             elem.popover('toggle');
         });
     },
@@ -590,8 +601,13 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
 SimCam.initialize = function (options) {
     "use strict";
-    var app;
-    app = new SimCam.Constructor.Router.App(options);
-    Backbone.history.start();
+    var app, image_preload;
+    image_preload = new Image();
+    image_preload.onload = function () {
+        app = new SimCam.Constructor.Router.App(options);
+        Backbone.history.start();
+    };
+    image_preload.src = '/img/grid.gif';
+    return app;
 };
 
