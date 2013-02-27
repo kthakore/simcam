@@ -195,8 +195,11 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
         var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
 
-
+        this.controls.enabled = true;
         if ( this.SELECTED ) {
+          
+            this.controls.enabled = false; 
+            console.log( this.controls.enabled);
 
             var intersects = ray.intersectObject( this.plane );
             if( intersects[0] && intersects[0].point ) {
@@ -333,6 +336,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
             that.rendered = true;
             that.trigger('rendered');
         }
+    
 	    that.controls.update();
         that.renderer.render( that.scene, that.camera );
     }
@@ -403,7 +407,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode, app: options.app });
         that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
 
-        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : that.on_main_viewer_render });
+        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function(t){that.on_main_viewer_render(t);} });
         that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
         
 
@@ -424,7 +428,21 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
     on_main_viewer_render : function (t){
         "use strict";
         var that;
-        console.log( t );
+        that = this;
+        _.each( t.objects, function( o,i ) {
+            var elem, loc ;
+            loc = t.to_screen_xy(i);
+            elem = $('<p style="position:absolute; z-index:4; top: '+ loc.y +'px; left: '+ loc.x +'px;" data-toggle="popover" ></p>');
+            that.$el.append(elem);
+            console.log(elem[0]);
+            elem.popover({ 
+                            'placement':'top',
+                            'html': true,
+                            'title': '3D element',
+                            'content': 'Click and drag to move. Hold shift and drag to rotate. <input type="button" class="close_popover btn" value="close">'
+                        });
+            elem.popover('toggle');
+        });
     },
     on_load : function () {
         "use strict";
