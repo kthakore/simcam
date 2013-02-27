@@ -210,7 +210,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
                     vector.sub(this.SELECTED.position, loc);
 
                     // Direction we are already facing (without rotation)
-                    forward = new THREE.Vector3(0 ,0, -1);
+                    forward = new THREE.Vector3(0, 0, -1);
 
                     // Direction we want to be facing (towards mouse pointer)
                     target = vector.normalize();
