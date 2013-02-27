@@ -50,7 +50,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         that.offset = new THREE.Vector3();
 
         that.camera = new THREE.PerspectiveCamera(35, that.$el.innerWidth() / window.innerHeight, 1, 10000);
-        that.camera.position.set(65, 65, 65);
+        that.camera.position.set(45, 45, 45);
 
         that.controls = new THREE.OrbitControls(that.camera, that.$('canvas')[0]);
         that.controls.rotateSpeed = 1.0;
@@ -185,49 +185,48 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     on_canvas_mmove : function (event) {
         "use strict";
         event.preventDefault();
-
-        this.mouse.x = (event.clientX / $(this.el).innerWidth()) * 2 - 1;
+        var vector, ray, intersects, loc, forward, target, axis, sinAngle, cosAngle, angle, rotation_measuring_mesh;
+        this.mouse.x = (event.clientX / this.$el.innerWidth()) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
         //
 
-        var vector = new THREE.Vector3( this.mouse.x, this.mouse.y, 0.5 );
-        this.projector.unprojectVector( vector, this.camera );
+        vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
+        this.projector.unprojectVector(vector, this.camera);
 
-        var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
+        ray = new THREE.Ray(this.camera.position, vector.subSelf(this.camera.position).normalize());
 
         this.controls.enabled = true;
-        if ( this.SELECTED ) {
-          
-            this.controls.enabled = false; 
-            console.log( this.controls.enabled);
+        if (this.SELECTED) {
+            this.controls.enabled = false;
+            console.log(this.controls.enabled);
 
-            var intersects = ray.intersectObject( this.plane );
-            if( intersects[0] && intersects[0].point ) {
-                if( event.shiftKey )
-                {
-                    var loc =  intersects[ 0 ].point.subSelf( this.offset ); 
-                    var vector = new THREE.Vector3(0,0,0);
+            intersects = ray.intersectObject(this.plane);
+            if (intersects[0] && intersects[0].point) {
+                if (event.shiftKey) {
+                
+                    loc = intersects[0].point.subSelf(this.offset);
+                    vector = new THREE.Vector3(0, 0, 0);
 
-                    vector.sub( this.SELECTED.position, loc );
+                    vector.sub(this.SELECTED.position, loc);
 
-                                        // Direction we are already facing (without rotation)
-            var forward = new THREE.Vector3(0,0,-1);
+                    // Direction we are already facing (without rotation)
+                    forward = new THREE.Vector3(0 ,0, -1);
 
-            // Direction we want to be facing (towards mouse pointer)
-            var target = vector.normalize();
+                    // Direction we want to be facing (towards mouse pointer)
+                    target = vector.normalize();
 
-            // Axis and angle of rotation
-            var axis = new THREE.Vector3().cross(forward, target);
-            var sinAngle = axis.length(); // |u x v| = |u|*|v|*sin(a)
-            var cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
-            var angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
-            axis.normalize();
-           
-            var a = new THREE.Mesh();
-            a.useQuaternion = true;
-            a.quaternion.setFromAxisAngle(axis, angle);
-                this.SELECTED.rotation.set( a.quaternion.x, a.quaternion.y, a.quaternion.z );
-                this.SELECTED.rotation.multiplyScalar( 0.5 );
+                    // Axis and angle of rotation
+                    axis = new THREE.Vector3().cross(forward, target);
+                    sinAngle = axis.length(); // |u x v| = |u|*|v|*sin(a)
+                    cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
+                    angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
+                    axis.normalize();
+                   
+                    rotation_measuring_mesh = new THREE.Mesh();
+                    rotation_measuring_mesh.useQuaternion = true;
+                    rotation_measuring_mesh.quaternion.setFromAxisAngle(axis, angle);
+                    this.SELECTED.rotation.set(rotation_measuring_mesh.quaternion.x, rotation_measuring_mesh.quaternion.y, rotation_measuring_mesh.quaternion.z);
+                    this.SELECTED.rotation.multiplyScalar(0.5);
 
                 }
                 else {
