@@ -30872,7 +30872,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 	}
 
 	function onMouseDown( event ) {
-        console.log( 'asdsad' );
 
         if ( ! _this.enabled ) return; 
 

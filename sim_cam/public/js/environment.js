@@ -40,10 +40,12 @@ SimCam.Template.SideMenu = {
 
 /*View Constructors*/
 SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
-    initialize: function () {
+    initialize: function (options) {
         "use strict";
         var that, light, jsonLoader, xplane, yplane, zplane;
         that = this;
+
+        that.bind('rendered', function () { if (options.render_cb) { options.render_cb(this); } }, that);
         that.mouse =  new THREE.Vector2();
         that.offset = new THREE.Vector3();
 
@@ -93,7 +95,6 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
             cam_obj.scale.set(1, 1, 1);
             cam_obj.rotation.set(0, 0, 0);
-            console.log(that.options.app.models.camera);
             cam_obj.model = that.options.app.models.camera;
             //					cam_obj.castShadow = false;
             //					cam_obj.receiveShadow = false;
@@ -158,7 +159,23 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
            window.addEventListener( 'resize', onWindowResize, false );
            */
         $(window).on('resize', function () {that.on_resize(); });
-        this.animate();
+        that.animate();
+    },
+    to_screen_xy: function (o) {
+        "use strict";
+        var that, pos, camera, jqdiv, projScreenMat, object, obj;
+        that = this;
+        camera = that.camera;
+        jqdiv = that.$el;
+        obj = that.objects[o];
+        pos = obj.position.clone();
+        projScreenMat = new THREE.Matrix4();
+        projScreenMat.multiply(camera.projectionMatrix, camera.matrixWorldInverse);
+        projScreenMat.multiplyVector3(pos);
+
+        return { x: (pos.x + 1) * jqdiv.width() / 2 + jqdiv.offset().left,
+             y: (-pos.y + 1) * jqdiv.height() / 2 + jqdiv.offset().top };
+
     },
     events : {
         'mousemove canvas' : 'on_canvas_mmove',
@@ -166,89 +183,88 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         'mouseup canvas' : 'on_canvas_mup'
     },
     on_canvas_mmove : function (event) {
-                
-				event.preventDefault();
+        "use strict";
+        event.preventDefault();
 
-			    this.mouse.x = ( event.clientX / $(this.el).innerWidth() ) * 2 - 1;
-				this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+        this.mouse.x = (event.clientX / $(this.el).innerWidth()) * 2 - 1;
+        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        //
 
-				//
+        var vector = new THREE.Vector3( this.mouse.x, this.mouse.y, 0.5 );
+        this.projector.unprojectVector( vector, this.camera );
 
-				var vector = new THREE.Vector3( this.mouse.x, this.mouse.y, 0.5 );
-				this.projector.unprojectVector( vector, this.camera );
-
-				var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
-
-
-				if ( this.SELECTED ) {
-
-					var intersects = ray.intersectObject( this.plane );
-                    if( intersects[0] && intersects[0].point ) {
-                        if( event.shiftKey )
-                        {
-                            var loc =  intersects[ 0 ].point.subSelf( this.offset ); 
-                            var vector = new THREE.Vector3(0,0,0);
-
-                            vector.sub( this.SELECTED.position, loc );
-
-                                                // Direction we are already facing (without rotation)
-                    var forward = new THREE.Vector3(0,0,-1);
-
-                    // Direction we want to be facing (towards mouse pointer)
-                    var target = vector.normalize();
-
-                    // Axis and angle of rotation
-                    var axis = new THREE.Vector3().cross(forward, target);
-                    var sinAngle = axis.length(); // |u x v| = |u|*|v|*sin(a)
-                    var cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
-                    var angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
-                    axis.normalize();
-                   
-                    var a = new THREE.Mesh();
-                    a.useQuaternion = true;
-                    a.quaternion.setFromAxisAngle(axis, angle);
-                        this.SELECTED.rotation.set( a.quaternion.x, a.quaternion.y, a.quaternion.z );
-                        this.SELECTED.rotation.multiplyScalar( 0.5 );
-       
-                        }
-                        else {
-					       this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
-                        }
-                        this.SELECTED.model.trigger( 'move', this.SELECTED.model, this.SELECTED );
-                    }
-					return;
-
-				}
+        var ray = new THREE.Ray( this.camera.position, vector.subSelf( this.camera.position ).normalize() );
 
 
-				var intersects = ray.intersectObjects( this.objects );
+        if ( this.SELECTED ) {
 
-				if ( intersects.length > 0 ) {
+            var intersects = ray.intersectObject( this.plane );
+            if( intersects[0] && intersects[0].point ) {
+                if( event.shiftKey )
+                {
+                    var loc =  intersects[ 0 ].point.subSelf( this.offset ); 
+                    var vector = new THREE.Vector3(0,0,0);
 
-					if ( this.INTERSECTED != intersects[ 0 ].object ) {
+                    vector.sub( this.SELECTED.position, loc );
 
-						if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+                                        // Direction we are already facing (without rotation)
+            var forward = new THREE.Vector3(0,0,-1);
 
-						this.INTERSECTED = intersects[ 0 ].object;
-						this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
+            // Direction we want to be facing (towards mouse pointer)
+            var target = vector.normalize();
 
-						this.plane.position.copy( this.INTERSECTED.position );
-						this.plane.lookAt( this.camera.position );
-                        this.plane.rotation.copy( this.camera.rotation );
+            // Axis and angle of rotation
+            var axis = new THREE.Vector3().cross(forward, target);
+            var sinAngle = axis.length(); // |u x v| = |u|*|v|*sin(a)
+            var cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
+            var angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
+            axis.normalize();
+           
+            var a = new THREE.Mesh();
+            a.useQuaternion = true;
+            a.quaternion.setFromAxisAngle(axis, angle);
+                this.SELECTED.rotation.set( a.quaternion.x, a.quaternion.y, a.quaternion.z );
+                this.SELECTED.rotation.multiplyScalar( 0.5 );
 
-					}
+                }
+                else {
+                   this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
+                }
+                this.SELECTED.model.trigger( 'move', this.SELECTED.model, this.SELECTED );
+            }
+            return;
 
-				    this.el.style.cursor = 'pointer';
+        }
 
-				} else {
 
-					if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+        var intersects = ray.intersectObjects( this.objects );
 
-					this.INTERSECTED = null;
+        if ( intersects.length > 0 ) {
 
-					this.el.style.cursor = 'auto';
+            if ( this.INTERSECTED != intersects[ 0 ].object ) {
 
-				}
+                if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+
+                this.INTERSECTED = intersects[ 0 ].object;
+                this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
+
+                this.plane.position.copy( this.INTERSECTED.position );
+                this.plane.lookAt( this.camera.position );
+                this.plane.rotation.copy( this.camera.rotation );
+
+            }
+
+            this.el.style.cursor = 'pointer';
+
+        } else {
+
+            if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+
+            this.INTERSECTED = null;
+
+            this.el.style.cursor = 'auto';
+
+        }
 
 
     },
@@ -306,15 +322,19 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     animate : function () {
                 var that = this; 
 				requestAnimationFrame( function() { that.animate() } );
-				this.render();
+				that.render();
     }, 
     render : function () {
+        "use strict";
+        var that;
+        that = this;
 
-				this.controls.update();
-
-				this.renderer.render( this.scene, this.camera );
-
-
+        if (that.rendered === undefined && that.objects.length >0 ) {
+            that.rendered = true;
+            that.trigger('rendered');
+        }
+	    that.controls.update();
+        that.renderer.render( that.scene, that.camera );
     }
 });
 
@@ -383,8 +403,9 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode, app: options.app });
         that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
 
-        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app });
+        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : that.on_main_viewer_render });
         that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
+        
 
         main_viewer_frame.on('load', function () { that.main_viewer.trigger('load'); });
         camera_viewer_frame.on('load', function () { that.camera_viewer.trigger('load'); });
@@ -399,6 +420,11 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
     events: {
         'load' : 'on_load',
         'click .close_popover' : 'on_click_close_popover'
+    },
+    on_main_viewer_render : function (t){
+        "use strict";
+        var that;
+        console.log( t );
     },
     on_load : function () {
         "use strict";
@@ -459,8 +485,6 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.view = new SimCam.Constructor.View.Main({ el : env_frame_body, mode: options.mode, app: that });
 	    that.view.render();
-
-
     }
 });
 
