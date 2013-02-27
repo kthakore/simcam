@@ -50,7 +50,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         that.camera = new THREE.PerspectiveCamera(35, that.$el.innerWidth() / window.innerHeight, 1, 10000);
         that.camera.position.set(65, 65, 65);
 
-        that.controls = new THREE.OrbitControls(that.camera);
+        that.controls = new THREE.OrbitControls(that.camera, that.$('canvas')[0]);
         that.controls.rotateSpeed = 1.0;
         that.controls.zoomSpeed = 1.2;
         that.controls.panSpeed = 0.8;

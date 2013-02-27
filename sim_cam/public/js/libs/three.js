@@ -30698,7 +30698,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 	this.center = new THREE.Vector3();
 
-	this.userZoom = true;
+	this.userZoom = false;
 	this.userZoomSpeed = 1.0;
 
 	this.userRotate = true;
@@ -30872,6 +30872,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 	}
 
 	function onMouseDown( event ) {
+        console.log( 'asdsad' );
 
         if ( ! _this.enabled ) return; 
 
@@ -30893,8 +30894,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		}
 
-		document.addEventListener( 'mousemove', onMouseMove, false );
-		document.addEventListener( 'mouseup', onMouseUp, false );
+		domElement.addEventListener( 'mousemove', onMouseMove, false );
+		domElement.addEventListener( 'mouseup', onMouseUp, false );
 
 	}
 
@@ -30937,8 +30938,8 @@ THREE.OrbitControls = function ( object, domElement ) {
 
 		if ( ! scope.userRotate ) return;
 
-		document.removeEventListener( 'mousemove', onMouseMove, false );
-		document.removeEventListener( 'mouseup', onMouseUp, false );
+		domElement.removeEventListener( 'mousemove', onMouseMove, false );
+		domElement.removeEventListener( 'mouseup', onMouseUp, false );
 
 		state = STATE.NONE;
 
@@ -30961,7 +30962,6 @@ THREE.OrbitControls = function ( object, domElement ) {
 		}
 
 	}
-
 	this.domElement.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 	this.domElement.addEventListener( 'mousedown', onMouseDown, false );
 	this.domElement.addEventListener( 'mousewheel', onMouseWheel, false );
