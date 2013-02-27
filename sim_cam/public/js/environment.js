@@ -203,7 +203,6 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
             intersects = ray.intersectObject(this.plane);
             if (intersects[0] && intersects[0].point) {
                 if (event.shiftKey) {
-                
                     loc = intersects[0].point.subSelf(this.offset);
                     vector = new THREE.Vector3(0, 0, 0);
 
@@ -221,38 +220,36 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
                     cosAngle = forward.dot(target); // u . v = |u|*|v|*cos(a)
                     angle = Math.atan2(sinAngle, cosAngle); // atan2(sin(a),cos(a)) = a
                     axis.normalize();
-                   
                     rotation_measuring_mesh = new THREE.Mesh();
                     rotation_measuring_mesh.useQuaternion = true;
                     rotation_measuring_mesh.quaternion.setFromAxisAngle(axis, angle);
                     this.SELECTED.rotation.set(rotation_measuring_mesh.quaternion.x, rotation_measuring_mesh.quaternion.y, rotation_measuring_mesh.quaternion.z);
                     this.SELECTED.rotation.multiplyScalar(0.5);
 
+                } else {
+                    this.SELECTED.position.copy(intersects[0].point.subSelf(this.offset));
                 }
-                else {
-                   this.SELECTED.position.copy( intersects[ 0 ].point.subSelf( this.offset ) );
-                }
-                this.SELECTED.model.trigger( 'move', this.SELECTED.model, this.SELECTED );
+                this.SELECTED.model.trigger('move', this.SELECTED.model, this.SELECTED);
             }
             return;
 
         }
 
 
-        var intersects = ray.intersectObjects( this.objects );
+        intersects = ray.intersectObjects(this.objects);
 
-        if ( intersects.length > 0 ) {
+        if (intersects.length > 0) {
 
-            if ( this.INTERSECTED != intersects[ 0 ].object ) {
+            if (this.INTERSECTED !== intersects[0].object) {
 
-                if ( this.INTERSECTED ) this.INTERSECTED.material.color.setHex( this.INTERSECTED.currentHex );
+                if (this.INTERSECTED) this.INTERSECTED.material.color.setHex(this.INTERSECTED.currentHex);
 
                 this.INTERSECTED = intersects[ 0 ].object;
                 this.INTERSECTED.currentHex = this.INTERSECTED.material.color.getHex();
 
-                this.plane.position.copy( this.INTERSECTED.position );
-                this.plane.lookAt( this.camera.position );
-                this.plane.rotation.copy( this.camera.rotation );
+                this.plane.position.copy(this.INTERSECTED.position);
+                this.plane.lookAt(this.camera.position);
+                this.plane.rotation.copy(this.camera.rotation);
 
             }
 
