@@ -198,7 +198,6 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         this.controls.enabled = true;
         if (this.SELECTED) {
             this.controls.enabled = false;
-            console.log(this.controls.enabled);
 
             intersects = ray.intersectObject(this.plane);
             if (intersects[0] && intersects[0].point) {
@@ -339,11 +338,98 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 });
 
 SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
-    initialize: function (options) {
-        "use strict";
+    initialize: function(options) {
+        var that = this;
+        console.log(options.app.models.camera.toJSON()); 
+        that.options = options;
+
+        var cc = options.app.models.camera.toJSON(); 
+        this.camera = new THREE.PerspectiveCamera( cc.fov, cc.ar , cc.near, cc.far );
+        this.camera.position.set(0,0,15);
+
+        this.scene = new THREE.Scene();
+        this.scene.add( new THREE.AmbientLight( 0x505050 ) );
+
+        var light = new THREE.SpotLight( 0xffffff, 1.5 );
+        light.position.set( 0, 500, 2000 );
+        light.castShadow = true;
+
+        light.shadowCameraNear = 200;
+        light.shadowCameraFar = this.camera.far;
+        light.shadowCameraFov = 50;
+
+        light.shadowBias = -0.00022;
+        light.shadowDarkness = 0.5;
+
+        light.shadowMapWidth = 2048;
+        light.shadowMapHeight = 2048;
+        this.scene.add( light);
+
+        var material = new THREE.MeshLambertMaterial({
+            map: THREE.ImageUtils.loadTexture("img/grid.gif")
+        });
+
+        material.map.needsUpdate = true;
+
+        var cube = new THREE.Mesh(
+            new THREE.CubeGeometry( 8, 5, 0.1 ),
+            material
+            );
+        cube.overdraw = true;
+        that.scene.add( cube ); 
+        this.grid = cube;
+        this.camera.lookAt( this.grid );
+        this.camera.rotation.set(0,0,0);
+        var cv = this.$('canvas');
+
+        this.renderer = new THREE.WebGLRenderer( { antialias: true, clearColor: 0x888888, clearAlpha: 255, canvas: that.$('canvas')[0]} );
+        this.renderer.sortObjects = false;
+        this.renderer.setSize( cv.innerHeight(), cv.innerWidth());
+
+           $(window).on('resize', function() { that.on_resize(); } )
+
+        this.animate();
+        that.on_resize(); 
+    },
+    events : {
+    },
+    on_resize : function( ) {
+        var that = this;
+
+        var width = that.$el.innerWidth();
+        var cv = this.$el;
+        if( this.renderer ) { 
+            this.renderer.setSize( width* this.camera.aspect, width);
+        }
+
+    },
+    animate : function() {
+        var that = this; 
+        requestAnimationFrame( function() { that.animate() } );
+        this.render();
+
+    },
+    render : function() {
+
+        this.renderer.render( this.scene, this.camera );
+
+
+    },
+    update_grid : function( model, obj ) {
+        var that = this;
+        var grid = that.options.app.models.grid;
+        that.grid.position.copy( grid.get('position') );
+        that.grid.rotation.copy( grid.get('rotation') );
+    }, 
+    update_cam : function( model, obj) { 
+        var that = this;
+        var cam = that.options.app.models.camera;
+
+        that.camera.position.copy( cam.get('position') );
+        that.camera.rotation.copy( cam.get('rotation') );
+
 
     }
-
 });
 
 
@@ -430,7 +516,6 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
             loc = t.to_screen_xy(i);
             elem = $('<p style="position:absolute; z-index:4; top: '+ loc.y +'px; left: '+ loc.x +'px;" data-toggle="popover" ></p>');
             that.$el.append(elem);
-            console.log(elem[0]);
             elem.popover({ 
                             'placement':'top',
                             'html': true,
