@@ -387,6 +387,10 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that.renderer.sortObjects = false;
         that.renderer.setSize(cv.innerHeight(), cv.innerWidth());
 
+        options.app.models.grid.bind('move', function (o, m) {that.update_grid(o, m); });
+        options.app.models.camera.bind('move', function (o, m) {that.update_cam(o, m); });
+
+
         $(window).on('resize', function () { that.on_resize(); });
 
         that.animate();
@@ -422,9 +426,8 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         "use strict";
         var that, grid;
         that = this;
-        grid = that.options.app.models.grid;
-        that.grid.position.copy(grid.get('position'));
-        that.grid.rotation.copy(grid.get('rotation'));
+        that.grid.position.copy(obj.position);
+        that.grid.rotation.copy(obj.rotation);
     },
     update_cam : function (model, obj) {
         "use strict";
@@ -432,11 +435,15 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that = this;
         cam = that.options.app.models.camera;
 
-        that.camera.position.copy(cam.get('position'));
-        that.camera.rotation.copy(cam.get('rotation'));
-
-
+        that.camera.position.copy(obj.position);
+        that.camera.rotation.copy(obj.rotation);
+    },
+    pinhole_update_camera : function () {
+        "use strict";
+        var that = this;
+        
     }
+    
 });
 
 
