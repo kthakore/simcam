@@ -30,8 +30,7 @@ SimCam.Template.SideMenu = {
                 '<li><a href="javascript:void(0)">X: <input type="text" name="u" class="span1 pinhole_sidemenu_input"/></a></li>' +
                 '<li><a href="javascript:void(0)">Y: <input type="text" name="v" class="span1 pinhole_sidemenu_input"/></a></li>' +
                 '<li class="nav-header">Aspect Ratio</li>' +
-                '<li><a href="javascript:void(0)"><input type="text" name="aspect_ratio" class="span1 pinhole_sidemenu_input"/></a></li>' +
-                '<li><input type="button" class="btn btn-primary pinhole_sidemenu_apply_btn" value="Apply" /></li>',
+                '<li><a href="javascript:void(0)"><input type="text" name="aspect" class="span1 pinhole_sidemenu_input"/></a></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -347,8 +346,16 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that = this;
         that.options = options;
 
-        cc = options.app.models.camera.toJSON();
-        that.camera = new THREE.PerspectiveCamera(cc.fov, cc.ar, cc.near, cc.far);
+        that.camera = new THREE.PerspectiveCamera();
+        cc = options.app.models.camera;
+
+        cc.set('fov', that.camera.fov);
+        cc.set('aspect', that.camera.aspect);
+        cc.set('far', that.camera.far);
+        cc.set('near', that.camera.near);
+        cc.set('u', 200);
+        cc.set('v', 200);
+        cc.trigger('set', cc);
         that.camera.position.set(0, 0, 15);
 
         that.scene = new THREE.Scene();
@@ -389,6 +396,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         options.app.models.grid.bind('move', function (o, m) {that.update_grid(o, m); });
         options.app.models.camera.bind('move', function (o, m) {that.update_cam(o, m); });
+        options.app.models.camera.bind('update_params', function (m) { that.on_update_params(m); });
 
 
         $(window).on('resize', function () { that.on_resize(); });
@@ -400,10 +408,12 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
     },
     on_resize : function () {
         "use strict";
-        var that, width, cv;
+        var that, width, cv, camera;
         that = this;
+        camera = that.options.app.models.camera;
 
         width = that.$el.innerWidth();
+
         cv = that.$el;
         if (that.renderer) {
             that.renderer.setSize(width * that.camera.aspect, width);
@@ -438,12 +448,17 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that.camera.position.copy(obj.position);
         that.camera.rotation.copy(obj.rotation);
     },
-    pinhole_update_camera : function () {
+    on_update_params: function (model) {
         "use strict";
-        var that = this;
-        
+        var that, attrs;
+        that = this;
+        _.each(model.attributes, function (o, i) {
+            that.camera[i] = o;
+            console.log('i' + ' ' + i + ' ' + that.camera[i]);
+        });
+        that.camera.updateProjectionMatrix();
+        that.render();
     }
-    
 });
 
 
@@ -454,8 +469,10 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         that = this;
         that.app = options.app;
         that.render(options.mode);
+        that.app.models.camera.bind('set', that.on_camera_model_set, that);
     },
     events : {
+        'change .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input'
     },
     render: function (mode) {
         "use strict";
@@ -466,6 +483,39 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
             template = 'Sidemenu template not implemented for: ' + mode.type;
         }
         that.$('.body').html(template);
+
+    },
+    on_camera_model_set: function (model) {
+        "use strict";
+        var that, attrs;
+        that = this;
+        attrs = model.attributes;
+        _.each(attrs, function (value, name) {
+            that.$('[name="' + name + '"]').val(value);
+        });
+    },
+    on_change_pinhole_sidemenu_input : function (e) {
+        "use strict";
+        var that, cur_target, name, value, cm, u, v;
+        that = this;
+        cur_target = $(e.currentTarget);
+        name = cur_target.attr('name');
+        value = cur_target.val();
+        cm = that.app.models.camera;
+        cm.set(name, value);
+
+        if (name === 'u') {
+            u = value;
+            v = cm.get('v');
+            cm.set('aspect', u / v);
+            that.$('[name="aspect"]').val(u / v);
+        } else if (name === 'v') {
+            v = value;
+            u = cm.get('u');
+            cm.set('aspect', u / v);
+            that.$('[name="aspect"]').val(u / v);
+        }
+        cm.trigger('update_params', cm);
 
     }
 });
@@ -574,7 +624,7 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
-        that.models = { camera: new SimCam.Constructor.Model.Generic(), grid: new SimCam.Constructor.Model.Generic() };
+        that.models = { camera: new SimCam.Constructor.Model.Generic({ }), grid: new SimCam.Constructor.Model.Generic() };
 
         env_frame = $(SimCam.Template.MainFrame);
 
