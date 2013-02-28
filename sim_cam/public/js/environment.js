@@ -180,7 +180,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     events : {
         'mousemove canvas' : 'on_canvas_mmove',
         'mousedown canvas' : 'on_canvas_mdown',
-        'mouseup canvas' : 'on_canvas_mup'
+        'mouseup canvas'   : 'on_canvas_mup'
     },
     on_canvas_mmove : function (event) {
         "use strict";
@@ -188,7 +188,6 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         var vector, ray, intersects, loc, forward, target, axis, sinAngle, cosAngle, angle, rotation_measuring_mesh;
         this.mouse.x = (event.clientX / this.$el.innerWidth()) * 2 - 1;
         this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        //
 
         vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
         this.projector.unprojectVector(vector, this.camera);
