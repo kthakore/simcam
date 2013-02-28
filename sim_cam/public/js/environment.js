@@ -30,7 +30,12 @@ SimCam.Template.SideMenu = {
                 '<li><a href="javascript:void(0)">X: <input type="text" name="u" class="span1 pinhole_sidemenu_input"/></a></li>' +
                 '<li><a href="javascript:void(0)">Y: <input type="text" name="v" class="span1 pinhole_sidemenu_input"/></a></li>' +
                 '<li class="nav-header">Aspect Ratio</li>' +
-                '<li><a href="javascript:void(0)"><input type="text" name="aspect" class="span1 pinhole_sidemenu_input"/></a></li>',
+                '<li><a href="javascript:void(0)"><input type="text" name="aspect" class="span1 pinhole_sidemenu_input"/></a></li>' +
+                '<li class="nav-header">Far</li>' +
+                '<li><a href="javascript:void(0)"><input type="text" name="far" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>' +
+                '<li class="nav-header">Near</li>' +
+                '<li><a href="javascript:void(0)"><input type="text" name="near" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>',
+
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -412,7 +417,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that = this;
         camera = that.options.app.models.camera;
 
-        width = that.$el.innerWidth();
+        width = camera.get('u');
 
         cv = that.$el;
         if (that.renderer) {
@@ -453,10 +458,11 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that, attrs;
         that = this;
         _.each(model.attributes, function (o, i) {
+            
             that.camera[i] = o;
-            console.log('i' + ' ' + i + ' ' + that.camera[i]);
         });
         that.camera.updateProjectionMatrix();
+        that.on_resize();
         that.render();
     }
 });
