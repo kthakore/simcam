@@ -401,7 +401,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         options.app.models.grid.bind('move', function (o, m) {that.update_grid(o, m); });
         options.app.models.camera.bind('move', function (o, m) {that.update_cam(o, m); });
-        options.app.models.camera.bind('update_params', function (m) { that.on_update_params(m); });
+        options.app.models.camera.bind('update_pinhole_params', function (m) { that.on_update_pinhole_params(m); });
 
 
         $(window).on('resize', function () { that.on_resize(); });
@@ -453,7 +453,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that.camera.position.copy(obj.position);
         that.camera.rotation.copy(obj.rotation);
     },
-    on_update_params: function (model) {
+    on_update_pinhole_params: function (model) {
         "use strict";
         var that, attrs;
         that = this;
@@ -478,7 +478,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         that.app.models.camera.bind('set', that.on_camera_model_set, that);
     },
     events : {
-        'change .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input'
+        'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input'
     },
     render: function (mode) {
         "use strict";
@@ -521,7 +521,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
             cm.set('aspect', u / v);
             that.$('[name="aspect"]').val(u / v);
         }
-        cm.trigger('update_params', cm);
+        cm.trigger('update_pinhole_params', cm);
 
     }
 });
