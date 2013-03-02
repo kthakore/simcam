@@ -4,7 +4,14 @@
 /*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame */
 /*jshint globalstrict: true*/
 
+/**TODO:
+ * Template for Calibration
+ * Making 
+ *
+ */
+
 var SimCam = {
+    "Version"  : 0.001,
     "Template" : {},
     "Constructor" : {
         "Collection": {},
@@ -35,7 +42,7 @@ SimCam.Template.SideMenu = {
                 '<li><a href="javascript:void(0)"><input type="text" name="far" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>' +
                 '<li class="nav-header">Near</li>' +
                 '<li><a href="javascript:void(0)"><input type="text" name="near" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>',
-
+    "calibration" : '',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -580,6 +587,9 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         "use strict";
         var that;
         that = this;
+        if (!that.options.learning_environment) {
+            return;
+        }
         _.each(t.objects, function (o, i) {
             var elem, loc, placement;
             loc = t.to_screen_xy(i);
