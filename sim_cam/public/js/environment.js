@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame */
+/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary */
 /*jshint globalstrict: true*/
 
 /**TODO:
@@ -50,7 +50,7 @@ SimCam.Template.SideMenu = {
                 '<li class="nav-header">Tangential Distortions</li>' +
                 '<li><a href="javascript:void(0)">TX: <input type="text" name="t1" class="span1 distortions_sidemenu_input"/></a></li>' +
                 '<li class="nav-header">Far</li>' +
-                '<li><a href="javascript:void(0)">TY: <input type="text" name="t2" class="span1 distortions_sidemenu_input" disabled="true" /></a></li>',
+                '<li><a href="javascript:void(0)">TY: <input type="text" name="t2" class="span1 distortions_sidemenu_input" /></a></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -459,6 +459,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that = this;
         that.renderer.render(that.scene, that.camera);
         if (that.update_current_data_url) {
+            that.current_image = that.$('canvas')[0].toDataURL();
 
             that.on_update_current_image();
             that.update_current_data_url = false;
@@ -483,20 +484,37 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that.update_current_data_url = true;
 
     },
+    get_mean_image : function (data_url) {
+        "use strict";
+        var that, total, sum, arr;
+        that = this;
+
+        arr = Base64Binary.decode(data_url);
+        total = arr.length;
+
+        sum = 0;
+        _.each(arr, function (obj) {
+            sum += obj;
+        });
+
+        return (sum / total);
+    },
     update_distortion_image : function () {
         "use strict";
         var that, ImageConstructor, camera_model, image_model, params, distortion_url_bit;
         that = this;
-
+        if (that.loading_image) {
+            return;
+        }
+        that.loading_image = true;
         camera_model = that.options.app.models.camera;
 
         distortion_url_bit = '';
-        that.loading_image = true;
         params = ['t1', 't2', 'r1', 'r2', 'r3'];
         _.each(params, function (param) {
             var param_model = camera_model.get(param);
             if (param_model) {
-                distortion_url_bit += param + '=' + param_model;
+                distortion_url_bit += param + '=' + param_model + '&';
             }
         });
        
@@ -507,7 +525,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             "type" : 'base64'
         });
         image_model.save({ },
-            { 
+            {
                 success : function (data, textStatus, jqXHR) {
                     var dist_url, image, image_element;
                     dist_url  = '/api/distort/' + data.get('img') + '?' + distortion_url_bit;
@@ -518,9 +536,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
                         image_element = $('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_url + '" />');
                         that.$el.append(image_element);
                     }
-                    console.log(image_element[0]);
-
-                    that.loading_iamge = false;
+                    that.loading_image = false;
                 },
                 error : function () { that.loading_image = false; }
             });
@@ -528,7 +544,6 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
     on_update_current_image: function () {
         "use strict";
         var that = this;
-        that.current_image = that.$('canvas')[0].toDataURL();
         that.update_distortion_image();
 
     },
