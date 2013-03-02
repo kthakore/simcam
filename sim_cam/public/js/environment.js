@@ -396,8 +396,10 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         light.shadowMapHeight = 2048;
         that.scene.add(light);
 
+        that.texture_loaded = false;
+
         material = new THREE.MeshLambertMaterial({
-            map: THREE.ImageUtils.loadTexture("/img/grid.gif")
+            map: THREE.ImageUtils.loadTexture("/img/grid.gif", undefined, function () { that.texture_loaded = true; })
         });
 
         material.map.needsUpdate = true;
@@ -447,7 +449,9 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         "use strict";
         var that = this;
         requestAnimationFrame(function () { that.animate(); });
-        that.render();
+        if (that.texture_loaded) {
+            that.render();
+        }
 
     },
     render : function () {
@@ -455,6 +459,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that = this;
         that.renderer.render(that.scene, that.camera);
         if (that.update_current_data_url) {
+
             that.on_update_current_image();
             that.update_current_data_url = false;
         }
@@ -480,8 +485,21 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
     },
     update_distortion_image : function () {
         "use strict";
-        var that, ImageConstructor, image_model;
+        var that, ImageConstructor, camera_model, image_model, params, distortion_url_bit;
         that = this;
+
+        camera_model = that.options.app.models.camera;
+
+        distortion_url_bit = '';
+        that.loading_image = true;
+        params = ['t1', 't2', 'r1', 'r2', 'r3'];
+        _.each(params, function (param) {
+            var param_model = camera_model.get(param);
+            if (param_model) {
+                distortion_url_bit += param + '=' + param_model;
+            }
+        });
+       
         ImageConstructor = Backbone.Model.extend({ url: '/api/image' });
 
         image_model = new ImageConstructor({
@@ -489,13 +507,23 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             "type" : 'base64'
         });
         image_model.save({ },
-            { success : function (data, textStatus, jqXHR) {
-                var dist_url, image;
-                dist_url  = '/api/distort/' + data.get('img') + '?t1=0.01&r2=20';
-                that.$('img').remove();
-                that.$el.append('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_url + '" />');
-                            
-            }});
+            { 
+                success : function (data, textStatus, jqXHR) {
+                    var dist_url, image, image_element;
+                    dist_url  = '/api/distort/' + data.get('img') + '?' + distortion_url_bit;
+                    image_element = that.$('img');
+                    if (image_element.length > 0) {
+                        image_element.attr('src', dist_url);
+                    } else {
+                        image_element = $('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_url + '" />');
+                        that.$el.append(image_element);
+                    }
+                    console.log(image_element[0]);
+
+                    that.loading_iamge = false;
+                },
+                error : function () { that.loading_image = false; }
+            });
     },
     on_update_current_image: function () {
         "use strict";
@@ -520,7 +548,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         "use strict";
         var that;
         that = this;
-        that.update_distortions();
+        that.on_update_current_image();
     }
 });
 
