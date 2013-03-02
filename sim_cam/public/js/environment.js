@@ -42,7 +42,15 @@ SimCam.Template.SideMenu = {
                 '<li><a href="javascript:void(0)"><input type="text" name="far" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>' +
                 '<li class="nav-header">Near</li>' +
                 '<li><a href="javascript:void(0)"><input type="text" name="near" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>',
-    "calibration" : '',
+    "distortions" : '<h5>Distortions</h5>' +
+                '<li class="nav-header">Radial Distortions</li>' +
+                '<li><a href="javascript:void(0)">R1: <input type="text" name="r1" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">R2: <input type="text" name="r2" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">R3: <input type="text" name="r3" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li class="nav-header">Tangential Distortions</li>' +
+                '<li><a href="javascript:void(0)">TX: <input type="text" name="t1" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li class="nav-header">Far</li>' +
+                '<li><a href="javascript:void(0)">TY: <input type="text" name="t2" class="span1 distortions_sidemenu_input" disabled="true" /></a></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -409,10 +417,13 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         options.app.models.grid.bind('move', function (o, m) {that.update_grid(o, m); });
         options.app.models.camera.bind('move', function (o, m) {that.update_cam(o, m); });
         options.app.models.camera.bind('update_pinhole_params', function (m) { that.on_update_pinhole_params(m); });
+        options.app.models.camera.bind('update_distortions_params', function (m) { that.on_update_distortions_params(m); });
+
 
 
         $(window).on('resize', function () { that.on_resize(); });
 
+        that.update_current_data_url = true;
         that.animate();
         that.on_resize();
     },
@@ -443,6 +454,10 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         "use strict";
         var that = this;
         that.renderer.render(that.scene, that.camera);
+        if (that.update_current_data_url) {
+            that.on_update_current_image();
+            that.update_current_data_url = false;
+        }
     },
     update_grid : function (model, obj) {
         "use strict";
@@ -450,6 +465,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         that = this;
         that.grid.position.copy(obj.position);
         that.grid.rotation.copy(obj.rotation);
+        that.update_current_data_url = true;
     },
     update_cam : function (model, obj) {
         "use strict";
@@ -459,18 +475,52 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         that.camera.position.copy(obj.position);
         that.camera.rotation.copy(obj.rotation);
+        that.update_current_data_url = true;
+
+    },
+    update_distortion_image : function () {
+        "use strict";
+        var that, ImageConstructor, image_model;
+        that = this;
+        ImageConstructor = Backbone.Model.extend({ url: '/api/image' });
+
+        image_model = new ImageConstructor({
+            "image": that.current_image,
+            "type" : 'base64'
+        });
+        image_model.save({ },
+            { success : function (data, textStatus, jqXHR) {
+                var dist_url, image;
+                dist_url  = '/api/distort/' + data.get('img') + '?t1=0.01&r2=20';
+                that.$('img').remove();
+                that.$el.append('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_url + '" />');
+                            
+            }});
+    },
+    on_update_current_image: function () {
+        "use strict";
+        var that = this;
+        that.current_image = that.$('canvas')[0].toDataURL();
+        that.update_distortion_image();
+
     },
     on_update_pinhole_params: function (model) {
         "use strict";
         var that, attrs;
         that = this;
+        //TODO: do only fov, near, far, aspect, u, v
         _.each(model.attributes, function (o, i) {
-            
             that.camera[i] = o;
         });
         that.camera.updateProjectionMatrix();
         that.on_resize();
         that.render();
+    },
+    on_update_distortions_params: function (model) {
+        "use strict";
+        var that;
+        that = this;
+        that.update_distortions();
     }
 });
 
@@ -485,7 +535,9 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         that.app.models.camera.bind('set', that.on_camera_model_set, that);
     },
     events : {
-        'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input'
+        'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input',
+        'keyup .distortions_sidemenu_input' : 'on_change_distortions_sidemenu_input'
+
     },
     render: function (mode) {
         "use strict";
@@ -530,6 +582,17 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         }
         cm.trigger('update_pinhole_params', cm);
 
+    },
+    on_change_distortions_sidemenu_input : function (e) {
+        "use strict";
+        var that, cur_target, name, value, cm;
+        that = this;
+        cur_target = $(e.currentTarget);
+        name = cur_target.attr('name');
+        value = cur_target.val();
+        cm = that.app.models.camera;
+        cm.set(name, value);
+        cm.trigger('update_distortions_params', cm);
     }
 });
 
@@ -677,6 +740,10 @@ SimCam.initialize = function (options) {
     image_preload = new Image();
     image_preload.onload = function () {
         app = new SimCam.Constructor.Router.App(options);
+        if (options.success) {
+            options.success(app);
+        }
+
         Backbone.history.start();
     };
     image_preload.src = '/img/grid.gif';

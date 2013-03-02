@@ -41,7 +41,7 @@ sub create_image {
    my $self = shift;
    my $params = $self->req->json;
 
-   $self->app->log->info('Api|Image|called');
+   $self->app->log->info('Api|Image|called for type: '. Dumper $params);
    if( $params->{type} eq 'base64' ) {
        $self->app->log->info('Api|Image|base64');
 
