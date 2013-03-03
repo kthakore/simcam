@@ -504,7 +504,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that, ImageConstructor, camera_model, image_model, params, distortion_url_bit;
         that = this;
         if (that.loading_image) {
-            return;
+            return false;
         }
         that.loading_image = true;
         camera_model = that.options.app.models.camera;
@@ -517,7 +517,13 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
                 distortion_url_bit += param + '=' + param_model + '&';
             }
         });
-       
+
+
+        if (distortion_url_bit === '') {
+            that.loading_image = false;
+            return false;
+        }
+
         ImageConstructor = Backbone.Model.extend({ url: '/api/image' });
 
         image_model = new ImageConstructor({
@@ -648,8 +654,15 @@ SimCam.Constructor.View.BottomBarImage = Backbone.View.extend({
 
 SimCam.Constructor.View.BottomBar = Backbone.View.extend({
     initialize: function (options) {
+        var that;
+        that = this;
         "use strict";
 
+        console.log( options.mode.type );
+        if (options.mode.type !== 'calibration') {
+            that.$el.hide();
+            return;
+        }
     }
 });
 
@@ -668,6 +681,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
         bottom_el = that.$('.bottom_bar');
         side_el   = that.$('.sidemenu');
+
 
         that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode, app: options.app });
         that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
