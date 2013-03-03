@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SimCAM Environment</title>
+    </head>
+    <body>
+        <div id="environment">
+        </div>
+        <script src="/js/libs/jquery-1.9.1.min.js"></script>
+        <script src="/js/libs/underscore-min.js"></script>
+        <script src="/js/libs/backbone-min.js"></script>
+        <script src="/js/libs/bootstrap.min.js"></script> 
+        <script src="/js/libs/three.js"></script> 
+
+        <script src="https://raw.github.com/danguer/blog-examples/master/js/base64-binary.js"></script>
+
+        <script src="/js/environment.js"></script> 
+
+        <script>
+
+            SimCam.initialize({ element: $('#environment'), 
+                                         mode: { 
+                                               type: 'distortions' 
+                                            },
+                                success: function(app) { window.simcam = app } 
+                               });
+
+        </script>
+    </body>
+</html>
