@@ -611,14 +611,12 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             cc_img = that.current_image;
             current_capture.set('type', 'base64');
             check_data = { 'type' : 'base64', 'image' : cc_img};
-            console.log(check_data);
         }
 
         $.getJSON(check_url, check_data, function (data) { current_capture.set('checked', data); })
             .done(function () {
                 current_capture.set('image', cc_img);
                 model.get('captures').add(current_capture);
-                console.log(JSON.stringify(model.toJSON()));
             });
     }
 });
