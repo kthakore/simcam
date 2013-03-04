@@ -83,9 +83,10 @@ sub store_base64image {
     my $d = MIME::Base64::decode_base64($uri);
     my $file_name = sha1_hex( $uri );
     my $file_loc = $IMAGE_LOCATION.$file_name;
-    File::Slurp::write_file( $file_loc, $d );
+    File::Slurp::write_file( $file_loc. '.png', $d );
    
-    $self->imagemagick_convert(  $file_loc, $file_loc.'_in.png' );   
+    $self->imagemagick_convert(  $file_loc.'.png', $file_loc.'_in.png' );   
+    unlink( $file_loc.'.png' );
     return $file_name;
 
 }
@@ -95,6 +96,7 @@ sub imagemagick_convert {
     my $first = shift; 
     my $second = shift;
 
+    $self->app->log->info( "Api|imagemagick_convert: running on $first $second" );
     my ($merged, @result) = Capture::Tiny::capture_merged sub {
 
        `convert $first $second`;
@@ -141,11 +143,21 @@ sub get_check {
    my $image = $self->param('image'); 
    my $type = $self->param('type');
 
-   if( $type && $type eq 'base64' ){
-	my $image = $self->store_base64image( $image ); 
+   unless( $image ) {
+        my $json = $self->req->json; 
+        $type = $json->{type};
+        $image = $json->{image};
    }
 
-    my $run = '../simcamCV/check public/uploads/'.$image.'_in.png public/uploads/'.$image.'_check.png'; 
+   if( $type && $type eq 'base64' ){
+    $image = $self->store_base64image( $image ); 
+   } 
+
+   my $located = $self->image_location( $image );
+   
+   my $out = sha1_hex($located.'_check').'_check.png';
+
+   my $run = '../simcamCV/check public/uploads/'.$located . ' public/uploads/'. $out; 
 
     $self->app->log->info( $run );
     my $result;
@@ -161,8 +173,8 @@ sub get_check {
     }
 
    return $self->respond_to( {
-     json => sub { $self->render_json( $result );  },
-     text =>  sub { $self->render_static( 'uploads/'.$image.'_check.png' ); }
+     json => sub { $self->render_json( { result => $result, out => $out, in => $located } );  },
+     text =>  sub { $self->render_static( 'uploads/'.$out); }
  
    });
 

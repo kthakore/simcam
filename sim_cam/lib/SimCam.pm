@@ -86,6 +86,8 @@ sub startup {
 
   # CHECK GRID IN IMAGE
   $r->get('/api/check/:image')->to('api#get_check');
+  $r->get('/api/check')->to('api#get_check');
+
 
   # DISTORT AN IMAGE
   $r->get('/api/distort/:image')->to('api#get_distort');

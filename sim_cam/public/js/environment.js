@@ -591,7 +591,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
     },
     on_request_capture: function (model) {
         "use strict";
-        var that, current_capture, cc_img;
+        var that, current_capture, cc_img, check_url, check_data;
         that = this;
 
         current_capture = new SimCam.Constructor.Model.Generic({});
@@ -599,19 +599,27 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         current_capture.set('undistorted', { url : that.current_image, img: that.current_image_undistorted });
         current_capture.set('distorted', that.current_distortion);
 
-        
+        check_url = '/api/check';
+        check_data = undefined;
         if (that.current_distortion) {
             cc_img = that.current_distortion.out;
+            check_url += '/' + cc_img;
         } else if (that.current_image_undistorted) {
             cc_img = that.current_image_undistorted;
+            check_url += '/' + cc_img;
         } else {
             cc_img = that.current_image;
             current_capture.set('type', 'base64');
+            check_data = { 'type' : 'base64', 'image' : cc_img};
+            console.log(check_data);
         }
 
-        current_capture.set('image', cc_img);
-        model.get('captures').add(current_capture);
-        console.log(current_capture);
+        $.getJSON(check_url, check_data, function (data) { current_capture.set('checked', data); })
+            .done(function () {
+                current_capture.set('image', cc_img);
+                model.get('captures').add(current_capture);
+                console.log(JSON.stringify(model.toJSON()));
+            });
     }
 });
 
