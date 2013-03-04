@@ -46,6 +46,19 @@ SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
 
 /*Templates*/
 
+SimCam.Template.ResultsModal = '<div id="results_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="results_modal_label" aria-hidden="true">' +
+          '<div class="modal-header">' +
+          '  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
+          '  <h3 id="results_modal_label">Results</h3>' +
+          '</div>' +
+          '<div class="modal-body">' +
+          '  <p>One fine body…</p>' +
+          '</div>' +
+          '<div class="modal-footer">' +
+          '  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>' +
+          '</div>' +
+          '</div>';
+
 SimCam.Template.MainFrame = '<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="640px" ></iframe>';
 
 SimCam.Template.SideMenu = {
@@ -749,9 +762,9 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
             that.$('[name="calibrate"]').removeAttr('disabled');
             that.on_click_calibrate_btn();
         }
-                
     },
     on_add_calibration : function () {
+        "use strict";
         var that;
         that = this;
         //enable the results button
@@ -791,8 +804,31 @@ SimCam.Constructor.View.BottomBar = Backbone.View.extend({
         that.$('.captured_count').html(that.collection.length);
         img_holder = that.$('.bottom_bar_image_holder');
 
+        //TODO: Make into a view with a remove button?
         img_holder.append('<img src="/uploads/' + model.get('checked').out +  '" class="bottom_bar_img" />');
 
+    }
+});
+
+SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
+    initialize: function (options) {
+        "use strict";
+        var that;
+        that = this;
+        that.options = options;
+        that.app     = options.app;
+        console.log(that.$el[0]);
+        that.$el.on('shown', function () { console.log('asd'); });
+    },
+    events : {
+
+    },
+    render : function (calibrations) {
+        "use strict";
+        var that;
+        that = this;
+        console.log(calibrations);
+        that.$el.modal('show');
     }
 });
 
@@ -818,6 +854,8 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
         that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
         that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
+
+        that.modal_view             = new SimCam.Constructor.View.ResultsModal({ el: options.app.el.find('#results_modal'), mode: that.mode, app: options.app});
 
         main_viewer_frame.on('load', function () { that.main_viewer.trigger('load'); });
         camera_viewer_frame.on('load', function () { that.camera_viewer.trigger('load'); });
@@ -892,8 +930,8 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         current_calibration = new SimCam.Constructor.Model.Generic({});
 
         current_calibration.set('captures', captures.toJSON());
-        $.getJSON('/api/calibrate' + calibrate_images_data, function (d) { current_calibration.set('result', d); }).done(function () { calibrations.add(current_calibration); });
-        
+        $.getJSON('/api/calibrate' + calibrate_images_data, function (d) { current_calibration.set('result', d); })
+            .done(function () { calibrations.add(current_calibration); });
     },
     on_request_result : function () {
         "use strict";
@@ -904,8 +942,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
         //construct or acquire modal
 
-        console.log( calibrations );
-
+        that.modal_view.render(calibrations);
     }
 });
 
@@ -913,6 +950,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 /*Router Constuctor*/
 SimCam.Constructor.Router.App = Backbone.Router.extend({
     version : 0.01,
+    el: $('body'),
     initialize: function (options) {
         "use strict";
         var that, env_frame, env_frame_body;
@@ -928,6 +966,9 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
         env_frame.load(function () { that.on_env_frame_load(options, env_frame); });
 
         that.element.append(env_frame);
+
+        that.el.append(SimCam.Template.ResultsModal);
+        that.el.find('#results_modal').modal().modal('hide');
 
     },
     routes: {
