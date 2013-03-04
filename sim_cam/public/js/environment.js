@@ -25,6 +25,9 @@ var SimCam = {
 
 SimCam.Constructor.Model.Generic = Backbone.Model.extend({});
 
+/*Collection Contructors*/
+SimCam.Constructor.Collection.Generic = Backbone.Collection.extend({});
+
 /*Templates*/
 
 SimCam.Template.MainFrame = '<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="640px" ></iframe>';
@@ -51,6 +54,12 @@ SimCam.Template.SideMenu = {
                 '<li><a href="javascript:void(0)">TX: <input type="text" name="t1" class="span1 distortions_sidemenu_input"/></a></li>' +
                 '<li class="nav-header">Far</li>' +
                 '<li><a href="javascript:void(0)">TY: <input type="text" name="t2" class="span1 distortions_sidemenu_input" /></a></li>',
+    "calibration" : '<li class="nav-header">Calibration</li>' +
+                '<li><input type="button" name="capture" class="btn btn_primary calibration_sidemenu_input" value="Capture Image" /></li>' +
+                '<li class="nav-header"> </li>' +
+                '<li><input type="button" name="calibrate" class="btn btn_primary calibration_sidemenu_input" value="Calibrate" /></li>' +
+                '<li class="nav-header"> </li>' +
+                '<li><input type="button" name="results" class="btn btn_primary calibration_sidemenu_input" value="View Current Results" /></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -421,6 +430,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         options.app.models.camera.bind('update_pinhole_params', function (m) { that.on_update_pinhole_params(m); });
         options.app.models.camera.bind('update_distortions_params', function (m) { that.on_update_distortions_params(m); });
 
+        options.app.models.calibration.bind('request_capture', function (m) { that.on_request_capture(m); });
 
 
         $(window).on('resize', function () { that.on_resize(); });
@@ -518,9 +528,10 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             }
         });
 
-
         if (distortion_url_bit === '') {
             that.loading_image = false;
+            that.current_distortion = undefined;
+            that.current_image_undistorted = undefined;
             return false;
         }
 
@@ -534,14 +545,21 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             {
                 success : function (data, textStatus, jqXHR) {
                     var dist_url, image, image_element;
+                    that.current_image_undistorted = data.get('img');
                     dist_url  = '/api/distort/' + data.get('img') + '?' + distortion_url_bit;
-                    image_element = that.$('img');
-                    if (image_element.length > 0) {
-                        image_element.attr('src', dist_url);
-                    } else {
-                        image_element = $('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_url + '" />');
-                        that.$el.append(image_element);
-                    }
+                    $.getJSON(dist_url, function (d) {
+                        var dist_image_src = '/uploads/' + d.out;
+                        that.current_distortion = d;
+
+                        image_element = that.$('img');
+                        if (image_element.length > 0) {
+                            image_element.attr('src', dist_image_src);
+                        } else {
+                            image_element = $('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_image_src + '" />');
+                            that.$el.append(image_element);
+                        }
+
+                    });
                     that.loading_image = false;
                 },
                 error : function () { that.loading_image = false; }
@@ -570,6 +588,30 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that;
         that = this;
         that.on_update_current_image();
+    },
+    on_request_capture: function (model) {
+        "use strict";
+        var that, current_capture, cc_img;
+        that = this;
+
+        current_capture = new SimCam.Constructor.Model.Generic({});
+
+        current_capture.set('undistorted', { url : that.current_image, img: that.current_image_undistorted });
+        current_capture.set('distorted', that.current_distortion);
+
+        
+        if (that.current_distortion) {
+            cc_img = that.current_distortion.out;
+        } else if (that.current_image_undistorted) {
+            cc_img = that.current_image_undistorted;
+        } else {
+            cc_img = that.current_image;
+            current_capture.set('type', 'base64');
+        }
+
+        current_capture.set('image', cc_img);
+        model.get('captures').add(current_capture);
+        console.log(current_capture);
     }
 });
 
@@ -585,8 +627,10 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
     },
     events : {
         'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input',
-        'keyup .distortions_sidemenu_input' : 'on_change_distortions_sidemenu_input'
-
+        'keyup .distortions_sidemenu_input' : 'on_change_distortions_sidemenu_input',
+        'click [name="capture"]' : 'on_click_capture_btn',
+        'click [name="calibrate"]' : 'on_click_calibrate_btn',
+        'click [name="results"]' : 'on_click_results_btn'
     },
     render: function (mode) {
         "use strict";
@@ -642,7 +686,25 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         cm = that.app.models.camera;
         cm.set(name, value);
         cm.trigger('update_distortions_params', cm);
+    },
+    on_click_capture_btn : function () {
+        "use strict";
+        var that = this;
+        that.app.models.calibration.trigger('request_capture', that.app.models.calibration);
+    },
+    on_click_calibrate_btn : function () {
+        "use strict";
+        var that = this;
+        that.app.models.calibration.trigger('request_calibrate', that.app.models.calibration);
+
+    },
+    on_click_results_btn : function () {
+        "use strict";
+        var that = this;
+        that.app.models.calibration.trigger('request_results', that.app.models.calibration);
+
     }
+
 });
 
 SimCam.Constructor.View.BottomBarImage = Backbone.View.extend({
@@ -654,11 +716,10 @@ SimCam.Constructor.View.BottomBarImage = Backbone.View.extend({
 
 SimCam.Constructor.View.BottomBar = Backbone.View.extend({
     initialize: function (options) {
+        "use strict";
         var that;
         that = this;
-        "use strict";
 
-        console.log( options.mode.type );
         if (options.mode.type !== 'calibration') {
             that.$el.hide();
             return;
@@ -760,7 +821,7 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
-        that.models = { camera: new SimCam.Constructor.Model.Generic({ }), grid: new SimCam.Constructor.Model.Generic() };
+        that.models = { camera: new SimCam.Constructor.Model.Generic({ }), grid: new SimCam.Constructor.Model.Generic(), calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Generic() }) };
 
         env_frame = $(SimCam.Template.MainFrame);
 
