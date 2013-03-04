@@ -137,7 +137,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
                 material
             );
             cube.model = that.options.app.models.grid;
-            cube.model.trigger('init', cube.model, cube);
+            cube.model.trigger('move', cube.model, cube);
             cube.overdraw = true;
             that.scene.add(cube);
             that.objects.push(cube);
@@ -147,7 +147,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
             that.scene.add(cam_obj);
 
             that.objects.push(cam_obj);
-            cam_obj.model.trigger('init', cam_obj.model, cam_obj);
+            cam_obj.model.trigger('move', cam_obj.model, cam_obj);
 
 
         });
@@ -479,6 +479,9 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         "use strict";
         var that, grid;
         that = this;
+        grid = that.options.app.models.grid;
+        grid.set('position', [obj.position.x, obj.position.y, obj.position.z]);
+        grid.set('rotation', [obj.rotation.x, obj.rotation.y, obj.rotation.z]);
         that.grid.position.copy(obj.position);
         that.grid.rotation.copy(obj.rotation);
         that.update_current_data_url = true;
@@ -488,6 +491,8 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that, cam;
         that = this;
         cam = that.options.app.models.camera;
+        cam.set('position', [obj.position.x, obj.position.y, obj.position.z]);
+        cam.set('rotation', [obj.rotation.x, obj.rotation.y, obj.rotation.z]);
 
         that.camera.position.copy(obj.position);
         that.camera.rotation.copy(obj.rotation);
@@ -613,10 +618,15 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             check_data = { 'type' : 'base64', 'image' : cc_img};
         }
 
+        current_capture.set('camera', that.options.app.models.camera.toJSON());
+        current_capture.set('grid', that.options.app.models.grid.toJSON());
+
+
         $.getJSON(check_url, check_data, function (data) { current_capture.set('checked', data); })
             .done(function () {
                 current_capture.set('image', cc_img);
                 model.get('captures').add(current_capture);
+                console.log(current_capture);
             });
     }
 });
@@ -725,11 +735,27 @@ SimCam.Constructor.View.BottomBar = Backbone.View.extend({
         "use strict";
         var that;
         that = this;
-
         if (options.mode.type !== 'calibration') {
             that.$el.hide();
             return;
         }
+
+        that.model = options.app.models.calibration;
+        that.collection = that.model.get('captures');
+
+        that.$('.bottom_bar_image_holder').html('');
+
+        that.collection.bind('add', that.on_add_capture, that);
+    },
+    on_add_capture: function (model) {
+        "use strict";
+        var that, img_holder;
+        that = this;
+        that.$('.captured_count').html(that.collection.length);
+        img_holder = that.$('.bottom_bar_image_holder');
+
+        img_holder.append('<img src="/uploads/' + model.get('checked').out +  '" class="bottom_bar_img" />');
+
     }
 });
 
