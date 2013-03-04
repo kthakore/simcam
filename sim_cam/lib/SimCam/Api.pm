@@ -150,7 +150,7 @@ sub get_check {
    }
 
    if( $type && $type eq 'base64' ){
-    $image = $self->store_base64image( $image ); 
+    $image = $self->store_base64image( $image ) .'_in.png'; 
    } 
 
    my $located = $self->image_location( $image );
@@ -281,7 +281,6 @@ sub get_calibrate {
             my $fo = { distortion => \@d_array, intrinsics => \@f_array};
 
 	return	$self->render({
-		text => Dumper $fo,
 		json => $fo
 	});
     }

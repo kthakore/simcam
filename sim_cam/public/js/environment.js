@@ -21,7 +21,7 @@ var SimCam = {
     }
 };
 
-SimCam.captures_needed_for_calibration = 3;
+SimCam.captures_needed_for_calibration = 4;
 
 /*Model Constructors*/
 
@@ -29,6 +29,20 @@ SimCam.Constructor.Model.Generic = Backbone.Model.extend({});
 
 /*Collection Contructors*/
 SimCam.Constructor.Collection.Generic = Backbone.Collection.extend({});
+
+SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
+    to_calibrate : function () {
+        "use strict";
+        var that = this, mapped, url_str = '?';
+        // map the collection in just the checked inputs
+        mapped = that.map(function (m) { return m.get('checked')['in']; });
+        _.each(mapped, function (o) {
+            url_str += 'images=' + o + '&';
+        });
+        return url_str;
+    }
+});
+
 
 /*Templates*/
 
@@ -643,6 +657,8 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         that.render(options.mode);
         that.app.models.camera.bind('set', that.on_camera_model_set, that);
         that.app.models.calibration.get('captures').bind('add', that.on_add_capture, that);
+        that.app.models.calibration.get('calibrations').bind('add', that.on_add_calibration, that);
+
     },
     events : {
         'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input',
@@ -731,8 +747,15 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         if (captures.length >= SimCam.captures_needed_for_calibration) {
             //enable the calibration button
             that.$('[name="calibrate"]').removeAttr('disabled');
+            that.on_click_calibrate_btn();
         }
                 
+    },
+    on_add_calibration : function () {
+        var that;
+        that = this;
+        //enable the results button
+        that.$('[name="results"]').removeAttr('disabled');
     }
 
 });
@@ -776,7 +799,7 @@ SimCam.Constructor.View.BottomBar = Backbone.View.extend({
 SimCam.Constructor.View.Main = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
-        var that, main_viewer_frame, camera_viewer_frame, mv_body, cv_body, side_el, bottom_el, popovers;
+        var that, main_viewer_frame, camera_viewer_frame, mv_body, cv_body, side_el, bottom_el, popovers, calibration;
         that = this;
 
         that.mode = options.mode;
@@ -804,7 +827,10 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
             popovers.popover({ html: true});
             popovers.popover('toggle');
         }
+        calibration = options.app.models.calibration;
 
+        calibration.bind('request_calibrate', that.on_request_calibrate, that);
+        calibration.bind('request_results', that.on_request_result, that);
     },
     events: {
         'load' : 'on_load',
@@ -853,6 +879,33 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         var that;
         that = this;
 
+    },
+    on_request_calibrate : function (calibration_model) {
+        "use strict";
+        var that, captures, calibrations, current_calibration, calibrate_images_data;
+        that = this;
+        captures = calibration_model.get('captures');
+        calibrations = calibration_model.get('calibrations');
+
+        calibrate_images_data = captures.to_calibrate();
+
+        current_calibration = new SimCam.Constructor.Model.Generic({});
+
+        current_calibration.set('captures', captures.toJSON());
+        $.getJSON('/api/calibrate' + calibrate_images_data, function (d) { current_calibration.set('result', d); }).done(function () { calibrations.add(current_calibration); });
+        
+    },
+    on_request_result : function () {
+        "use strict";
+        var that, calibrations, modal;
+        that = this;
+
+        calibrations = that.options.app.models.calibration.get('calibrations');
+
+        //construct or acquire modal
+
+        console.log( calibrations );
+
     }
 });
 
@@ -867,7 +920,8 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
-        that.models = { camera: new SimCam.Constructor.Model.Generic({ }), grid: new SimCam.Constructor.Model.Generic(), calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Generic() }) };
+        that.models = { camera: new SimCam.Constructor.Model.Generic({ }), grid: new SimCam.Constructor.Model.Generic(), calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Captures(), calibrations: new SimCam.Constructor.Collection.Generic() }) };
+
 
         env_frame = $(SimCam.Template.MainFrame);
 
