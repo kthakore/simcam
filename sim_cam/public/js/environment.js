@@ -21,6 +21,8 @@ var SimCam = {
     }
 };
 
+SimCam.captures_needed_for_calibration = 3;
+
 /*Model Constructors*/
 
 SimCam.Constructor.Model.Generic = Backbone.Model.extend({});
@@ -624,9 +626,9 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         $.getJSON(check_url, check_data, function (data) { current_capture.set('checked', data); })
             .done(function () {
+                var captures = model.get('captures');
                 current_capture.set('image', cc_img);
-                model.get('captures').add(current_capture);
-                console.log(current_capture);
+                captures.add(current_capture);
             });
     }
 });
@@ -640,6 +642,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         that.app = options.app;
         that.render(options.mode);
         that.app.models.camera.bind('set', that.on_camera_model_set, that);
+        that.app.models.calibration.get('captures').bind('add', that.on_add_capture, that);
     },
     events : {
         'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input',
@@ -719,6 +722,17 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         var that = this;
         that.app.models.calibration.trigger('request_results', that.app.models.calibration);
 
+    },
+    on_add_capture : function (model) {
+        "use strict";
+        var that, captures;
+        that = this;
+        captures = that.app.models.calibration.get('captures');
+        if (captures.length >= SimCam.captures_needed_for_calibration) {
+            //enable the calibration button
+            that.$('[name="calibrate"]').removeAttr('disabled');
+        }
+                
     }
 
 });
