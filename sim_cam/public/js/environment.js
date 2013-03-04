@@ -57,9 +57,9 @@ SimCam.Template.SideMenu = {
     "calibration" : '<li class="nav-header">Calibration</li>' +
                 '<li><input type="button" name="capture" class="btn btn_primary calibration_sidemenu_input" value="Capture Image" /></li>' +
                 '<li class="nav-header"> </li>' +
-                '<li><input type="button" name="calibrate" class="btn btn_primary calibration_sidemenu_input" value="Calibrate" /></li>' +
+                '<li><input type="button" name="calibrate" class="btn btn_primary calibration_sidemenu_input" value="Calibrate" disabled="disabled" /></li>' +
                 '<li class="nav-header"> </li>' +
-                '<li><input type="button" name="results" class="btn btn_primary calibration_sidemenu_input" value="View Current Results" /></li>',
+                '<li><input type="button" name="results" class="btn btn_primary calibration_sidemenu_input" value="View Current Results" disabled="disabled" /></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
 
@@ -889,12 +889,17 @@ SimCam.initialize = function (options) {
     var app, image_preload;
     image_preload = new Image();
     image_preload.onload = function () {
-        app = new SimCam.Constructor.Router.App(options);
-        if (options.success) {
-            options.success(app);
-        }
 
-        Backbone.history.start();
+
+        SimCam.grid_texture_map = THREE.ImageUtils.loadTexture("/img/grid.gif", undefined, function () {
+            app = new SimCam.Constructor.Router.App(options);
+            if (options.success) {
+                options.success(app);
+            }
+
+            Backbone.history.start();
+
+        });
     };
     image_preload.src = '/img/grid.gif';
     return app;
