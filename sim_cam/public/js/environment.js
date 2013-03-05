@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary, highCharts */
+/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary, Highcharts */
 /*jshint globalstrict: true*/
 
 /**TODO:
@@ -46,7 +46,7 @@ SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
 
 /*Templates*/
 
-SimCam.Template.ResultsModal = '<div id="results_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="results_modal_label" aria-hidden="true">' +
+SimCam.Template.ResultsModal = '<div id="results_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="results_modal_label" aria-hidden="true">' +
 /*          '<div class="modal-header">' +
           '  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
           '  <h3 id="results_modal_label">Results</h3>' +
@@ -106,10 +106,8 @@ SimCam.Template.Modal = {
                     '<div class="tab-content">' +
                         '<div id="modal_nav_current_params" class="tab-pane">' +
                             '<h3>Intrinsics:</h3>' +
-                            '<% var latest_calibration = data.at( data.length - 1); %>' +
-                            '<% var latest_results = latest_calibration.get("result");  %>' +
-                            '<% var li_s = latest_results.intrinsics %>' +
-                            '<% var ld_s = latest_results.distortion %>' +
+                            '<% var li_s = latest_intrinsics %>' +
+                            '<% var ld_s = latest_distortion %>' +
                             '<table class="table tabled-bordered">' +
                             '<tr><td><%= parseFloat(li_s[0], 10) %></td><td><%= parseFloat(li_s[1], 10) %></td><td><%= parseFloat(li_s[2], 10) %></td></tr>' +
                             '<tr><td><%= parseFloat(li_s[3], 10) %></td><td><%= parseFloat(li_s[4], 10) %></td><td><%= parseFloat(li_s[5], 10) %></td></tr>' +
@@ -122,7 +120,7 @@ SimCam.Template.Modal = {
 
                         '</div>' +
                         '<div id="modal_nav_current_graph" class="tab-pane">' +
-                            '<p>CURRENT Graph</p>' +
+                            '<div id="calibration_chart_container">Loading ...</div>' +
                         '</div>' +
                         '<div id="modal_nav_current_diff" class="tab-pane">' +
                             '<p>CURRENT Current Diff</p>' +
@@ -862,6 +860,25 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
 //        that.$el.modal('hide');
     },
     events : {
+        'hidden' : 'on_hidden',
+        'a[href="#modal_nav_current_graph"] shown'  : 'on_graph_tab_shown'
+    },
+    on_hidden : function () {
+        "use strict";
+        var that = this;
+        console.log('hidden');
+        if (that.chart) {
+            that.chart.destroy();
+            that.chart = null;
+        }
+    },
+    on_graph_tab_shown : function () {
+        "use strict";
+        var that = this;
+        if (that.after_shown) {
+            that.after_shown();
+            that.after_shown = null;
+        }
 
     },
     set_up_calibration : function (options) {
@@ -876,7 +893,40 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         options.latest_distortion = options.latest_results.distortion;
 
         that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
-       
+        that.$('#calibration_chart_container').html('loading ...');
+
+
+        that.after_shown = function () {
+            that.chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'calibration_chart_container',
+                    type: 'bar',
+                    events: {
+                        load: function (event) {
+                        //When is chart ready?
+                        }
+                    }
+                },
+                title: {
+                    text: 'Fruit Consumption'
+                },
+                xAxis: {
+                    categories: ['Apples', 'Bananas', 'Oranges']
+                },
+                yAxis: {
+                    title: {
+                        text: 'Fruit eaten'
+                    }
+                },
+                series: [{
+                    name: 'Jane',
+                    data: [1, 0, 4]
+                }, {
+                    name: 'John',
+                    data: [5, 7, 3]
+                }]
+            });
+        };
         
     },
     render : function (options) {
@@ -891,6 +941,9 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         that.$('#modal_tab a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
 
         that.$('#modal_tab a:first').tab('show');
+        that.$('a[href="#modal_nav_current_graph"]').on('shown', function () { that.on_graph_tab_shown(); });
+
+
         that.$el.modal('show');
     }
 });

@@ -5,7 +5,6 @@
     <p>This tutorial will introduce you the concept of cameras, transformation, camera distortions and calibration. </p>
 
 </div>
-  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
 
 <div class="row">
 
@@ -113,10 +112,9 @@
 </div>
 
 
-
 <div class="row">
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
      <input type="hidden" name="position" />
-
      <div class="control-group">
           <!-- Button -->
           <div class="controls">
@@ -125,8 +123,11 @@
           </div>
         </div>
 
-</div>
+    </fieldset> 
+   
   </form>
+</div>
+
 
 
 % content_for javascript => begin
@@ -136,17 +137,6 @@
     <script src="/js/environment.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
-        var v = Backbone.View.extend({ 
-            initialize: function() { console.log('start'); },
-            events : { 'submit form': 'validate' },
-            validate : function() {
-
-                console.log('Validating form');
-                return false;
-            }
-            });
-
-        new v({el : $('body') });
 
 	    var simcam = SimCam.initialize({ element: $('#environment'), 
                                      mode: { 

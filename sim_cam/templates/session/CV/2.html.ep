@@ -1,13 +1,43 @@
 <div class="row">
-    <h1>Introduction</h1>
-    <p>This tutorial will introduce you the concept of cameras, transformation, camera distortions and calibration.</p>
+    <h1>Distortions</h1>
+</div>
+<div class="row-fluid" style="text-align:center">
+<center id="environment" class="span12" style="padding:5px">
+</center>
+</div>
 
-</div>
 <div class="row">
-    <h2>The Camera</h2>
-    <p>The concept of a camera has been around for a while. You may be familiar with cameras and capturing images with them. We will look a bit closer at exactly what a camera does.
-A camera "looks" at a far away object (The Big Ben) and shows it to you on a screen:
-     <img src="/images/image01.png" />
-The first thing we would notice is that the final image (the screen) doesn't have a depth. Of course you can move closer to the Big Ben, but in the screen it only gets bigger. Lights and shading in the final image give an illusion of depth, but the final image it self is not a 3D object. This means at some point the camera translated the Big Ben light to a flat image. This transformation can be understood as a transform between the 3D and 2D spatial coordinates.
-</p>
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+     <input type="hidden" name="position" />
+     <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+    </fieldset> 
+   
+  </form>
 </div>
+
+
+% content_for javascript => begin
+    <script src="/js/tracker.js"></script>
+    <script src="/js/libs/three.js"></script>
+
+    <script src="/js/environment.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+
+	    var simcam = SimCam.initialize({ element: $('#environment'), 
+                                     mode: { 
+                                           'type': 'pinhole', 
+                                           'learning_environment': true 
+                                        }
+                                   });
+
+    </script>
+% end;
+
