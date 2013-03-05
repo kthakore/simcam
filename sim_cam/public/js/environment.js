@@ -35,6 +35,21 @@ SimCam.Constructor.Collection.Calibrations = Backbone.Collection.extend({
         that = this;
         latest = that.at(that.length - 1);
         return latest.get('result');
+    },
+    distortions_series_parameters : function () {
+        "use strict";
+        var that, results, series;
+        that = this;
+        results = that.map(function (m) { return m.get('result'); });
+
+        series = [ ];
+        series.push({ name: 'r1', data:  _.map(results, function (m) { return parseFloat(m.distortion[0], 10); }) });
+        series.push({ name: 't2', data:  _.map(results, function (m) { return parseFloat(m.distortion[1], 10); }) });
+        series.push({ name: 't1', data:  _.map(results, function (m) { return parseFloat(m.distortion[2], 10); }) });
+        series.push({ name: 't2', data:  _.map(results, function (m) { return parseFloat(m.distortion[3], 10); }) });
+        series.push({ name: 'r3', data:  _.map(results, function (m) { return parseFloat(m.distortion[4], 10); }) });
+        console.log( results);
+        return series;
     }
 });
 
@@ -903,12 +918,11 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
         that.$('#calibration_chart_container').html('loading ...');
 
-
         that.after_shown = function () {
             that.chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'calibration_chart_container',
-                    type: 'bar',
+                    type: 'line',
                     events: {
                         load: function (event) {
                         //When is chart ready?
@@ -916,23 +930,17 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                     }
                 },
                 title: {
-                    text: 'Fruit Consumption'
+                    text: 'Distortions Parameters'
                 },
                 xAxis: {
-                    categories: ['Apples', 'Bananas', 'Oranges']
+                    title: { text: 'Captured Images' }
                 },
                 yAxis: {
                     title: {
-                        text: 'Fruit eaten'
+                        text: 'Values'
                     }
                 },
-                series: [{
-                    name: 'Jane',
-                    data: [1, 0, 4]
-                }, {
-                    name: 'John',
-                    data: [5, 7, 3]
-                }]
+                series: collection.distortions_series_parameters()
             });
         };
     },

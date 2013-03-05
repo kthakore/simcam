@@ -263,15 +263,17 @@ sub get_calibrate {
 
     if( -e $int && -e $dist ){
         my $xs = XML::Simple->new();
-            my $d_data = $xs->XMLin("/tmp/Distortion.xml");
-            my $f_data = $xs->XMLin("/tmp/Intrinsics.xml");
+            $self->app->log->info("Api|get_calibrate reading XMLs $dist and $int");
+            my $d_data = $xs->XMLin($dist);
+            my $f_data = $xs->XMLin($int);
 
-
-            my $d_cv_data = $d_data->{Distortion}->{data};
+            my @d_keys = keys %{$d_data};
+            my @f_keys = keys %{$f_data};
+            my $d_cv_data = $d_data->{$d_keys[0]}->{data};
 
             $d_cv_data =~ s/\s/ /g;
 
-            my $i_cv_data = $f_data->{Intrinsics}->{data};
+            my $i_cv_data = $f_data->{$f_keys[0]}->{data};
 
             $i_cv_data =~ s/\s/ /g;
           
