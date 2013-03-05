@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary */
+/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary, highCharts */
 /*jshint globalstrict: true*/
 
 /**TODO:
@@ -98,14 +98,16 @@ SimCam.Template.SideMenu = {
 
 SimCam.Template.Modal = {
     'calibration': '<ul class="nav nav-tabs" id="modal_tab">' +
-                      '<li><a href="#modal_nav_current_params" data-toggle="tab">Current Parameters</a></li>' +
-                      '<li><a href="#modal_nav_current_graph" data-toggle="tab">Current Graph</a></li>' +
+                      '<li><a href="#modal_nav_current_params" data-toggle="tab">Parameters</a></li>' +
+                      '<li><a href="#modal_nav_current_graph" data-toggle="tab">Graphs</a></li>' +
+                      '<li><a href="#modal_nav_current_diff" data-toggle="tab">Efficacy</a></li>' +
+
                    '</ul>' +
                     '<div class="tab-content">' +
                         '<div id="modal_nav_current_params" class="tab-pane">' +
                             '<h3>Intrinsics:</h3>' +
                             '<% var latest_calibration = data.at( data.length - 1); %>' +
-                            '<% var latest_results = latest_calibration.get("result"); console.log(latest_results); %>' +
+                            '<% var latest_results = latest_calibration.get("result");  %>' +
                             '<% var li_s = latest_results.intrinsics %>' +
                             '<% var ld_s = latest_results.distortion %>' +
                             '<table class="table tabled-bordered">' +
@@ -121,6 +123,9 @@ SimCam.Template.Modal = {
                         '</div>' +
                         '<div id="modal_nav_current_graph" class="tab-pane">' +
                             '<p>CURRENT Graph</p>' +
+                        '</div>' +
+                        '<div id="modal_nav_current_diff" class="tab-pane">' +
+                            '<p>CURRENT Current Diff</p>' +
                         '</div>' +
                     '</div>'
 
@@ -859,15 +864,33 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
     events : {
 
     },
+    set_up_calibration : function (options) {
+        "use strict";
+        var that, collection;
+        that = this;
+        collection = options.data;
+        options.latest_calibration = collection.at(collection.length - 1);
+
+        options.latest_results = options.latest_calibration.get("result");
+        options.latest_intrinsics = options.latest_results.intrinsics;
+        options.latest_distortion = options.latest_results.distortion;
+
+        that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
+       
+        
+    },
     render : function (options) {
         "use strict";
         var that;
         that = this;
-        that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
+        if (options.type === 'calibration') {
+            options = that.set_up_calibration(options);
+        } else if (options.type === 'capture') {
+            that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
+        }
         that.$('#modal_tab a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
 
         that.$('#modal_tab a:first').tab('show');
-        
         that.$el.modal('show');
     }
 });
@@ -1032,25 +1055,50 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
     }
 });
 
-
+ 
 SimCam.initialize = function (options) {
     "use strict";
-    var app, image_preload;
-    image_preload = new Image();
-    image_preload.onload = function () {
+
+    $(function () {
+    
+        if (options.mode.type === 'calibration') {
+            SimCam.ScriptLoader.loadscript();
+        }
+ 
+
+    });
+
+    $(function () {
+
+        var app, image_preload;
+        image_preload = new Image();
+        image_preload.onload = function () {
 
 
-        SimCam.grid_texture_map = THREE.ImageUtils.loadTexture("/img/grid.gif", undefined, function () {
-            app = new SimCam.Constructor.Router.App(options);
-            if (options.success) {
-                options.success(app);
-            }
+            SimCam.grid_texture_map = THREE.ImageUtils.loadTexture("/img/grid.gif", undefined, function () {
+                app = new SimCam.Constructor.Router.App(options);
+                if (options.success) {
+                    options.success(app);
+                }
 
-            Backbone.history.start();
+                Backbone.history.start();
 
-        });
-    };
-    image_preload.src = '/img/grid.gif';
-    return app;
+            });
+        };
+        image_preload.src = '/img/grid.gif';
+        return app;
+    });
 };
 
+
+
+SimCam.ScriptLoader = {
+    loadscript : function () {
+        "use strict";
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "/js/highcharts.js";
+        document.body.appendChild(script);
+    }
+};
+ 
