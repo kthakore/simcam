@@ -1,0 +1,45 @@
+<div class="row">
+    <h1>Calibration</h1>
+</div>
+<div class="row-fluid" style="text-align:center">
+<center id="environment" class="span12" style="padding:5px">
+</center>
+</div>
+<div class="row">
+  <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+     <input type="hidden" name="position" />
+     <div class="control-group">
+          <!-- Button -->
+          <div class="controls">
+            <input type="reset" class="btn btn-danger" value="Reset" />
+            <input type="submit" class="btn btn-success" value="Submit" />
+          </div>
+        </div>
+
+    </fieldset> 
+   
+  </form>
+</div>
+
+
+% content_for javascript => begin
+    <script src="/js/tracker.js"></script>
+    <script src="/js/libs/three.js"></script>
+
+    <script src="/js/environment.js"></script>
+    <!-- INSIDE SESSION 0 TEMPLATE -->
+    <script type="text/javascript">
+            var simcam = SimCam.initialize({ element: $('#environment'), 
+                                         mode: { 
+                                               type: 'calibration' 
+                                            },
+                                         camera: {
+                                            r1 : 10
+                                         },
+                                         success: function(app) { window.simcam = app } 
+
+                                       });
+
+    </script>
+% end;
+
