@@ -28,7 +28,15 @@ SimCam.captures_needed_for_calibration = 4;
 SimCam.Constructor.Model.Generic = Backbone.Model.extend({});
 
 /*Collection Contructors*/
-SimCam.Constructor.Collection.Generic = Backbone.Collection.extend({});
+SimCam.Constructor.Collection.Calibrations = Backbone.Collection.extend({
+    latest_results : function () {
+        "use strict";
+        var that, latest;
+        that = this;
+        latest = that.at(that.length - 1);
+        return latest.get('result');
+    }
+});
 
 SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
     to_calibrate : function () {
@@ -42,6 +50,7 @@ SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
         return url_str;
     }
 });
+
 
 
 /*Templates*/
@@ -886,9 +895,8 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         var that, collection;
         that = this;
         collection = options.data;
-        options.latest_calibration = collection.at(collection.length - 1);
-
-        options.latest_results = options.latest_calibration.get("result");
+        console.log(collection);
+        options.latest_results = collection.latest_results();
         options.latest_intrinsics = options.latest_results.intrinsics;
         options.latest_distortion = options.latest_results.distortion;
 
@@ -927,7 +935,6 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                 }]
             });
         };
-        
     },
     render : function (options) {
         "use strict";
@@ -1074,9 +1081,11 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
-        that.models = { camera: new SimCam.Constructor.Model.Generic(options.camera), grid: new SimCam.Constructor.Model.Generic(), calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Captures(), calibrations: new SimCam.Constructor.Collection.Generic() }) };
-
-
+        that.models = {
+            camera: new SimCam.Constructor.Model.Generic(options.camera),
+            grid: new SimCam.Constructor.Model.Generic(),
+            calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Captures(), calibrations: new SimCam.Constructor.Collection.Calibrations() })
+        };
         env_frame = $(SimCam.Template.MainFrame);
 
         env_frame.load(function () { that.on_env_frame_load(options, env_frame); });
@@ -1084,7 +1093,6 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
         that.element.append(env_frame);
 
         that.el.append(SimCam.Template.ResultsModal);
-        that.el.find('#results_modal').modal().modal('hide');
 
     },
     routes: {
