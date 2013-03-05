@@ -103,7 +103,21 @@ SimCam.Template.Modal = {
                    '</ul>' +
                     '<div class="tab-content">' +
                         '<div id="modal_nav_current_params" class="tab-pane">' +
-                            '<p>CURRENTPARMA</p>' +
+                            '<h3>Intrinsics:</h3>' +
+                            '<% var latest_calibration = data.at( data.length - 1); %>' +
+                            '<% var latest_results = latest_calibration.get("result"); console.log(latest_results); %>' +
+                            '<% var li_s = latest_results.intrinsics %>' +
+                            '<% var ld_s = latest_results.distortion %>' +
+                            '<table class="table tabled-bordered">' +
+                            '<tr><td><%= parseFloat(li_s[0], 10) %></td><td><%= parseFloat(li_s[1], 10) %></td><td><%= parseFloat(li_s[2], 10) %></td></tr>' +
+                            '<tr><td><%= parseFloat(li_s[3], 10) %></td><td><%= parseFloat(li_s[4], 10) %></td><td><%= parseFloat(li_s[5], 10) %></td></tr>' +
+                            '<tr><td><%= parseFloat(li_s[6], 10) %></td><td><%= parseFloat(li_s[7], 10) %></td><td><%= parseFloat(li_s[8], 10) %></td></tr>' +
+                            '</table>' +
+                            '<h3>Distortions:</h3>' +
+                            '<table class="table tabled-bordered">' +
+                            '<tr><td><%= parseFloat(ld_s[0], 10) %></td><td><%= parseFloat(ld_s[1], 10) %></td><td><%= parseFloat(ld_s[2], 10) %></td><td><%= parseFloat(ld_s[3], 10) %></td><td><%= parseFloat(ld_s[4], 10) %></td></tr>' +
+                            '</table>' +
+
                         '</div>' +
                         '<div id="modal_nav_current_graph" class="tab-pane">' +
                             '<p>CURRENT Graph</p>' +
@@ -849,8 +863,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         "use strict";
         var that;
         that = this;
-        console.log(options);
-        that.$('.modal-body').html(SimCam.Template.Modal[options.type]);
+        that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
         that.$('#modal_tab a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
 
         that.$('#modal_tab a:first').tab('show');
