@@ -47,10 +47,11 @@ SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
 /*Templates*/
 
 SimCam.Template.ResultsModal = '<div id="results_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="results_modal_label" aria-hidden="true">' +
-          '<div class="modal-header">' +
+/*          '<div class="modal-header">' +
           '  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
           '  <h3 id="results_modal_label">Results</h3>' +
           '</div>' +
+*/
           '<div class="modal-body">' +
           '  <p>One fine body…</p>' +
           '</div>' +
@@ -94,6 +95,22 @@ SimCam.Template.SideMenu = {
 
 };
 
+
+SimCam.Template.Modal = {
+    'calibration': '<ul class="nav nav-tabs" id="modal_tab">' +
+                      '<li><a href="#modal_nav_current_params" data-toggle="tab">Current Parameters</a></li>' +
+                      '<li><a href="#modal_nav_current_graph" data-toggle="tab">Current Graph</a></li>' +
+                   '</ul>' +
+                    '<div class="tab-content">' +
+                        '<div id="modal_nav_current_params" class="tab-pane">' +
+                            '<p>CURRENTPARMA</p>' +
+                        '</div>' +
+                        '<div id="modal_nav_current_graph" class="tab-pane">' +
+                            '<p>CURRENT Graph</p>' +
+                        '</div>' +
+                    '</div>'
+
+};
 
 /*View Constructors*/
 SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
@@ -609,9 +626,11 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         "use strict";
         var that, attrs;
         that = this;
-        //TODO: do only fov, near, far, aspect, u, v
-        _.each(model.attributes, function (o, i) {
-            that.camera[i] = o;
+        _.each(['fov', 'near', 'far', 'aspect'], function (param) {
+            var value = model.get(param);
+            if (value) {
+                that.camera[param] = value;
+            }
         });
         that.camera.updateProjectionMatrix();
         that.on_resize();
@@ -655,7 +674,11 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             .done(function () {
                 var captures = model.get('captures');
                 current_capture.set('image', cc_img);
-                captures.add(current_capture);
+                if (parseInt(current_capture.get('checked').result, 10) === 256) {
+                    captures.add(current_capture);
+                } else {
+                    alert("Couldn't find the grid in the camera view!");
+                }
             });
     }
 });
@@ -817,17 +840,21 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         that = this;
         that.options = options;
         that.app     = options.app;
-        console.log(that.$el[0]);
-        that.$el.on('shown', function () { console.log('asd'); });
+//        that.$el.modal('hide');
     },
     events : {
 
     },
-    render : function (calibrations) {
+    render : function (options) {
         "use strict";
         var that;
         that = this;
-        console.log(calibrations);
+        console.log(options);
+        that.$('.modal-body').html(SimCam.Template.Modal[options.type]);
+        that.$('#modal_tab a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
+
+        that.$('#modal_tab a:first').tab('show');
+        
         that.$el.modal('show');
     }
 });
@@ -942,7 +969,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
         //construct or acquire modal
 
-        that.modal_view.render(calibrations);
+        that.modal_view.render({ "type" : "calibration", "data" : calibrations});
     }
 });
 
@@ -958,7 +985,7 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
-        that.models = { camera: new SimCam.Constructor.Model.Generic({ }), grid: new SimCam.Constructor.Model.Generic(), calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Captures(), calibrations: new SimCam.Constructor.Collection.Generic() }) };
+        that.models = { camera: new SimCam.Constructor.Model.Generic(options.camera), grid: new SimCam.Constructor.Model.Generic(), calibration: new SimCam.Constructor.Model.Generic({ captures: new SimCam.Constructor.Collection.Captures(), calibrations: new SimCam.Constructor.Collection.Generic() }) };
 
 
         env_frame = $(SimCam.Template.MainFrame);
