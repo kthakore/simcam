@@ -44,7 +44,7 @@ SimCam.Constructor.Collection.Calibrations = Backbone.Collection.extend({
 
         series = [ ];
         series.push({ name: 'r1', data:  _.map(results, function (m) { return parseFloat(m.distortion[0], 10); }) });
-        series.push({ name: 't2', data:  _.map(results, function (m) { return parseFloat(m.distortion[1], 10); }) });
+        series.push({ name: 'r2', data:  _.map(results, function (m) { return parseFloat(m.distortion[1], 10); }) });
         series.push({ name: 't1', data:  _.map(results, function (m) { return parseFloat(m.distortion[2], 10); }) });
         series.push({ name: 't2', data:  _.map(results, function (m) { return parseFloat(m.distortion[3], 10); }) });
         series.push({ name: 'r3', data:  _.map(results, function (m) { return parseFloat(m.distortion[4], 10); }) });
@@ -149,10 +149,18 @@ SimCam.Template.Modal = {
 
                         '</div>' +
                         '<div id="modal_nav_current_graph" class="tab-pane">' +
-                            '<div id="calibration_chart_container">Loading ...</div>' +
+                            '<div id="calibration_chart_container" style="width:100%; height:100%;">Loading ...</div>' +
                         '</div>' +
                         '<div id="modal_nav_current_diff" class="tab-pane">' +
-                            '<p>CURRENT Current Diff</p>' +
+                            '<table class="table">' +
+                            '<thead><tr>' +
+                                '<td>Undistorted:</td>' +
+                                '<td>Distorted:</td>' +
+                                '<td>Corrected:</td>' +
+                                '<td>Difference:</td>' +
+                            '</tr></thead>' +
+                            '<tbody id="difference_image_show" style="max-height:320px; overflow-y:scroll;"></tbody>' +
+                            '</table>' +
                         '</div>' +
                     '</div>'
 
@@ -914,7 +922,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
     },
     set_up_calibration : function (options) {
         "use strict";
-        var that, collection;
+        var that, collection, diff_grid;
         that = this;
         collection = options.data;
         console.log(collection);
@@ -926,6 +934,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         that.$('#calibration_chart_container').html('loading ...');
 
         that.after_shown = function () {
+            var env = that.$('#calibration_chart_container');
             that.chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'calibration_chart_container',
@@ -934,13 +943,22 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                         load: function (event) {
                         //When is chart ready?
                         }
-                    }
+                    },
+                    height : 400,
+                    width  : env.innerWidth() * 0.9
+                },
+                legend : {
+                    useHTML: true,
+                    foating: true,
+                    align: 'right',
+                    layout: 'vertical',
+                    verticalAlign: 'top'
                 },
                 title: {
-                    text: 'Distortions Parameters'
+                    text: 'Distortions & Intrinsics Parameters'
                 },
                 xAxis: {
-                    title: { text: 'Captured Images' }
+                    title: { text: 'Calibration Attempts' }
                 },
                 yAxis: {
                     title: {
@@ -949,7 +967,36 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                 },
                 series: collection.distortions_series_parameters()
             });
+        
         };
+
+        diff_grid = that.$('#difference_image_show');
+
+        diff_grid.html('');
+
+        _.each(collection.models.reverse(), function (model, i) {
+            var tr, captures, lc, correct_url, ji;
+            captures = model.get('captures');
+            lc = captures[captures.length - 1];
+        
+            ji = model.get('result').job_id;
+            correct_url = '/api/undistort/' +
+                          lc.distorted.out +
+                          '?job_id=' + ji;
+                    /*
+                          '&cx=' + parseFloat(t[0], 10) +
+                          '&cy=' + parseFloat(t[4], 10) +
+                          '&fx=' + parseFloat(t[2], 10) +
+                          '&fy=' + parseFloat(t[5], 10);
+                    */
+
+
+            tr = _.template('<tr><td><img src="<%=lc.undistorted.url%>" /></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td><img src="<%=cu%>" /></td><td></td></tr>', {lc : lc, cu : correct_url});
+
+            diff_grid.append($(tr));
+
+        });
+        
     },
     render : function (options) {
         "use strict";

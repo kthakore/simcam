@@ -16,7 +16,7 @@ sub image_location {
    my $self = shift;
    my $image = shift;
 
-   my $loc = $IMAGE_LOCATION.$image;
+   my $loc = 'public/uploads/'.$image;
    my $log = $self->app->log();
    $log->info('Looking for image at: '.$loc );
    if ( -e $loc ){
@@ -293,7 +293,7 @@ sub get_calibrate {
             my @d_array = split(' ', $d_cv_data ); 
             my @f_array = split(' ', $i_cv_data );
            
-            my $fo = { distortion => \@d_array, intrinsics => \@f_array};
+            my $fo = { distortion => \@d_array, intrinsics => \@f_array, job_id => $job_id};
 
 	return	$self->render({
 		json => $fo
@@ -384,4 +384,46 @@ sub run_distort {
     }
 }
 
+
+
+sub get_undistort {
+    my $self = shift;
+    my $job_id = $self->param('job_id');
+    my $dist =  $job_id . '_dist.xml';
+    my $int = $job_id .'_int.xml';
+    my $image = $self->image_location($self->param('image'));
+
+    my $dist_path = $IMAGE_LOCATION.$dist;
+    my $int_path = $IMAGE_LOCATION.$int;
+    my $image_path = $IMAGE_LOCATION.$image;
+    my $out_image =  $IMAGE_LOCATION.$job_id. '_correct.png';
+
+   $job_id .= '_correct'; 
+
+    my $run  = "../simcamCV/distort $dist_path $image_path $out_image $int_path";
+
+    $self->app->log->info( $run );
+
+    my( $stdout, $stderr, @result) = Capture::Tiny::capture {
+        
+        `$run`
+    };
+
+    my $r;
+    if( -f $out_image )
+        {
+            $r = { success => 1, out => $job_id.'.png', job_id => $job_id };
+        }
+        else
+        {
+            $r = { success => 0, result => { out => $stdout, err => $stderr, res => \@result } , job_id => $job_id};  
+        }
+
+    return $self->respond_to( {
+         json => sub { $self->render_json( $r );  },
+         any =>  sub { $self->render_static( 'uploads/'.$job_id.'.png' ); }
+     
+       });
+
+}
 1;

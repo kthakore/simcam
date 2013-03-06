@@ -92,6 +92,9 @@ sub startup {
 
   # DISTORT AN IMAGE
   $r->get('/api/distort/:image')->to('api#get_distort');
+  # DISTORT AN IMAGE
+  $r->get('/api/undistort/:image')->to('api#get_undistort');
+
 
   # CALIBRATE IMAGES
   $r->get('/api/calibrate')->to('api#get_calibrate'); #EXPECTS LIST OF IMAGES
