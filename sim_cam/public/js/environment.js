@@ -48,7 +48,12 @@ SimCam.Constructor.Collection.Calibrations = Backbone.Collection.extend({
         series.push({ name: 't1', data:  _.map(results, function (m) { return parseFloat(m.distortion[2], 10); }) });
         series.push({ name: 't2', data:  _.map(results, function (m) { return parseFloat(m.distortion[3], 10); }) });
         series.push({ name: 'r3', data:  _.map(results, function (m) { return parseFloat(m.distortion[4], 10); }) });
-        console.log( results);
+
+        series.push({ name: 'cx', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[0], 10); }) });
+        series.push({ name: 'cy', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[4], 10); }) });
+        series.push({ name: 'fx', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[2], 10); }) });
+        series.push({ name: 'fy', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[5], 10); }) });
+
         return series;
     }
 });
@@ -258,7 +263,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
         that.renderer = new THREE.WebGLRenderer({antialias: true, clearColor: 0x888888, clearAlpha: 255, canvas: that.$('canvas')[0]});
         that.renderer.sortObjects = false;
-        that.renderer.setSize(that.$el.innerWidth(), window.innerHeight);
+        that.renderer.setSize(that.$el.innerWidth(), that.$el.innerHeight());
 
         that.renderer.shadowMapEnabled = true;
         that.renderer.shadowMapSoft = true;
