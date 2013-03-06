@@ -47,11 +47,10 @@ sub create_image {
 
        my $local_image = $self->store_base64image( $params->{image} ); 
        return $self->render( { json => { img => $local_image } } );
-   } elsif ( $params->{type} eq 'upload') {
+   } elsif ( $params->{type} eq 'raw') {
        $self->app->log->info('Api|Image|upload');
-
-       return $self->render( { json => { message => 'Upload not implemented yet.' }, status => 501 } );
-
+       my $local_image = $self->store_rawimage( $params->{image} ); 
+       return $self->render( { json => { img => $local_image } } );
    } else {
        $self->app->log->info('Api|Image|invalid');
        return $self->render( { json => { message => 'Invalid format'}, text=> 'Invalid params', status => 400 } );
@@ -71,6 +70,20 @@ sub get_image {
         
 
     return $self->render({ json => {message => 'Invalid Argument'}, text => 'Invalid Argument', status => 400 });
+}
+
+sub store_rawimage {
+    my $self = shift;
+    my $d = shift;
+    warn $d;
+    my $file_name = sha1_hex( $d );
+    my $file_loc = $IMAGE_LOCATION.$file_name;
+    File::Slurp::write_file( $file_loc. '.png', $d );
+   
+    $self->imagemagick_convert(  $file_loc.'.png', $file_loc.'_in.png' );   
+    unlink( $file_loc.'.png' );
+    return $file_name;
+
 }
 
 sub store_base64image {

@@ -634,7 +634,9 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         ImageConstructor = Backbone.Model.extend({ url: '/api/image' });
 
+        
         image_model = new ImageConstructor({
+//            "image": atob(that.current_image.replace('data:image/png;base64,', '')),      
             "image": that.current_image,
             "type" : 'base64'
         });
