@@ -975,9 +975,10 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         diff_grid.html('');
 
         _.each(collection.models.reverse(), function (model, i) {
-            var tr, captures, lc, correct_url, ji;
+            var tr, captures, lc, correct_url, ji, undistorted_image, calibrated_image, difference_image, load_count = 0;
             captures = model.get('captures');
             lc = captures[captures.length - 1];
+
         
             ji = model.get('result').job_id;
             correct_url = '/api/undistort/' +
@@ -990,11 +991,28 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                           '&fy=' + parseFloat(t[5], 10);
                     */
 
+            
 
-            tr = _.template('<tr><td><img src="<%=lc.undistorted.url%>" /></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td><img src="<%=cu%>" /></td><td></td></tr>', {lc : lc, cu : correct_url});
+            tr = _.template('<tr><td><img src="<%=lc.undistorted.url%>" /></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td><img src="<%=cu%>" /></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url});
 
-            diff_grid.append($(tr));
+            tr = $(tr);
+            diff_grid.append(tr);
 
+            undistorted_image = new Image();
+
+            calibrated_image = new Image();
+
+            undistorted_image.onload = calibrated_image.onload = function () {
+                var context = tr.find('canvas')[0].getContext('2d');
+                load_count += 1;
+                if (load_count >= 2) {
+                    difference_image = imagediff.diff(undistorted_image, calibrated_image);
+                    context.putImageData(difference_image, 0, 0);
+                }
+            };
+
+            undistorted_image.src = lc.undistorted.url;
+            calibrated_image.src = correct_url;
         });
         
     },
@@ -1185,7 +1203,9 @@ SimCam.initialize = function (options) {
     $(function () {
     
         if (options.mode.type === 'calibration') {
-            SimCam.ScriptLoader.loadscript();
+            SimCam.ScriptLoader.loadscript('/js/highcharts.js');
+            SimCam.ScriptLoader.loadscript('/js/imagediff.js');
+
         }
  
 
@@ -1216,11 +1236,11 @@ SimCam.initialize = function (options) {
 
 
 SimCam.ScriptLoader = {
-    loadscript : function () {
+    loadscript : function (scr) {
         "use strict";
         var script = document.createElement("script");
         script.type = "text/javascript";
-        script.src = "/js/highcharts.js";
+        script.src = scr;
         document.body.appendChild(script);
     }
 };
