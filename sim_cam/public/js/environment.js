@@ -1,7 +1,7 @@
 /*jslint browser: true*/
 /*jslint newcap: false*/
 /*jslint nomen: true */
-/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary, Highcharts */
+/*global $, _, jQuery, Backbone, console, alert, THREE, requestAnimationFrame, Base64Binary, Highcharts, imagediff */
 /*jshint globalstrict: true*/
 
 /**TODO:
@@ -315,7 +315,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
         event.preventDefault();
         var vector, ray, intersects, loc, forward, target, axis, sinAngle, cosAngle, angle, rotation_measuring_mesh;
         this.mouse.x = (event.clientX / this.$el.innerWidth()) * 2 - 1;
-        this.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        this.mouse.y = -(event.clientY / this.$el.innerHeight()) * 2 + 1;
 
         vector = new THREE.Vector3(this.mouse.x, this.mouse.y, 0.5);
         this.projector.unprojectVector(vector, this.camera);
@@ -993,7 +993,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
 
             
 
-            tr = _.template('<tr><td><img src="<%=lc.undistorted.url%>" /></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td><img src="<%=cu%>" /></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url});
+            tr = _.template('<tr><td class="undistorted_image"></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td class="calibrated_image"></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url});
 
             tr = $(tr);
             diff_grid.append(tr);
@@ -1006,6 +1006,8 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                 var context = tr.find('canvas')[0].getContext('2d');
                 load_count += 1;
                 if (load_count >= 2) {
+                    that.$('.undistorted_image').html(undistorted_image);
+                    that.$('.calibrated_image').html(calibrated_image);
                     difference_image = imagediff.diff(undistorted_image, calibrated_image);
                     context.putImageData(difference_image, 0, 0);
                 }
