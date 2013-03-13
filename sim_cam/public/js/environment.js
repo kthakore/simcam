@@ -89,7 +89,7 @@ SimCam.Template.ResultsModal = '<div id="results_modal" class="modal fade" tabin
           '</div>' +
           '</div>';
 
-SimCam.Template.MainFrame = '<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="640px" ></iframe>';
+SimCam.Template.MainFrame = '<iframe src="/iframes/environment.html" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" frameborder="0" class="simcam_iframe" width="100%" height="100%" ></iframe>';
 
 SimCam.Template.SideMenu = {
     "pinhole" : '<h5>Pinhole Camera Model</h5>' +
@@ -922,7 +922,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
     },
     set_up_calibration : function (options) {
         "use strict";
-        var that, collection, diff_grid;
+        var that, collection, diff_grid, m_reverse;
         that = this;
         collection = options.data;
         console.log(collection);
@@ -973,12 +973,13 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         diff_grid = that.$('#difference_image_show');
 
         diff_grid.html('');
-
-        _.each(collection.models.reverse(), function (model, i) {
+        m_reverse = collection.models;
+        _.each(collection.models, function (model, i) {
             var tr, captures, lc, correct_url, ji, undistorted_image, calibrated_image, difference_image, load_count = 0;
             captures = model.get('captures');
             lc = captures[captures.length - 1];
 
+            console.log(lc);
         
             ji = model.get('result').job_id;
             correct_url = '/api/undistort/' +
@@ -993,10 +994,10 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
 
             
 
-            tr = _.template('<tr><td class="undistorted_image"></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td class="calibrated_image"></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url});
+            tr = _.template('<tr class="' + i + '"><td class="undistorted_image"></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td class="calibrated_image"></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url});
 
             tr = $(tr);
-            diff_grid.append(tr);
+            diff_grid.prepend(tr);
 
             undistorted_image = new Image();
 
@@ -1006,8 +1007,8 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                 var context = tr.find('canvas')[0].getContext('2d');
                 load_count += 1;
                 if (load_count >= 2) {
-                    that.$('.undistorted_image').html(undistorted_image);
-                    that.$('.calibrated_image').html(calibrated_image);
+                    tr.find('.undistorted_image').html(undistorted_image);
+                    tr.find('.calibrated_image').html(calibrated_image);
                     difference_image = imagediff.diff(undistorted_image, calibrated_image);
                     context.putImageData(difference_image, 0, 0);
                 }
@@ -1209,6 +1210,8 @@ SimCam.initialize = function (options) {
             SimCam.ScriptLoader.loadscript('/js/imagediff.js');
 
         }
+        
+        options.element.css({height: window.innerHeight * 0.99 + 'px' });
  
 
     });
