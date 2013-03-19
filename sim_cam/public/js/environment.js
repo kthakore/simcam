@@ -224,8 +224,8 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
             cam_obj.scale.set(1, 1, 1);
             cam_obj.rotation.set(0, 0, 0);
             cam_obj.model = that.options.app.models.camera;
-            //					cam_obj.castShadow = false;
-            //					cam_obj.receiveShadow = false;
+            //cam_obj.castShadow = false;
+            //cam_obj.receiveShadow = false;
             material = new THREE.MeshLambertMaterial({
                 map: THREE.ImageUtils.loadTexture("/img/grid.gif")
             });
@@ -623,6 +623,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         }
         that.loading_image = true;
         camera_model = that.options.app.models.camera;
+        console.log(camera_model);
 
         distortion_url_bit = '';
         params = ['t1', 't2', 'r1', 'r2', 'r3'];
@@ -642,7 +643,6 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
 
         ImageConstructor = Backbone.Model.extend({ url: '/api/image' });
 
-        
         image_model = new ImageConstructor({
 //            "image": atob(that.current_image.replace('data:image/png;base64,', '')),      
             "image": that.current_image,
@@ -1061,7 +1061,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
         that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
 
-        that.modal_view             = new SimCam.Constructor.View.ResultsModal({ el: options.app.el.find('#results_modal'), mode: that.mode, app: options.app});
+        that.modal_view        = new SimCam.Constructor.View.ResultsModal({ el: options.app.el.find('#results_modal'), mode: that.mode, app: options.app});
 
         main_viewer_frame.on('load', function () { that.main_viewer.trigger('load'); });
         camera_viewer_frame.on('load', function () { that.camera_viewer.trigger('load'); });
@@ -1179,13 +1179,26 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
     },
     routes: {
-	    '': 'default_route'
+	    '': 'default_route',
+        'camera/:distortion' : 'route_camera_distortion'
     },
     //ROUTES
     default_route : function () {
         "use strict";
         var that;
         that = this;
+    },
+    route_camera_distortion : function (dist) {
+        "use strict";
+        var that = this,
+            params = {};
+        _.each(dist.split('&'), function (param) {
+            var kv = param.split('=');
+            params[kv[0]] = kv[1];
+            that.models.camera.set(kv[0], parseFloat(kv[1], 10));
+            that.models.camera.trigger('update_distortions_params');            
+        });
+
     },
     //EVENTS 
     on_env_frame_load : function (options, env_frame) {

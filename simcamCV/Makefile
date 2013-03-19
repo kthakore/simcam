@@ -1,4 +1,4 @@
-CC = g++
+CC = gcc -x c++
 CFLAGS = -lopencv_imgproc -lopencv_highgui -lopencv_calib3d -lopencv_core
 
 all: check calibrate noise distort diff

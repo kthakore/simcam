@@ -17,9 +17,6 @@ int main( int argc, char * argv[] )
 
 	const char* intrinsics = argv[4];
 
-	printf( std
-
-
 	CvMat *intrinsic = (CvMat*)cvLoad( intrinsics);
 	CvMat *distortion = (CvMat*)cvLoad( distortions );
 
