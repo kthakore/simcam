@@ -134,8 +134,7 @@
 
 	    var simcam = SimCam.initialize({ element: $('#environment'), 
                                      mode: { 
-                                           'type': 'pinhole', 
-                                           'learning_environment': true 
+                                           'type': 'pinhole' 
                                         }
                                    });
 
