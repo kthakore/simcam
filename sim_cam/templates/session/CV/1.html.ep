@@ -92,6 +92,7 @@
 
 
 <div class="row-fluid" style="text-align:center">
+<p>To see how the parameters change the camera adjust the linear intrinsic parameters in the environment below: </p>
 <center id="environment" class="span12" style="padding:5px">
 </center>
 </div>
@@ -112,8 +113,7 @@
      <div class="control-group">
           <!-- Button -->
           <div class="controls">
-            <input type="reset" class="btn btn-danger" value="Reset" />
-            <input type="submit" class="btn btn-success" value="Submit" />
+            <input type="submit" class="btn btn-success" value="Next" />
           </div>
         </div>
 
