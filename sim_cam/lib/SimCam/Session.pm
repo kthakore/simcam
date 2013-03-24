@@ -77,7 +77,10 @@ sub run {
 
         if ( $s_num > ($count - 1) ){
             $s_num = $count - 1;
+            $self->app->log->info("Valid force of session last: $s_num");
+            $user->update({ current_session => $s_num });
         }
+
         my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
         
         if( $session ) {
