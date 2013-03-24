@@ -65,7 +65,14 @@ sub startup {
 
   $r->post('/login')->to('front#login');
 
-  $r->get('/logout')->to('root#logout');
+  $r->get('/logout' => sub {  
+        my $self = shift;
+        my $user = $self->current_user;
+        if( $user ) {
+            $self->session( expires => 1 );
+        }
+        return $self->redirect_to('/');
+    });
 
 
   $r->get('/session/:num/start')->to('session#start');
