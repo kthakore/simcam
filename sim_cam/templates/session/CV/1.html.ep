@@ -103,12 +103,6 @@
 	         The focal lengths describe where the camera can focus. 
 	         If you have a webcam, see if you can find the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>)  in the environment below.  
 			</p>
-			<h5>Non-linear Intrinsic Parameters</h5>
-			<p>Of course real cameras are not as simple as described in the pinhole camera model. Real lens systems are susceptible to two distortions.</p>
-			<h6>Radial Distortion</h6>
-			<p></p>
-			<h6>Tangential Distortion</h6>
-			<p></p>
 </div>
 
 
