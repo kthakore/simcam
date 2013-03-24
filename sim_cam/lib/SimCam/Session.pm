@@ -75,6 +75,9 @@ sub run {
         my @files = <$dir/*.html.ep>;
         my $count = scalar @files;
 
+        if ( $s_num > ($count - 1) ){
+            $s_num = $count - 1;
+        }
         my $session = $se_rs->search({ usr_id => $user->id, milestone => $s_num})->next();
         
         if( $session ) {
