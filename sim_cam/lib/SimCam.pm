@@ -18,7 +18,7 @@ sub startup {
 
     $self->plugin(
         'authentication' => {
-            session     => { 'stash_key' => 'simcam', 'expires' => 2592000 },
+        'session'     => { 'stash_key' => 'simcam', 'expires' => 2592000 },
             'load_user' => sub {
 
                 my $self   = shift;
