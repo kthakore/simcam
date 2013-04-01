@@ -21,7 +21,29 @@ The second one describing the distortion coefficients matrix (or vector):
           <img src="/images/distortions_coefficents.png" /><br /> <center><span style="clear:both" class="small"> <a href="http://docs.opencv.org/doc/tutorials/calib3d/camera_calibration/camera_calibration.html">source</a> </span></center> 
         </div>
 </div>
+
+<div class="row">
+    <h2>Calibration Method</h2>
+    <p> 
+        To solve for these matrices we need to know how the camera behaves optically. This can be done by taking images of a pattern called a calibration grid. See an example of such an image below: </p>
  
+
+<div class="row" style="text-align: center"> 
+        <div>		
+    		<img width="300px" src="/images/calibration.jpg" /><br />
+    <center>
+<span style="clear:both" class="small">Courtesy of Uditha Jayarathne from Robarts Medical Imaging Lab. </span></center> 
+		</div>
+</div>
+
+
+<p>Once several of these images are captured, algorithms can be run to estimate the calibration parameters. There are a variety of algorithms run but most are based on Z. Zhang's algorithm. You can read about the algorithm in the papers below:
+<ul>
+ <li><a href="/zhang.pdf">A flexible new technique for camera calibration <b>Zhengyou Zhang</b></a></li>
+ <li><a href="/zhang2.pdf">Zhang's Camera Calibration: Step by step <b>Lucas Teixeira, Marcelo Gattass, and Manuel Fernandez</b></a>
+</ul>
+    </p>
+</div> 
 
 <div class="row-fluid" style="text-align:center">
 <center id="environment" class="span12" style="padding:5px">
