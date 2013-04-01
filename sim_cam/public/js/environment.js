@@ -623,8 +623,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         }
         that.loading_image = true;
         camera_model = that.options.app.models.camera;
-        console.log(camera_model);
-
+        
         distortion_url_bit = '';
         params = ['t1', 't2', 'r1', 'r2', 'r3'];
         _.each(params, function (param) {

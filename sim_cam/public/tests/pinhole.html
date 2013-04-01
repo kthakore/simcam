@@ -19,7 +19,10 @@
             var simcam = SimCam.initialize({ element: $('#environment'), 
                                          mode: { 
                                                type: 'pinhole' 
-                                            }
+                                            },
+                                         success: function(app) {
+                                             window.simcam = app;
+                                         }
                                        });
 
         </script>
