@@ -23,7 +23,7 @@ The second one describing the distortion coefficients matrix (or vector):
 </div>
 
 <div class="row">
-    <h2>Calibration Method</h2>
+    <h2>Calibration Background</h2>
     <p> 
         To solve for these matrices we need to know how the camera behaves optically. This can be done by taking images of a pattern called a calibration grid. See an example of such an image below: </p>
  
@@ -42,9 +42,20 @@ The second one describing the distortion coefficients matrix (or vector):
  <li><a href="/zhang.pdf">A flexible new technique for camera calibration <b>Zhengyou Zhang</b></a></li>
  <li><a href="/zhang2.pdf">Zhang's Camera Calibration: Step by step <b>Lucas Teixeira, Marcelo Gattass, and Manuel Fernandez</b></a>
 </ul>
-    </p>
-</div> 
+</p>
+<h2>Calibration Practice</h2>
+ <p>
+   In practical usage calibration is done using software. One library that does camera calibration based on Zhang's algorithm is OpenCV. To set up OpenCV and begin doing calibration with it have a look at <a href="http://docs.opencv.org/doc/tutorials/calib3d/camera_calibration/camera_calibration.html">this guide.</a>
+</p>
 
+<h3>Simulated Environment for Calibration</h3>
+<p>Below is a simulated environment with a distorted camera. The environment also uses the OpenCV software to calibrate the distorted camera. To begin calibration move and place the grid in various positions and capture the images using the capture image button in the side menu (located on the right). You can see all your captured images on the bottom bar.</p>
+
+<p>For the first calibration attempt 4 images need to be captured. As you capture each subsequent image, a calibration attempt is done. You can then click on view current results button to see your current camera matrix and distortion parameters, graphs showing changes in parameter values and finally the efficacy of each calibration attempt.</p>
+
+
+
+</div> 
 <div class="row-fluid" style="text-align:center">
 <center id="environment" class="span12" style="padding:5px">
 </center>
