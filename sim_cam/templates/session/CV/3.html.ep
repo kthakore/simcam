@@ -1,6 +1,28 @@
 <div class="row">
     <h1>Calibration</h1>
+    <p>Calibration is the process with which we determine the two matrices we just discussed. The first one describing the camera matrix:</p> 
 </div>
+
+<div class="row" style="text-align: center"> 
+        <div>		
+		<span><img src="/images/image08.gif" /></span>
+		</div>
+</div>
+
+<div class="row">
+<p>
+The second one describing the distortion coefficients matrix (or vector): 
+</p>
+</div>
+
+<div class="row" style="text-align: center"> 
+
+        <div>
+          <img src="/images/distortions_coefficents.png" /><br /> <center><span style="clear:both" class="small"> <a href="http://docs.opencv.org/doc/tutorials/calib3d/camera_calibration/camera_calibration.html">source</a> </span></center> 
+        </div>
+</div>
+ 
+
 <div class="row-fluid" style="text-align:center">
 <center id="environment" class="span12" style="padding:5px">
 </center>
@@ -11,8 +33,7 @@
      <div class="control-group">
           <!-- Button -->
           <div class="controls">
-            <input type="reset" class="btn btn-danger" value="Reset" />
-            <input type="submit" class="btn btn-success" value="Submit" />
+            <input type="submit" class="btn btn-success" value="Next" />
           </div>
         </div>
 
