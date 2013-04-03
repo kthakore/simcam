@@ -106,13 +106,13 @@ SimCam.Template.SideMenu = {
                 '<li><a href="javascript:void(0)"><input type="text" name="near" class="span1 pinhole_sidemenu_input" disabled="true" /></a></li>',
     "distortions" : '<h5>Distortions</h5>' +
                 '<li class="nav-header">Radial Distortions</li>' +
-                '<li><a href="javascript:void(0)">R1: <input type="text" name="r1" class="span1 distortions_sidemenu_input"/></a></li>' +
-                '<li><a href="javascript:void(0)">R2: <input type="text" name="r2" class="span1 distortions_sidemenu_input"/></a></li>' +
-                '<li><a href="javascript:void(0)">R3: <input type="text" name="r3" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">K1: <input type="text" name="r1" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">K2: <input type="text" name="r2" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">K3: <input type="text" name="r3" class="span1 distortions_sidemenu_input"/></a></li>' +
                 '<li class="nav-header">Tangential Distortions</li>' +
-                '<li><a href="javascript:void(0)">TX: <input type="text" name="t1" class="span1 distortions_sidemenu_input"/></a></li>' +
+                '<li><a href="javascript:void(0)">P1: <input type="text" name="t1" class="span1 distortions_sidemenu_input"/></a></li>' +
                 '<li class="nav-header">Far</li>' +
-                '<li><a href="javascript:void(0)">TY: <input type="text" name="t2" class="span1 distortions_sidemenu_input" /></a></li>',
+                '<li><a href="javascript:void(0)">P2: <input type="text" name="t2" class="span1 distortions_sidemenu_input" /></a></li>',
     "calibration" : '<li class="nav-header">Calibration</li>' +
                 '<li><input type="button" name="capture" class="btn btn_primary calibration_sidemenu_input" value="Capture Image" /></li>' +
                 '<li class="nav-header"> </li>' +
@@ -1170,12 +1170,18 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
         };
         env_frame = $(SimCam.Template.MainFrame);
 
-        env_frame.load(function () { that.on_env_frame_load(options, env_frame); });
+        env_frame.load(function () { 
+                that.on_env_frame_load(options, env_frame);
+                if (options.success) {
+                    options.success(that);
+                }
+
+            });
 
         that.element.append(env_frame);
 
         that.el.append(SimCam.Template.ResultsModal);
-
+    
     },
     routes: {
 	    '': 'default_route',
@@ -1237,9 +1243,6 @@ SimCam.initialize = function (options) {
 
             SimCam.grid_texture_map = THREE.ImageUtils.loadTexture("/img/grid.gif", undefined, function () {
                 app = new SimCam.Constructor.Router.App(options);
-                if (options.success) {
-                    options.success(app);
-                }
 
                 Backbone.history.start();
 

@@ -1,3 +1,33 @@
+<style>
+  .pinhole_sidemenu_input {
+    width: 50px !important
+}
+
+.matrix {
+    position: relative;
+}
+.matrix:before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 0;
+    border: 1px solid #000;
+    border-right: 0px;
+    width: 6px;
+    height: 100%;
+}
+.matrix:after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 0;
+    border: 1px solid #000;
+    border-left: 0px;
+    width: 6px;
+    height: 100%;
+}
+</style>
+
 <div class="row">
 
     <h1>Introduction</h1>
@@ -70,8 +100,6 @@
 	</p>
 </div>
 
-
-
 <div class="row">
 
     <h3>Pin hole Camera Model</h3>
@@ -90,13 +118,6 @@
 		</div>
 </div>
 
-
-<div class="row-fluid" style="text-align:center">
-<p>To see how the parameters change the camera adjust the linear intrinsic parameters in the environment below: </p>
-<center id="environment" class="span12" style="padding:5px">
-</center>
-</div>
-
 <div class="row">	
 		   <p>
 		     Where the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>) are the focal lengths of the camera. 
@@ -106,6 +127,57 @@
 			</p>
 </div>
 
+<div class="row-fluid" style="text-align:center">
+
+
+<center id="environment" class="span12" style="padding:5px">
+</center>
+</div>
+
+
+
+<div class="row">
+<p>To see how the parameters change the camera adjust the linear intrinsic parameters in the table below: </p>
+
+    <center>
+        <table class="matrix">
+            <tr>
+                <td>
+                    <input type="text" name="0" class="span1 pinhole_sidemenu_input" />
+                </td>
+                <td>
+                    <input type="text" name="1" class="span1 pinhole_sidemenu_input" />
+                </td>
+                <td>
+                    <input type="text" name="2" class="span1 pinhole_sidemenu_input" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="3" class="span1 pinhole_sidemenu_input" />
+                </td>
+                <td>
+                    <input type="text" name="4" class="span1 pinhole_sidemenu_input" />
+                </td>
+                <td>
+                    <input type="text" name="5" class="span1 pinhole_sidemenu_input" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" name="6" class="span1 pinhole_sidemenu_input" />
+                </td>
+                <td>
+                    <input type="text" name="7" class="span1 pinhole_sidemenu_input" />
+                </td>
+                <td>
+                    <input type="text" name="8" class="span1 pinhole_sidemenu_input" />
+                </td>
+            </tr>
+
+        </table>
+    </center>
+</div>
 
 <div class="row">
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
@@ -132,10 +204,19 @@
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
 
-	    var simcam = SimCam.initialize({ element: $('#environment'), 
+	    SimCam.initialize({ element: $('#environment'), 
                                      mode: { 
                                            'type': 'pinhole' 
-                                        }
+                                        },
+                                     success : function (app) {
+                                        window.simcam = app;
+                                        console.log(app.view); 
+                                        var camera = app.view.camera_viewer.camera;
+                                        var camera_model = app.models.camera;
+                                        camera_model.bind('move', function() {
+                                            console.log('moved');
+                                        }); 
+                                    }
                                    });
 
     </script>
