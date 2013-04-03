@@ -120,7 +120,10 @@ SimCam.Template.SideMenu = {
                 '<li class="nav-header"> </li>' +
                 '<li><input type="button" name="results" class="btn btn_primary calibration_sidemenu_input" value="View Current Results" disabled="disabled" /></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
-                '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>'
+                '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>',
+    "webcam" :  '<li class="nav-header">Webcam Calibration</li>' +
+                '<li><input type="button" name="capture" class="btn btn_primary calibration_sidemenu_input" value="Capture Image" /></li>' +
+                '<li><input type="button" name="results" class="btn btn_primary calibration_sidemenu_input" value="View Current Results" disabled="disabled" /></li>'
 
 };
 
@@ -167,6 +170,40 @@ SimCam.Template.Modal = {
 };
 
 /*View Constructors*/
+
+SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
+
+    initialize: function (options) {
+        var that = this;
+        that.cv_el = options.cv_el;
+        that.$el.html('<center><video id="video" width="640" height="480" autoplay></video></center>');
+        that.cv_el.html('<canvas id="canvas" width="640" height="480" style="width:200px">');
+
+        var ctx = that.cv_el.find('canvas')[0].getContext("2d");
+        var video = that.$('#video')[0],
+        videoObj = { "video": true },
+        errBack = function(error) {
+            console.log("Video capture error: ", error.code); 
+        };
+    
+        if(navigator.getUserMedia) { 
+            navigator.getUserMedia(videoObj, function(stream) {
+                video.src = stream;
+                video.play();
+            }, errBack);
+        } else if(navigator.webkitGetUserMedia) {
+            navigator.webkitGetUserMedia(videoObj, function(stream){
+                video.src = window.webkitURL.createObjectURL(stream);
+                video.play();
+            }, errBack);
+        }
+
+        options.view.side_bar_viewer.$el.find('[name="capture"]').on('click', function() {
+                   ctx.drawImage(video, 0, 0, 640, 480); 
+        });
+    }
+});
+
 SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
     initialize: function (options) {
         "use strict";
@@ -1057,8 +1094,15 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         that.bottom_bar_viewer = new SimCam.Constructor.View.BottomBar({ el: bottom_el, mode: that.mode, app: options.app });
         that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
 
-        that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
-        that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
+            if( options.mode.type !== 'webcam') {
+            
+                that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
+                that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
+
+            }
+            else {
+                that.main_viewer = new SimCam.Constructor.View.MainWebCamView({ el : mv_body, cv_el :  cv_body, app: options.app, view: that });
+            }
 
         that.modal_view        = new SimCam.Constructor.View.ResultsModal({ el: options.app.el.find('#results_modal'), mode: that.mode, app: options.app});
 

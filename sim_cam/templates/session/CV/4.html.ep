@@ -23,6 +23,8 @@
 % content_for javascript => begin
     <script src="/js/tracker.js"></script>
     <script src="/js/environment.js"></script>
+    <script src="/js/libs/three.js"></script>
+
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
             var simcam = SimCam.initialize({ element: $('#environment'), 
