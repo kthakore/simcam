@@ -900,7 +900,7 @@ SimCam.Constructor.View.BottomBar = Backbone.View.extend({
         "use strict";
         var that;
         that = this;
-        if (options.mode.type !== 'calibration') {
+        if (options.mode.type !== 'calibration' && options.mode.type !== 'webcam') {
             that.$el.hide();
             return;
         }
@@ -1101,6 +1101,10 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 
             }
             else {
+                camera_viewer_frame.css('height', '150px');
+                main_viewer_frame.css('height', '640px');
+                that.$el.css('height', '670px');
+
                 that.main_viewer = new SimCam.Constructor.View.MainWebCamView({ el : mv_body, cv_el :  cv_body, app: options.app, view: that });
             }
 
