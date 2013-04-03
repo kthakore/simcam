@@ -1175,7 +1175,6 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
                 if (options.success) {
                     options.success(that);
                 }
-
             });
 
         that.element.append(env_frame);

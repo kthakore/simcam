@@ -115,9 +115,50 @@
 <div class="row" style="text-align: center"> 
         <div>		
 		<span><img src="/images/image08.gif" /></span>
+        <center>
+<table class="matrix">
+    <tr>
+        <td>
+            <input type="text" name="0" class="span1 pinhole_sidemenu_input" />
+        </td>
+        <td>
+            <input type="text" name="1" class="span1 pinhole_sidemenu_input" />
+        </td>
+        <td>
+            <input type="text" name="2" class="span1 pinhole_sidemenu_input" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="4" class="span1 pinhole_sidemenu_input" />
+        </td>
+        <td>
+            <input type="text" name="5" class="span1 pinhole_sidemenu_input" />
+        </td>
+        <td>
+            <input type="text" name="6" class="span1 pinhole_sidemenu_input" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="8" class="span1 pinhole_sidemenu_input" />
+        </td>
+        <td>
+            <input type="text" name="9" class="span1 pinhole_sidemenu_input" />
+        </td>
+        <td>
+            <input type="text" name="10" class="span1 pinhole_sidemenu_input" />
+        </td>
+    </tr>
+</table>
+</center>
+
+        <b style="color:blue;">To see how the parameters change the camera adjust the linear intrinsic parameters in the table above.</b>
+
+
 		</div>
 </div>
-
+<br />
 <div class="row">	
 		   <p>
 		     Where the (<span><img src="/images/f_near.gif" /></span>,<span><img src="/images/f_far.gif" /></span>) are the focal lengths of the camera. 
@@ -136,48 +177,6 @@
 
 
 
-<div class="row">
-<p>To see how the parameters change the camera adjust the linear intrinsic parameters in the table below: </p>
-
-    <center>
-        <table class="matrix">
-            <tr>
-                <td>
-                    <input type="text" name="0" class="span1 pinhole_sidemenu_input" />
-                </td>
-                <td>
-                    <input type="text" name="1" class="span1 pinhole_sidemenu_input" />
-                </td>
-                <td>
-                    <input type="text" name="2" class="span1 pinhole_sidemenu_input" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" name="3" class="span1 pinhole_sidemenu_input" />
-                </td>
-                <td>
-                    <input type="text" name="4" class="span1 pinhole_sidemenu_input" />
-                </td>
-                <td>
-                    <input type="text" name="5" class="span1 pinhole_sidemenu_input" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="text" name="6" class="span1 pinhole_sidemenu_input" />
-                </td>
-                <td>
-                    <input type="text" name="7" class="span1 pinhole_sidemenu_input" />
-                </td>
-                <td>
-                    <input type="text" name="8" class="span1 pinhole_sidemenu_input" />
-                </td>
-            </tr>
-
-        </table>
-    </center>
-</div>
 
 <div class="row">
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
@@ -213,9 +212,19 @@
                                         console.log(app.view); 
                                         var camera = app.view.camera_viewer.camera;
                                         var camera_model = app.models.camera;
-                                        camera_model.bind('move', function() {
-                                            console.log('moved');
-                                        }); 
+
+                                        _.each(camera.projectionMatrix.elements, function(element, i) {
+                                             
+                                              var input = $('[name="'+i+'"]').val( element );
+                                              input.on('keyup', function() {
+                                                var number = parseFloat( input.val() );
+                                                if (number && number !== NaN ) {
+                                                        camera.projectionMatrix.elements[i] = input.val();
+                                                 } else { return false; }
+                                              });
+                                        });
+
+                                       
                                     }
                                    });
 
