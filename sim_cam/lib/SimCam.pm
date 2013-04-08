@@ -106,7 +106,7 @@ sub startup {
   # CALIBRATE IMAGES
   $r->get('/api/calibrate')->to('api#get_calibrate'); #EXPECTS LIST OF IMAGES
 
- 
+  $r->websocket('/api/calibration')->to('api#calibration_socket'); 
 
 
 }

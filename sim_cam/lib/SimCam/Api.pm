@@ -8,6 +8,7 @@ use File::Slurp;
 use Capture::Tiny;
 use XML::Simple;
 use Data::Dumper;
+use Mojo::IOLoop;
 
 
 my $IMAGE_LOCATION = 'public/uploads/';
@@ -426,4 +427,20 @@ sub get_undistort {
        });
 
 }
+
+sub calibration_socket {
+    my $self = shift;
+
+
+    $self->app->log->debug("WS Connected ");
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+    $self->on(message => sub {
+        my ($self, $msg) = @_;
+
+        $self->send( $self->store_base64image($msg) );
+    
+    });
+
+}
+
 1;
