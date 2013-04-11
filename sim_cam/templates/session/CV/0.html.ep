@@ -6,6 +6,8 @@
     <ul id="tech_check_list">
     <li id="Canvas">Canvas: <span id="canvas_check"> </span>  </li>
     <li id="WebGL">WebGL: <span id="webgl_check"> </span>  </li>
+    <li id="WebSockets">WebSockets: <span id="websockets_check"> </span>  </li>
+
     </ul>
 
     <p>Google Chrome is recommended if the required technologies are not supported. Email <a href="mailto:kthakore@uwo.ca">kthakore@uwo.ca</a> </p>
@@ -38,6 +40,9 @@
         if( Modernizr.canvas ) {
             $('#canvas_check').html( 'Available' );
          } else {  $('#canvas_check').html('<b style="color:red">Not Available</b>' ); }
+        if( Modernizr.websockets ) {
+            $('#websockets_check').html( 'Available' );
+        } else {  $('#websockets_check').html('<b style="color:red">Not Available</b>' ); }
 
     </script>
     <script src="/js/tracker.js"></script>

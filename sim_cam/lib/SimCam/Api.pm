@@ -2,7 +2,7 @@ package SimCam::Api;
 use Mojo::Base "Mojolicious::Controller";
 use Digest::SHA qw/sha1_hex/;
 use MIME::Base64;
-use Mojo::JSON;
+use Mojo::JSON 'j';
 use DateTime;
 use File::Slurp;
 use Capture::Tiny;
@@ -428,19 +428,176 @@ sub get_undistort {
 
 }
 
-sub calibration_socket {
+
+sub run_calibration {
     my $self = shift;
+    my $images = shift;
+    my @images = @{$images};
+   foreach my $image ( @images ) {
 
+       if( my $location = $self->image_location( $image ) ){
+	  $image = $IMAGE_LOCATION.$location	
+	} else {
 
+        
+	    $self->app->log->error( 'Invalid Argument: '.$image.' not found');
+        return;
+	}
+   
+   }
+
+   if( scalar @images < 4 ){
+	    $self->app->log->error('Invalid Argument: need more then 4 images');
+
+        return;
+
+   }
+
+   my $job_id = sha1_hex( join(' ', @images ) );
+
+   my $output = 'public/uploads/'. $job_id;
+   my $int    = $output .'_int.xml';
+   my $dist   = $output .'_dist.xml';
+
+   my @run = ( '../simcamCV/calibrate', $int, $dist, (@images) );
+
+   my $run  = join(' ', @run);
+
+    $self->app->log->info( $run );
+
+    my( $stdout, $stderr, @result) = Capture::Tiny::capture {
+        
+        `$run`
+    };
+
+    if( $stderr ){
+        $self->app->log->error( "Api|get_calibrate error: $stderr" );
+        return;       
+    }
+
+    # CHeck if xml files exist
+
+    if( -e $int && -e $dist ){
+        my $xs = XML::Simple->new();
+            $self->app->log->info("Api|get_calibrate reading XMLs $dist and $int");
+            my $d_data = $xs->XMLin($dist);
+            my $f_data = $xs->XMLin($int);
+
+            my @d_keys = keys %{$d_data};
+            my @f_keys = keys %{$f_data};
+            my $d_cv_data = $d_data->{$d_keys[0]}->{data};
+
+            $d_cv_data =~ s/\s/ /g;
+
+            my $i_cv_data = $f_data->{$f_keys[0]}->{data};
+
+            $i_cv_data =~ s/\s/ /g;
+          
+            my @d_array = split(' ', $d_cv_data ); 
+            my @f_array = split(' ', $i_cv_data );
+           
+            my $fo = { distortion => \@d_array, intrinsics => \@f_array, job_id => $job_id};
+
+	return $fo;
+     }
+
+    else {
+        $self->app->log->error( "Api|get_calibrate error: XML files not created" );    
+        return; 
+    }
+}
+
+sub create_image_socket {
+    my $self = shift;
     $self->app->log->debug("WS Connected ");
     Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
     $self->on(message => sub {
         my ($self, $msg) = @_;
 
-        $self->send( $self->store_base64image($msg) );
+        $self->send( $self->store_base64image( j($msg) ));
     
     });
+}
+
+
+sub run_raw_check {
+   my $self = shift;
+   my $image = shift;
+   my $type = shift;
+
+
+   if( $type && $type eq 'base64' ){
+    $image = $self->store_base64image( $image ) .'_in.png'; 
+   } 
+    $self->app->log->info("RUINNING RUN_CHECK WITH $image");
+
+   my $located = $self->image_location( $image );
+   
+   my $out = sha1_hex($located.'_check').'_check.png';
+
+   my $run = '../simcamCV/check public/uploads/'.$located . ' public/uploads/'. $out; 
+
+    $self->app->log->info( $run );
+    my $result;
+    my ($merged, @result) = Capture::Tiny::capture_merged sub {
+       $result = system split(' ', $run);
+    };
+
+    if( $merged ){
+        $self->app->log->error( "Api|get_check error: $merged" ) if $merged;
+        return;
+        }
+
+   return { result => $result, out => $out, in => $located };
 
 }
 
+
+sub check_grid_socket {
+    my $self = shift;
+    $self->app->log->debug("WSCHECKGREIDConnected ");
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+    $self->on(message => sub {
+        my ($self, $msg) = @_;
+        my $req = j($msg);
+
+        if( $req->{image} ) {
+            $self->send( j( $self->run_raw_check( $req->{image}, $req->{type} ) ) );
+        } else {
+            $self->send('no image sent');
+        }
+    
+    });
+}
+
+sub get_distort_socket {
+    my $self = shift;
+    $self->app->log->debug("WS Connected ");
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+    $self->on(message => sub {
+        my ($self, $msg) = @_;
+
+        my $result = $self->run_distort( j( $msg ) );
+
+        $self->send( j($result) );
+    
+    });
+}
+
+sub calibration_socket {
+    my $self = shift;
+    $self->app->log->debug("WS Connected ");
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+    $self->on(message => sub {
+        my ($self, $msg) = @_;
+
+        my $result = $self->run_calibration( j( $msg ) );
+        if( ref $result eq 'HASH' ) {
+
+        $self->send( j($result) );
+
+        } else { $self->send( "Calibration didnt happen: $result " ) };
+    
+    });
+}
 1;

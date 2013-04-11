@@ -13,7 +13,7 @@ has 'schema' =>
 sub startup {
   my $self = shift;
 
-
+#  $self->config(hypnotoad => {listen => ['http://*:80']});:
   $self->mode('production');
 
     $self->plugin(
@@ -106,7 +106,9 @@ sub startup {
   # CALIBRATE IMAGES
   $r->get('/api/calibrate')->to('api#get_calibrate'); #EXPECTS LIST OF IMAGES
 
-  $r->websocket('/api/calibration')->to('api#calibration_socket'); 
+  $r->websocket('/api/ws_calibration')->to('api#calibration_socket'); 
+  $r->websocket('/api/ws_check')->to('api#check_grid_socket'); 
+
 
 
 }

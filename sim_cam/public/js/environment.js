@@ -169,6 +169,7 @@ SimCam.Template.Modal = {
 
 };
 
+
 /*View Constructors*/
 
 SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
@@ -176,10 +177,13 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
     initialize: function (options) {
         var that = this;
         that.cv_el = options.cv_el;
+        that.calibration = options.app.models.calibration;
+        that.captures = that.calibration.get('captures');
         that.$el.html('<center><video id="video" width="640" height="480" autoplay></video></center>');
         that.cv_el.html('<canvas id="canvas" width="640" height="480" style="width:200px">');
 
-        var ctx = that.cv_el.find('canvas')[0].getContext("2d");
+        that.cv_el_canvas = that.cv_el.find('canvas')[0];
+        var ctx = that.cv_el_canvas.getContext("2d");
         var video = that.$('#video')[0],
         videoObj = { "video": true },
         errBack = function(error) {
@@ -198,8 +202,110 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
             }, errBack);
         }
 
-        options.view.side_bar_viewer.$el.find('[name="capture"]').on('click', function() {
-                   ctx.drawImage(video, 0, 0, 640, 480); 
+        var ws_capture_url = 'ws://'+location.hostname+':8080/api/ws_check';
+        var ws_calibration_url = 'ws://'+location.hostname+':8080/api/ws_calibration';
+
+        var sidebar_viewer = options.view.side_bar_viewer;
+
+        var capture_btn = sidebar_viewer.$el.find('[name="capture"]');
+        var results_btn = sidebar_viewer.$el.find('[name="results"]');
+
+        results_btn.on('click', function() {
+
+            if( that.cal_socket ) {
+                that.cal_socket.close();
+                that.cal_socket = undefined;
+            }
+            if (typeof(WebSocket) !== 'undefined') {
+              console.log("Using a standard webcal_socket");
+              that.cal_socket = new WebSocket(ws_capture_url);
+            } else if (typeof(MozWebSocket) !== 'undefined') {
+              console.log("Using MozWebSocket")
+              that.cal_socket = new MozWebSocket(ws_capture_url);
+            } else {
+              Messenger().post("Your browser does not support web cal_sockets. Cannot perform webcam calibration");
+            }
+
+            that.cal_socket.onopen = function (e) {
+                var req = _.pluck(calibration.get('captures').pluck('checked'), 'in');
+                Messenger().post('Captured images sent for calibration processing!');
+
+                that.cal_socket.send( JSON.stringify( req ) );
+            };
+            that.cal_socket.onmessage = function (e) {
+                var res = JSON.parse(e.data );
+                console.log( e.data );
+                if( res.result == "256" ) {
+                    Messenger().post('Calibration Grid Found! See captured images below!');
+
+                    var current_capture = new SimCam.Constructor.Model.Generic({});
+                    current_capture.set('checked', res );
+                    that.captures.add( current_capture );
+
+                    if(that.captures.length >= 4) {
+                            Messenger().post('You have enough captures to begin calibration');
+                            results_btn.removeAttr('disabled');
+                       }
+                } else {
+                    Messenger().post('Calibration Grid not Found');
+                }
+            };
+
+            that.cal_socket.onclose = function (e) {
+            };
+            that.cal_socket.onerror = function (e) {
+            }; 
+
+
+        });
+
+        capture_btn.on('click', function() {
+            ctx.drawImage(video, 0, 0, 640, 480); 
+
+            if( that.socket ) {
+                that.socket.close();
+                that.socket = undefined;
+            }
+            if (typeof(WebSocket) !== 'undefined') {
+              console.log("Using a standard websocket");
+              that.socket = new WebSocket(ws_capture_url);
+            } else if (typeof(MozWebSocket) !== 'undefined') {
+              console.log("Using MozWebSocket")
+              that.socket = new MozWebSocket(ws_capture_url);
+            } else {
+              Messenger().post("Your browser does not support web sockets. Cannot perform webcam calibration");
+            }
+
+            that.socket.onopen = function (e) {
+                var req = { "image" : that.cv_el_canvas.toDataURL(), "type" : "base64" };
+                Messenger().post('Captured image sent for processing!');
+
+                that.socket.send( JSON.stringify( req ) );
+            };
+            that.socket.onmessage = function (e) {
+                var res = JSON.parse(e.data );
+                console.log( e.data );
+                if( res.result == "256" ) {
+                    Messenger().post('Calibration Grid Found! See captured images below!');
+
+                    var current_capture = new SimCam.Constructor.Model.Generic({});
+                    current_capture.set('checked', res );
+                    that.captures.add( current_capture );
+
+                    if(that.captures.length >= 4) {
+                            Messenger().post('You have enough captures to begin calibration');
+                            results_btn.removeAttr('disabled');
+                       }
+                } else {
+                    Messenger().post('Calibration Grid not Found');
+                }
+            };
+
+            that.socket.onclose = function (e) {
+            };
+            that.socket.onerror = function (e) {
+            }; 
+
         });
     }
 });
