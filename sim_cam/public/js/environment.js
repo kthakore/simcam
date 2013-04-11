@@ -235,17 +235,11 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
             that.cal_socket.onmessage = function (e) {
                 var res = JSON.parse(e.data );
                 console.log( e.data );
-                if( res.result == "256" ) {
-                    Messenger().post('Calibration Grid Found! See captured images below!');
+                if( res.job_id  ) {
+                    
+                    Messenger().post('Calibration attempt done ! View yourresults!');
 
-                    var current_capture = new SimCam.Constructor.Model.Generic({});
-                    current_capture.set('checked', res );
-                    that.captures.add( current_capture );
-
-                    if(that.captures.length >= 4) {
-                            Messenger().post('You have enough captures to begin calibration');
-                            results_btn.removeAttr('disabled');
-                       }
+                    var current_calibration = new SimCam.Constructor.Model.Generic({});
                 } else {
                     Messenger().post('Calibration Grid not Found');
                 }
