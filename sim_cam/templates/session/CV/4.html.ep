@@ -1,8 +1,13 @@
 <div class="row">
     <h1>Calibrate your webcam!</h1>
-    <p><a href="/logout">Logout</a>
 </div>
 <div class="row-fluid" style="text-align:center">
+<p>
+To use your webcam with this website, please select allow on the popup. Use this calibration 
+grid to calibration the camera : <a href="http://i.imgur.com/Tqjf1ll.gif?1"><img src="http://i.imgur.com/Tqjf1ll.gif?1" width="150px"/></a>. </p>
+<p>
+ Print out the calibration grid or if you have a mobile phone use that.
+</p>
 <center id="environment" class="span12" style="padding:5px">
 </center>
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">

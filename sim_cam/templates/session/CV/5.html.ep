@@ -157,8 +157,10 @@ The system that I have been exposed to can be used to improve understanding of c
 The system that I have been exposed to has enough fidelity to simulate the pin-hole camera model for training.
 The system that I have been exposed to has enough fidelity to simulate radial and tangential distortions for training.
 The simulation of grid placement has sufficient realism for training camera calibration.
-The real-time feedback of camera calibration parameters are valuable to understand the effects of the parameters.
-The real-time feedback of shown difference image between the corrected and undistorted image is valuable to gauge good calibration attempts.
+The real-time feedback of camera calibration parameters are valuable to understand the effects of the parameters. <br /> <center><img src="http://i.imgur.com/yFg2psb.png" /></center>
+The real-time feedback of camera calibration parameters graphs are valuable to understand the effects of the parameters. <br /> <center><img src="http://i.imgur.com/juChUtH.png" /></center>
+The real-time feedback of shown difference image between the corrected and undistorted image is valuable to gauge good calibration attempts.  <br /> <center><img src="http://i.imgur.com/UQ21Pay.png" /></center> 
+Allowing calibration of the user's webcam is valuable as a practical exercise of camera calibration knowledge to students learning calibration.
 I would recommend use of the system for training camera calibration to beginners.
 I would continue use of the system for training camera calibration to beginners if it were readily available.
 I would continue use of the system for training if it were readily available.

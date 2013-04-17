@@ -53,8 +53,11 @@ The second one describing the distortion coefficients matrix (or vector):
 
 <p>For the first calibration attempt 4 images need to be captured. As you capture each subsequent image, a calibration attempt is done. You can then click on view current results button to see your current camera matrix and distortion parameters, graphs showing changes in parameter values and finally the efficacy of each calibration attempt.</p>
 
+<h3>Image captures for calibration</h3>
+<p>Selection of the calibration image captures is vital for a good calibration attempt. Generally good image captures involve providing the calibration algorithm with the most information about the optical behaviour of the camera. This means that the image captures are balanced and unique.</p>
 
-
+<h4>Balanced</h4>
+<p></p>
 </div> 
 <div class="row-fluid" style="text-align:center">
 <center id="environment" class="span12" style="padding:5px">
@@ -83,12 +86,23 @@ The second one describing the distortion coefficients matrix (or vector):
     <script src="/js/environment.js"></script>
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
+
+            var get_random_float = function() {  return Math.random() - ( Math.random() /( Math.random() * 10 )) }
             var simcam = SimCam.initialize({ element: $('#environment'), 
                                          mode: { 
                                                type: 'calibration' 
                                             },
                                          camera: {
-                                            r1 : 10
+                                            r1 : get_random_float(),
+                                            r2 : get_random_float(),
+                                            r3 : get_random_float(),
+                                            t1 : get_random_float() * get_random_float(),
+                                            t2 : get_random_float() * get_random_float()
+
+
+
+
+
                                          },
                                          success: function(app) { window.simcam = app } 
 

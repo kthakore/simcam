@@ -210,51 +210,10 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
         var capture_btn = sidebar_viewer.$el.find('[name="capture"]');
         var results_btn = sidebar_viewer.$el.find('[name="results"]');
 
-        results_btn.on('click', function() {
-
-            if( that.cal_socket ) {
-                that.cal_socket.close();
-                that.cal_socket = undefined;
-            }
-            if (typeof(WebSocket) !== 'undefined') {
-              console.log("Using a standard webcal_socket");
-              that.cal_socket = new WebSocket(ws_capture_url);
-            } else if (typeof(MozWebSocket) !== 'undefined') {
-              console.log("Using MozWebSocket")
-              that.cal_socket = new MozWebSocket(ws_capture_url);
-            } else {
-              Messenger().post("Your browser does not support web cal_sockets. Cannot perform webcam calibration");
-            }
-
-            that.cal_socket.onopen = function (e) {
-                var req = _.pluck(calibration.get('captures').pluck('checked'), 'in');
-                Messenger().post('Captured images sent for calibration processing!');
-
-                that.cal_socket.send( JSON.stringify( req ) );
-            };
-            that.cal_socket.onmessage = function (e) {
-                var res = JSON.parse(e.data );
-                console.log( e.data );
-                if( res.job_id  ) {
-                    
-                    Messenger().post('Calibration attempt done ! View yourresults!');
-
-                    var current_calibration = new SimCam.Constructor.Model.Generic({});
-                } else {
-                    Messenger().post('Calibration Grid not Found');
-                }
-            };
-
-            that.cal_socket.onclose = function (e) {
-            };
-            that.cal_socket.onerror = function (e) {
-            }; 
-
-
-        });
 
         capture_btn.on('click', function() {
             ctx.drawImage(video, 0, 0, 640, 480); 
+                capture_btn.attr('disabled', 'disabled');
 
             if( that.socket ) {
                 that.socket.close();
@@ -272,9 +231,11 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
 
             that.socket.onopen = function (e) {
                 var req = { "image" : that.cv_el_canvas.toDataURL(), "type" : "base64" };
-                Messenger().post('Captured image sent for processing!');
 
                 that.socket.send( JSON.stringify( req ) );
+                Messenger().post('Captured image sent for processing!');
+
+                capture_btn.removeAttr('disabled');
             };
             that.socket.onmessage = function (e) {
                 var res = JSON.parse(e.data );
@@ -285,11 +246,10 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
                     var current_capture = new SimCam.Constructor.Model.Generic({});
                     current_capture.set('checked', res );
                     that.captures.add( current_capture );
-
-                    if(that.captures.length >= 4) {
-                            Messenger().post('You have enough captures to begin calibration');
-                            results_btn.removeAttr('disabled');
-                       }
+                    if( that.captures.length >= 4) {
+                        results_btn.removeAttr('disabled');
+    
+                    }
                 } else {
                     Messenger().post('Calibration Grid not Found');
                 }
@@ -869,7 +829,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
                 if (parseInt(current_capture.get('checked').result, 10) === 256) {
                     captures.add(current_capture);
                 } else {
-                    alert("Couldn't find the grid in the camera view!");
+                    Messenger().post("Couldn't find the grid in the camera view!");
                 }
             });
     }
@@ -1061,7 +1021,6 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         var that, collection, diff_grid, m_reverse;
         that = this;
         collection = options.data;
-        console.log(collection);
         options.latest_results = collection.latest_results();
         options.latest_intrinsics = options.latest_results.intrinsics;
         options.latest_distortion = options.latest_results.distortion;
@@ -1116,10 +1075,16 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
             lc = captures[captures.length - 1];
 
             console.log(lc);
-        
+            
+            var distorted = lc.distorted;
+            if( lc.distorted === undefined ) {
+                distorted = lc.checked['in'];
+            } else {
+                distorted = distorted.out;
+            }
             ji = model.get('result').job_id;
             correct_url = '/api/undistort/' +
-                          lc.distorted.out +
+                          distorted +
                           '?job_id=' + ji;
                     /*
                           '&cx=' + parseFloat(t[0], 10) +
@@ -1128,9 +1093,11 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                           '&fy=' + parseFloat(t[5], 10);
                     */
 
+            var width = 200; var height = 200;
+                        
             
 
-            tr = _.template('<tr class="' + i + '"><td class="undistorted_image"></td><td><img src="/uploads/<%=lc.distorted.out%>" /></td><td class="calibrated_image"></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url});
+            tr = _.template('<tr class="' + i + '"><td class="undistorted_image"></td><td><img src="/uploads/<%=distorted%>" /></td><td class="calibrated_image"></td><td><canvas width=200 height=200 /></td></tr>', {lc : lc, cu : correct_url, distorted: distorted });
 
             tr = $(tr);
             diff_grid.prepend(tr);
@@ -1139,8 +1106,14 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
 
             calibrated_image = new Image();
 
+            var target_canvas = $(tr.find('canvas')[0]);
             undistorted_image.onload = calibrated_image.onload = function () {
-                var context = tr.find('canvas')[0].getContext('2d');
+
+                target_canvas.attr('width', undistorted_image.width);
+                target_canvas.attr('height', undistorted_image.height);
+                target_canvas.css( { "width" : "200px", "height" : "200px" } );
+
+                var context = target_canvas[0].getContext('2d');
                 load_count += 1;
                 if (load_count >= 2) {
                     tr.find('.undistorted_image').html(undistorted_image);
@@ -1149,8 +1122,13 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                     context.putImageData(difference_image, 0, 0);
                 }
             };
-
-            undistorted_image.src = lc.undistorted.url;
+            var un_im_url = lc.undistorted;
+            if( lc.undistorted === undefined ) {
+                un_im_url = '/uploads/'+lc.checked['in'];
+            } else {
+                un_im_url = un_im_url.url;
+            }
+            undistorted_image.src = un_im_url;
             calibrated_image.src = correct_url;
         });
         
@@ -1369,8 +1347,8 @@ SimCam.initialize = function (options) {
     "use strict";
 
     $(function () {
-    
-        if (options.mode.type === 'calibration') {
+   
+        if (options.mode.type === 'calibration' || options.mode.type === 'webcam' ) {
             SimCam.ScriptLoader.loadscript('/js/highcharts.js');
             SimCam.ScriptLoader.loadscript('/js/imagediff.js');
 

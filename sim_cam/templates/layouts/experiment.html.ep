@@ -4,6 +4,9 @@
     <title><%= title %></title>
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+            <link rel="stylesheet" type="text/css" media="screen" href="/css/messenger.css">
+            <link rel="stylesheet" type="text/css" media="screen" href="/css/messenger-theme-future.css">
+
   </head>
   <body>
 
@@ -12,6 +15,9 @@
     <script src="/js/libs/underscore-min.js"></script>
     <script src="/js/libs/backbone-min.js"></script>
     <script src="/js/libs/bootstrap.min.js"></script>
+        <script src="/js/messenger.js"></script> 
+        <script src="/js/messenger-theme-future.js"></script>
+
 
 
     <%= content_for 'javascript' %>
