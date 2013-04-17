@@ -584,6 +584,8 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         cc.trigger('set', cc);
         that.camera.position.set(0, 0, 15);
 
+        console.log('HAPPPPPEND');
+
         that.scene = new THREE.Scene();
         that.scene.add(new THREE.AmbientLight(0x505050));
 
@@ -1176,7 +1178,6 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
             
                 that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
                 that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
-
             }
             else {
                 camera_viewer_frame.css('height', '150px');

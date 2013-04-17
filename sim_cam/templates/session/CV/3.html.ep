@@ -93,12 +93,13 @@ The second one describing the distortion coefficients matrix (or vector):
                                                type: 'calibration' 
                                             },
                                          camera: {
-                                            r1 : get_random_float(),
+                                            r1: 10
+/*                                            r1 : get_random_float(),
                                             r2 : get_random_float(),
                                             r3 : get_random_float(),
                                             t1 : get_random_float() * get_random_float(),
                                             t2 : get_random_float() * get_random_float()
-
+*/
 
 
 
