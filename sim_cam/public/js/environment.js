@@ -344,6 +344,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
             that.scene.add(cam_obj);
 
             that.objects.push(cam_obj);
+            
             cam_obj.model.trigger('move', cam_obj.model, cam_obj);
             console.log('triggered move');
 
@@ -385,6 +386,17 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
            */
         $(window).on('resize', function () {that.on_resize(); });
         that.animate();
+    },
+    set_from_camera : function ( camera ) {
+        var cam_obj = this.objects[1];
+//        this.scale.getScaleFromMatrix( camera.matrix );
+        console.log('sdsd');
+
+        var mat = new THREE.Matrix4().extractRotation( camera.matrix );
+        cam_obj.rotation.setEulerFromRotationMatrix( mat, camera.eulerOrder );
+
+        cam_obj.position.getPositionFromMatrix( camera.matrix );
+
     },
     to_screen_xy: function (o) {
         "use strict";
@@ -1173,10 +1185,10 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
         that.side_bar_viewer   = new SimCam.Constructor.View.SideMenu({ el: side_el, mode: that.mode, app: options.app });
 
             if( options.mode.type !== 'webcam') {
-            
+                 that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
+
                 that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
-                that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
-            }
+                       }
             else {
                 camera_viewer_frame.css('height', '150px');
                 main_viewer_frame.css('height', '640px');

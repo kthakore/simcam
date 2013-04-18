@@ -174,69 +174,68 @@
 <center id="environment" class="span12" style="padding:5px">
 </center>
 </div>
-
 <div class="row">
-    <h2>Rotational & Translation Matrix</h2>
-        <p> Move and rotate the camera to see how the rotation and translation matrix is affected.</p>
+<h2>Current Camera Extrinsics Camera</h2>
+<p>The matrix below shows current pose (rotation|translation) matrix of the camera above. You can click and drag to move the camera, and hold shift while dragging to rotate the camera.</p>
         <center>
 <table class="matrix" id="rt_matrix_table">
     <tr>
         <td>
-            <input type="text" name="0" disabled="true" class="span1 rt_input" />
+            <input type="text" name="0" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="1" disabled="true" class="span1 rt_input" />
+            <input type="text" name="4" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="2" disabled="true" class="span1 rt_input" />
+            <input type="text" name="8" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="3" disabled="true" class="span1 rt_input" />
-        </td>
-
-    </tr>
-    <tr>
-        <td>
-            <input type="text" name="4" disabled="true" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="5" disabled="true" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="6" disabled="true" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="7" disabled="true" class="span1 rt_input" />
+            <input type="text" name="12" disabled="true" class="span3 rt_input" />
         </td>
 
     </tr>
     <tr>
         <td>
-            <input type="text" name="8" disabled="true" class="span1 rt_input" />
+            <input type="text" name="1" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="9" disabled="true" class="span1 rt_input" />
+            <input type="text" name="5" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="10" disabled="true" class="span1 rt_input" />
+            <input type="text" name="9" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="11" disabled="true" class="span1 rt_input" />
+            <input type="text" name="13" disabled="true" class="span3 rt_input" />
         </td>
 
     </tr>
     <tr>
         <td>
-            <input type="text" name="12" disabled="true" class="span1 rt_input" />
+            <input type="text" name="2" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="13" disabled="true" class="span1 rt_input" />
+            <input type="text" name="6" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="14" disabled="true" class="span1 rt_input" />
+            <input type="text" name="10" disabled="true" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="15" disabled="true" class="span1 rt_input" />
+            <input type="text" name="14" disabled="true" class="span3 rt_input" />
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="3" disabled="true" class="span3 rt_input dd" />
+        </td>
+        <td>
+            <input type="text" name="7" disabled="true" class="span3 rt_input dd" />
+        </td>
+        <td>
+            <input type="text" name="11" disabled="true" class="span3 rt_input dd" />
+        </td>
+        <td>
+            <input type="text" name="15" disabled="true" class="span3 rt_input" />
         </td>
 
     </tr>
@@ -246,7 +245,70 @@
 
 </div>
 
+<div class="row">
+    <h2>Camera Pose</h2>
+    <p>
+        Another matrix called the camera pose matrix describes the camera's current rotation and translation relative to the world. Knowing this matrix will allow you to do precise measurements with your camera! This matrix is also called the extrinsics parameters of the camera..
+    </p>
+        <p>You can move and rotate the camera in the view above to see how the rotation and translation matrix is affected. </p>
+    <h3>Translation</h3>
+    <p>
+        When translating the camera away from the origin point of the world, the following matrix is applied to the pose matrix. 
+    </p>
 
+</div>
+<div class="row" style="text-align: center"> 
+        <div>		
+		<img src="/images/translation.png" /><br />
+        <center><a href="http://en.wikipedia.org/wiki/Translation_(geometry)">source</a></center>
+		</div>
+</div>
+
+<div class="row">
+    <p>This translation matrix would have the following effect on positions.</p>
+</div>
+
+<div class="row" style="text-align: center"> 
+        <div>		
+		<img src="/images/translation_effect.png" /><br />
+        <center><a href="http://en.wikipedia.org/wiki/Translation_(geometry)">source</a></center>
+		</div>
+</div>
+
+<div class="row">
+    <p class="well">
+        To learn more about translation matrices read this <a href="http://en.wikipedia.org/wiki/Translation_(geometry)">article</a>.
+    </p>
+</div>
+<div class="row">
+    <h3>Rotation</h3>
+    <p>
+        When rotating the camera relative to the origin point of the world, the following matrices are applied. 
+    </p>
+
+</div>
+<div class="row" style="text-align: center"> 
+        <div>		
+		<span> <img src="/images/rotation_x.png" /> </span>
+        <br />
+
+        <center><a href="http://en.wikipedia.org/wiki/Translation_(geometry)">source</a></center>
+		</div>
+</div>
+
+
+<div class="row">
+    <p class="well">
+        To learn more about rotation matrices read this <a href="http://en.wikipedia.org/wiki/Rotation_matrix">article</a>.
+    </p>
+</div>
+
+
+<div class="row">
+
+<h2>Questions:</h2>
+
+</div>
 
 
 <div class="row">
@@ -274,11 +336,12 @@
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
 
-        function update_matrix (camera){
-
+        function update_matrix (camera, app) {
                                         _.each(camera.matrix.elements, function(element, i) {
                                               var input = $('#rt_matrix_table').find('[name="'+i+'"]').val( element );
+                                                if( input.hasClass('dd') === false ) {
                                                 input.removeAttr('disabled' );
+                                                 }
                                               if( input.attr('data-setted') === undefined ) {
                                               input.on('keyup', function() {
                                                 var number = parseFloat( input.val(), 10 );
@@ -287,6 +350,8 @@
                                                         camera.updateMatrix();
 
                                                         camera.matrix.elements[i] = input.val();
+                                        app.view.main_viewer.set_from_camera(camera);
+
                                                  } else { return false; }
                                               });
                                               input.attr('data-setted', 'true');
@@ -308,10 +373,9 @@
                                         },
                                      success : function (app) {
                                         window.simcam = app;
-                                        console.log(app.view); 
                                         var camera = app.view.camera_viewer.camera;
                                         var camera_model = app.models.camera;
-                                        camera_model.bind('move', function(  ) { console.log('movetriggered'); update_matrix(camera); } );
+                                        camera_model.bind('move', function(  ) {  update_matrix(camera, app); } );
 
                                         _.each(camera.projectionMatrix.elements, function(element, i) {
                                              
@@ -320,6 +384,7 @@
                                                 var number = parseFloat( input.val(), 10 );
                                                 if (number && number !== NaN ) {
                                                         camera.projectionMatrix.elements[i] = input.val();
+
                                                  } else { return false; }
                                               });
                                         });
