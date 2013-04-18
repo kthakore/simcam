@@ -101,76 +101,6 @@
 </div>
 
 <div class="row">
-    <h2>Rotational & Translation Matrix</h2>
-        <center>
-<table class="matrix" id="rt_matrix_table">
-    <tr>
-        <td>
-            <input type="text" name="0" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="1" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="2" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="3" class="span1 rt_input" />
-        </td>
-
-    </tr>
-    <tr>
-        <td>
-            <input type="text" name="4" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="5" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="6" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="7" class="span1 rt_input" />
-        </td>
-
-    </tr>
-    <tr>
-        <td>
-            <input type="text" name="8" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="9" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="10" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="11" class="span1 rt_input" />
-        </td>
-
-    </tr>
-    <tr>
-        <td>
-            <input type="text" name="12" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="13" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="14" class="span1 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="15" class="span1 rt_input" />
-        </td>
-
-    </tr>
-</table>
-</center>
-
-
-</div>
-
-<div class="row">
 
     <h3>Pin hole Camera Model</h3>
 
@@ -245,6 +175,77 @@
 </center>
 </div>
 
+<div class="row">
+    <h2>Rotational & Translation Matrix</h2>
+        <p> Move and rotate the camera to see how the rotation and translation matrix is affected.</p>
+        <center>
+<table class="matrix" id="rt_matrix_table">
+    <tr>
+        <td>
+            <input type="text" name="0" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="1" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="2" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="3" disabled="true" class="span1 rt_input" />
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="4" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="5" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="6" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="7" disabled="true" class="span1 rt_input" />
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="8" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="9" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="10" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="11" disabled="true" class="span1 rt_input" />
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="12" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="13" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="14" disabled="true" class="span1 rt_input" />
+        </td>
+        <td>
+            <input type="text" name="15" disabled="true" class="span1 rt_input" />
+        </td>
+
+    </tr>
+</table>
+</center>
+
+
+</div>
+
 
 
 
@@ -273,6 +274,34 @@
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
 
+        function update_matrix (camera){
+
+                                        _.each(camera.matrix.elements, function(element, i) {
+                                              var input = $('#rt_matrix_table').find('[name="'+i+'"]').val( element );
+                                                input.removeAttr('disabled' );
+                                              if( input.attr('data-setted') === undefined ) {
+                                              input.on('keyup', function() {
+                                                var number = parseFloat( input.val(), 10 );
+                                                if (number && number !== NaN ) {
+                                                        camera.matrixAutoUpdate = false;
+                                                        camera.updateMatrix();
+
+                                                        camera.matrix.elements[i] = input.val();
+                                                 } else { return false; }
+                                              });
+                                              input.attr('data-setted', 'true');
+                                              } else {
+                                                         camera.matrixAutoUpdate = true;
+                                                        camera.updateMatrix();
+
+                                            }
+                                        });
+
+
+
+
+        }
+
 	    SimCam.initialize({ element: $('#environment'), 
                                      mode: { 
                                            'type': 'pinhole' 
@@ -282,6 +311,7 @@
                                         console.log(app.view); 
                                         var camera = app.view.camera_viewer.camera;
                                         var camera_model = app.models.camera;
+                                        camera_model.bind('move', function(  ) { console.log('movetriggered'); update_matrix(camera); } );
 
                                         _.each(camera.projectionMatrix.elements, function(element, i) {
                                              
@@ -293,18 +323,6 @@
                                                  } else { return false; }
                                               });
                                         });
-                                        console.log(camera.matrixWorld);
-                                        _.each(camera.matrixWorld.elements, function(element, i) {
-                                              var input = $('#rt_matrix_table').find('[name="'+i+'"]').val( element );
-                                              input.on('keyup', function() {
-                                                var number = parseFloat( input.val(), 10 );
-                                                if (number && number !== NaN ) {
-                                                        camera.matrixWorld.elements[i] = input.val();
-                                                 } else { return false; }
-                                              });
-                                        });
-
-
                                        
                                     }
                                    });

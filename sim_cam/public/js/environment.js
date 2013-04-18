@@ -345,7 +345,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
             that.objects.push(cam_obj);
             cam_obj.model.trigger('move', cam_obj.model, cam_obj);
-
+            console.log('triggered move');
 
         });
 
@@ -583,8 +583,6 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         cc.set('v', 200);
         cc.trigger('set', cc);
         that.camera.position.set(0, 0, 15);
-
-        console.log('HAPPPPPEND');
 
         that.scene = new THREE.Scene();
         that.scene.add(new THREE.AmbientLight(0x505050));
