@@ -49,10 +49,10 @@ SimCam.Constructor.Collection.Calibrations = Backbone.Collection.extend({
         series.push({ name: 't2', data:  _.map(results, function (m) { return parseFloat(m.distortion[3], 10); }) });
         series.push({ name: 'r3', data:  _.map(results, function (m) { return parseFloat(m.distortion[4], 10); }) });
 
-        series.push({ name: 'cx', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[0], 10); }) });
-        series.push({ name: 'cy', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[4], 10); }) });
-        series.push({ name: 'fx', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[2], 10); }) });
-        series.push({ name: 'fy', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[5], 10); }) });
+        series.push({ name: 'fx', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[0], 10); }) });
+        series.push({ name: 'fy', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[4], 10); }) });
+        series.push({ name: 'cx', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[2], 10); }) });
+        series.push({ name: 'cy', data:  _.map(results, function (m) { return parseFloat(m.intrinsics[5], 10); }) });
 
         return series;
     }
@@ -235,7 +235,6 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
                 that.socket.send( JSON.stringify( req ) );
                 Messenger().post('Captured image sent for processing!');
 
-                capture_btn.removeAttr('disabled');
             };
             that.socket.onmessage = function (e) {
                 var res = JSON.parse(e.data );
@@ -253,6 +252,8 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
                 } else {
                     Messenger().post('Calibration Grid not Found');
                 }
+                capture_btn.removeAttr('disabled');
+
             };
 
             that.socket.onclose = function (e) {
@@ -583,7 +584,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
         var that, light, cc, material, cube, cv;
         that = this;
         that.options = options;
-
+        
         that.camera = new THREE.PerspectiveCamera();
         cc = options.app.models.camera;
 

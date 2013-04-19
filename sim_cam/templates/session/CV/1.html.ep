@@ -119,36 +119,63 @@
 <table class="matrix" id="camera_matrix_table">
     <tr>
         <td>
-            <input type="text" name="0" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="0"  class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="1" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="4"  class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="2" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="8"  class="span3 rt_input" />
         </td>
+        <td>
+            <input type="text" name="12"  class="span3 rt_input" />
+        </td>
+
     </tr>
     <tr>
         <td>
-            <input type="text" name="4" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="1"  class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="5" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="5"  class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="6" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="9"  class="span3 rt_input" />
         </td>
+        <td>
+            <input type="text" name="13"  class="span3 rt_input" />
+        </td>
+
     </tr>
     <tr>
         <td>
-            <input type="text" name="8" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="2"  class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="9" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="6"  class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="10" class="span1 pinhole_sidemenu_input" />
+            <input type="text" name="10"  class="span3 rt_input" />
         </td>
+        <td>
+            <input type="text" name="14"  class="span3 rt_input" />
+        </td>
+
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="3"  class="span3 rt_input dd" />
+        </td>
+        <td>
+            <input type="text" name="7"  class="span3 rt_input dd" />
+        </td>
+        <td>
+            <input type="text" name="11"  class="span3 rt_input dd" />
+        </td>
+        <td>
+            <input type="text" name="15"  class="span3 rt_input" />
+        </td>
+
     </tr>
 </table>
 </center>
@@ -302,17 +329,57 @@
         To learn more about rotation matrices read this <a href="http://en.wikipedia.org/wiki/Rotation_matrix">article</a>.
     </p>
 </div>
-
-
 <div class="row">
 
-<h2>Questions:</h2>
-
-</div>
-
-
-<div class="row">
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+
+<%   
+   my $questions = [ 
+                    { 
+                        name => 'How is the camera described mathematically in the pinhole camera model?', 
+                        answers => [ 
+                                        'A', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    },
+                     { 
+                        name => '', 
+                        answers => [ 
+                                        'a', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    },
+
+                ]; 
+
+%>
+
+<h2>Questions</h2>
+<% my $count = 0; %>
+<% foreach my $q ( @{$questions} ) {  $count++;  %> 
+<p> 1) <%= $q->{name} %> </p>
+<table class="table table-bordered">
+<tr>
+  <% my $cc = 0; %>
+  <% foreach my $answer ( @{ $q->{answers} } ) { %>
+      <td style="text-align:center; vertical-align:middle">
+      <input type="radio" name="<%=$count%>" value="<%= $cc++ %>" selected="true">
+      </td>
+    <td>
+   <%= $answer %>
+</td>
+  <% } %>
+ </tr>
+
+</table>
+
+<% } %>
      <input type="hidden" name="position" />
      <div class="control-group">
           <!-- Button -->
