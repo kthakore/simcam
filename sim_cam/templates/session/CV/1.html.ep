@@ -119,61 +119,37 @@
 <table class="matrix" id="camera_matrix_table">
     <tr>
         <td>
-            <input type="text" name="0"  class="span3 rt_input" />
+            <input type="text" name="fx" value="1000" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="4"  class="span3 rt_input" />
+            <input type="text" disabled="true" value="0"  class="span3" />
         </td>
         <td>
-            <input type="text" name="8"  class="span3 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="12"  class="span3 rt_input" />
+            <input type="text" name="cx" value="0" class="span3 rt_input" />
         </td>
 
     </tr>
     <tr>
         <td>
-            <input type="text" name="1"  class="span3 rt_input" />
+            <input type="text" disabled="true" value="0" class="span3" />
         </td>
         <td>
-            <input type="text" name="5"  class="span3 rt_input" />
+            <input type="text" name="fy"  value="1000" class="span3 rt_input" />
         </td>
         <td>
-            <input type="text" name="9"  class="span3 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="13"  class="span3 rt_input" />
+            <input type="text" name="cy" value="0" class="span3 rt_input" />
         </td>
 
     </tr>
     <tr>
         <td>
-            <input type="text" name="2"  class="span3 rt_input" />
+            <input type="text" name="" value="0" disabled="true"  class="span3" />
         </td>
         <td>
-            <input type="text" name="6"  class="span3 rt_input" />
+            <input type="text" name="" value="0" disabled="true" class="span3" />
         </td>
         <td>
-            <input type="text" name="10"  class="span3 rt_input" />
-        </td>
-        <td>
-            <input type="text" name="14"  class="span3 rt_input" />
-        </td>
-
-    </tr>
-    <tr>
-        <td>
-            <input type="text" name="3"  class="span3 rt_input dd" />
-        </td>
-        <td>
-            <input type="text" name="7"  class="span3 rt_input dd" />
-        </td>
-        <td>
-            <input type="text" name="11"  class="span3 rt_input dd" />
-        </td>
-        <td>
-            <input type="text" name="15"  class="span3 rt_input" />
+            <input type="text" name="" value="1" disabled="true"  class="span3" />
         </td>
 
     </tr>
@@ -433,6 +409,28 @@
 
 
         }
+    
+        function update_camera_matrix ( camera, camera_model ) {    
+            var far = camera_model.get('far');
+            var near = camera_model.get('near');
+            var X = near + far;
+            var Y = near * far;
+            
+            var fx = $('[name="fx"]').val();
+            var fy = $('[name="fy"]').val();
+            var xo = $('[name="cx"]').val();
+            var yo = $('[name="cy"]').val();
+
+            var cam_matrix = new THREE.Matrix4( fx, 0, -1* xo, 0, 0, fy, -1 * yo, 0, 0,0, X, Y,0,0,-1,0);
+
+            var cl = camera.projectionMatrix.clone();
+            var fov = camera_model.get('fov') * 10;
+            cl.makeOrthographic(-fov, fov, fov, -fov, near, far);
+            cl.multiplySelf( cam_matrix );
+
+            camera.projectionMatrix.copy( cl );
+
+        }
 
 	    SimCam.initialize({ element: $('#environment'), 
                                      mode: { 
@@ -443,19 +441,15 @@
                                         var camera = app.view.camera_viewer.camera;
                                         var camera_model = app.models.camera;
                                         camera_model.bind('move', function(  ) {  update_matrix(camera, app); } );
-
-                                        _.each(camera.projectionMatrix.elements, function(element, i) {
-                                             
-                                              var input = $('#camera_matrix_table').find('[name="'+i+'"]').val( element );
-                                              input.on('keyup', function() {
+                                        $('.rt_input').on( 'keyup', function(e) { 
+                                             var input = $(e.currentTarget);
                                                 var number = parseFloat( input.val(), 10 );
-                                                if (number && number !== NaN ) {
-                                                        camera.projectionMatrix.elements[i] = input.val();
-
-                                                 } else { return false; }
-                                              });
+                                                if ( number !== NaN ) {
+                                                    update_camera_matrix( camera, camera_model);
+                                               } else {
+                                                    return false;
+                                                }
                                         });
-                                       
                                     }
                                    });
 
