@@ -72,6 +72,87 @@
 <div class="row">
 
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
+
+<%   
+   my $questions = [ 
+                    { 
+                        name => 'How is the camera described mathematically in the pinhole camera model?', 
+                        answers => [ 
+                                        'A', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    },
+                     { 
+                        name => 'What does the principal point (Cx, Cy) describe?', 
+                        answers => [ 
+                                        'a', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    },
+                    {
+                        name => 'What does the focal lengths (Fx, Fy) describe?', 
+                        answers => [ 
+                                        'a', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    },
+                     {
+                        name => 'How is the translation of the camera applied to the camera pose matrix?', 
+                        answers => [ 
+                                        'a', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    },
+                     {
+                        name => 'How is the rotation of the camera applied to the camera pose matrix?', 
+                        answers => [ 
+                                        'a', 
+                                        'b', 
+                                        'c', 
+                                        'd' , 
+                                        'e' 
+                                   ] 
+                    }
+
+
+
+                ]; 
+
+%>
+
+<h2>Questions</h2>
+<% my $count = 0; %>
+<% foreach my $q ( @{$questions} ) {  $count++;  %> 
+<p> 1) <%= $q->{name} %> </p>
+<table class="table table-bordered">
+<tr>
+  <% my $cc = 0; %>
+  <% foreach my $answer ( @{ $q->{answers} } ) { %>
+      <td style="text-align:center; vertical-align:middle">
+      <input type="radio" name="<%=$count%>" value="<%= $cc++ %>" selected="true">
+      </td>
+    <td>
+   <%= $answer %>
+</td>
+  <% } %>
+ </tr>
+
+</table>
+
+<% } %>
+
      <input type="hidden" name="position" />
      <div class="control-group">
           <!-- Button -->

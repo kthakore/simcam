@@ -314,15 +314,45 @@
                     { 
                         name => 'How is the camera described mathematically in the pinhole camera model?', 
                         answers => [ 
-                                        'A', 
+                                        'The camera is described as a matrix which transforms 3D positions from the real world to 2D pixel locations in the final image.', 
+                                        'The camera is described as a transformation matrix transforms 2D positions from the real world to 2D pixel locations in the final image.', 
+                                        'The camera is described as a vector which is a transforms 2D positions from the real world to 3D pixel locations in the final image.', 
+                                        'The camera is described as a matrix which is a transforms 2D positions from the real world to 3D pixel locations in the final image.', 
+                                        'The camera is described as a transformation matrix transforms 2D positions from the real world to 2D pixel locations in the final image.' 
+                                   ] 
+                    },
+                     { 
+                        name => 'What does the principal point (Cx, Cy) describe?', 
+                        answers => [ 
+                                        'The prinicipal point determines the bottom right of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The prinicipal point determines the bottom left of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The prinicipal point determines the center of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The prinicipal point determines the top left of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The prinicipal point determines the top right of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' 
+                                   ] 
+                    },
+                    {
+                        name => 'What happens when you change the focal lengths (Fx, Fy)?', 
+                        answers => [ 
+                                        'Increasing the focal lengths increases the angle of view, which makes objects appear farther.', 
+                                        'Increasing the focal lengths descreases the angle of view, which makes objects appear closer.', 
+                                        'Increasing the focal lengths descreases the angle of view, which makes objects appear farther.', 
+                                        'Decreasing the focal lengths increases the angle of view, which makes objects appear farther.', 
+                                        'Decreasing the focal lengths decreases the angle of view, which makes objects appear farther.' 
+                                   ] 
+                    },
+                     {
+                        name => 'How is the translation of the camera applied to the camera pose matrix?', 
+                        answers => [ 
+                                        'The X, ', 
                                         'b', 
                                         'c', 
                                         'd' , 
                                         'e' 
                                    ] 
                     },
-                     { 
-                        name => '', 
+                     {
+                        name => 'How is the rotation of the camera applied to the camera pose matrix?', 
                         answers => [ 
                                         'a', 
                                         'b', 
@@ -330,7 +360,9 @@
                                         'd' , 
                                         'e' 
                                    ] 
-                    },
+                    }
+
+
 
                 ]; 
 
@@ -341,17 +373,19 @@
 <% foreach my $q ( @{$questions} ) {  $count++;  %> 
 <p> 1) <%= $q->{name} %> </p>
 <table class="table table-bordered">
-<tr>
   <% my $cc = 0; %>
   <% foreach my $answer ( @{ $q->{answers} } ) { %>
+<tr>
+
       <td style="text-align:center; vertical-align:middle">
       <input type="radio" name="<%=$count%>" value="<%= $cc++ %>" selected="true">
       </td>
     <td>
    <%= $answer %>
-</td>
-  <% } %>
+    </td>
  </tr>
+
+  <% } %>
 
 </table>
 

@@ -18,8 +18,14 @@ var SimCam = {
         "Model"  :    {},
         "View"   :    {},
         "Router" :    {}
+    },
+    "Util" : {
+        "DEG2RAD" : function (d) { return d * (Math.PI/180); },
+        "RAD2DEG" : function (r) { return r * (180/Math.PI); }
     }
 };
+
+
 
 SimCam.captures_needed_for_calibration = 4;
 
@@ -129,6 +135,7 @@ SimCam.Template.SideMenu = {
 
 
 SimCam.Template.Modal = {
+    'obj_RT' : ' <div class="well" id="object_rt" style="z-index:11; width:200px; position:absolute; bottom:20px; right:0px;"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><dl><dt>Position</dt><dd><span id="x"> <span class="values"></span></span>, <span id="y"> <span class="values"> </span></span>, <span id="z"> <span class="values"> </span></span></dd><dt>Rotation</dt><dd> <span id="rx"> <span class="values"> </span></span>, <span id="ry"> <span class="values"> </span></span>, <span id="rz"> <span class="values"> </span></span></dd> </dl></div>',
     'calibration': '<ul class="nav nav-tabs" id="modal_tab">' +
                       '<li><a href="#modal_nav_current_params" data-toggle="tab">Parameters</a></li>' +
                       '<li><a href="#modal_nav_current_graph" data-toggle="tab">Graphs</a></li>' +
@@ -171,6 +178,92 @@ SimCam.Template.Modal = {
 
 
 /*View Constructors*/
+
+SimCam.Constructor.View.ObjectRTModal = Backbone.View.extend({
+    initialize: function (options) {
+        "use strict";
+        var that;
+        that = this;
+
+        that.$el.hide();
+
+        that.app = options.app;
+
+        that.app.models.camera.bind('move', that.set_object, that);
+        that.app.models.grid.bind('move', that.set_object, that);
+
+    },
+    events : {
+        "click .values" : "on_click_values",
+        "change input" : "on_change_input",
+        "click .close" : "on_click_close"
+    },
+    set_object : function (object, model) {
+        "use strict";
+        var that = this;
+
+        that.current_model = model;
+        that.current_object = object;
+        that.$('#x').html( '<span class="values">' + that.current_model.position.x  + '</span>');
+        that.$('#y').html( '<span class="values">' + that.current_model.position.y  + '</span>');
+        that.$('#z').html( '<span class="values">' + that.current_model.position.z  + '</span>');
+        that.$('#rx').html( '<span class="values">' + SimCam.Util.RAD2DEG(that.current_model.rotation.x ) + '</span>');
+        that.$('#ry').html( '<span class="values">' + SimCam.Util.RAD2DEG(that.current_model.rotation.y ) + '</span>');
+        that.$('#rz').html( '<span class="values">' + SimCam.Util.RAD2DEG(that.current_model.rotation.z ) + '</span>');
+
+
+
+        that.$el.show();
+    },
+    on_click_values : function (e) {
+        "use strict";
+        var that,
+        curTarget = $(e.currentTarget);
+        that = this;
+
+        console.log('asds');
+        curTarget.parent().html( '<input style="width:50px" name="'+ curTarget.parent().attr('id')  + '" value="' + curTarget.text() + '" />' );
+        
+        
+    },
+    on_change_input : function (e) {
+        "use strict";
+        var that, name, val,
+        curTarget = $(e.currentTarget);
+        that = this;
+        name = curTarget.attr('name');
+        val = curTarget.val();
+        switch( name ) {
+            case 'x':
+                that.current_model.position.x = val;
+                break;
+            case 'y':
+                that.current_model.position.y = val;
+                break;
+            case 'z':
+                that.current_model.position.z = val;
+                break;
+            case 'rx':
+                that.current_model.rotation.x = SimCam.Util.DEG2RAD(val);
+                break;
+             case 'ry':
+                that.current_model.rotation.y = SimCam.Util.DEG2RAD(val);
+                break;
+            case 'rz':
+                that.current_model.rotation.z = SimCam.Util.DEG2RAD(val);
+                break;
+            default:
+                break;
+        }
+            console.log(that.current_object);
+            that.current_object.trigger('move', that.current_object, that.current_model );
+        
+        
+    },
+    on_click_close: function(e) {
+        this.$el.hide();
+    }
+});
 
 SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
 
@@ -460,8 +553,7 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
                     rotation_measuring_mesh.useQuaternion = true;
                     rotation_measuring_mesh.quaternion.setFromAxisAngle(axis, angle);
                     this.SELECTED.rotation.set(rotation_measuring_mesh.quaternion.x, rotation_measuring_mesh.quaternion.y, rotation_measuring_mesh.quaternion.z);
-                    this.SELECTED.rotation.multiplyScalar(0.5);
-
+                    this.SELECTED.rotation.multiplyScalar(rotation_measuring_mesh.quaternion.w);
                 } else {
                     this.SELECTED.position.copy(intersects[0].point.subSelf(this.offset));
                 }
@@ -543,6 +635,8 @@ SimCam.Constructor.View.MainCanvas = Backbone.View.extend({
 
         if (this.INTERSECTED) {
             this.plane.position.copy(this.INTERSECTED.position);
+            this.INTERSECTED.model.trigger('move', this.INTERSECTED.model, this.INTERSECTED);
+
             this.SELECTED = null;
         }
 
@@ -757,6 +851,7 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
             "image": that.current_image,
             "type" : 'base64'
         });
+        that.current_distortion = undefined;
         image_model.save({ },
             {
                 success : function (data, textStatus, jqXHR) {
@@ -774,7 +869,6 @@ SimCam.Constructor.View.SideCanvas = Backbone.View.extend({
                             image_element = $('<img style="position:absolute; z-index: 2; top:0px; right: 0px" src="' + dist_image_src + '" />');
                             that.$el.append(image_element);
                         }
-
                     });
                     that.loading_image = false;
                 },
@@ -1189,14 +1283,16 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
                  that.camera_viewer     = new SimCam.Constructor.View.SideCanvas({ el: cv_body, mode: that.mode, app: options.app });
 
                 that.main_viewer       = new SimCam.Constructor.View.MainCanvas({ el: mv_body, mode: that.mode, app: options.app, render_cb : function (t) { that.on_main_viewer_render(t); } });
+                that.$el.append(SimCam.Template.Modal.obj_RT);
+                that.object_modal  = new SimCam.Constructor.View.ObjectRTModal({ el: that.$('#object_rt'), app: options.app});
                        }
             else {
                 camera_viewer_frame.css('height', '150px');
                 main_viewer_frame.css('height', '640px');
-                that.$el.css('height', '670px');
 
                 that.main_viewer = new SimCam.Constructor.View.MainWebCamView({ el : mv_body, cv_el :  cv_body, app: options.app, view: that });
             }
+                that.$el.css('height', '670px');
 
         that.modal_view        = new SimCam.Constructor.View.ResultsModal({ el: options.app.el.find('#results_modal'), mode: that.mode, app: options.app});
 
