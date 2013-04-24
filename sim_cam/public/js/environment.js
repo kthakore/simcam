@@ -1386,7 +1386,7 @@ SimCam.Constructor.View.Main = Backbone.View.extend({
 });
 
 
-/*Router Constuctor*/
+/*Router Constructor*/
 SimCam.Constructor.Router.App = Backbone.Router.extend({
     version : 0.01,
     el: $('body'),
