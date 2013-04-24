@@ -179,7 +179,7 @@
 </div>
 <div class="row">
 <h2>Current Camera Extrinsics Camera</h2>
-<p>The matrix below shows current pose (rotation|translation) matrix of the camera above. You can click and drag to move the camera, and hold shift while dragging to rotate the camera.</p>
+<p>The matrix below shows current pose (rotation|translation) matrix of the camera above. You can click and drag to move the camera, and hold shift while dragging to rotate the camera. You can also edit positions and rotations by clicking on the value in the bottom right widget. Click on the object you want to move first and it will change values.</p>
         <center>
 <table class="matrix" id="rt_matrix_table">
     <tr>
@@ -251,7 +251,7 @@
 <div class="row">
     <h2>Camera Pose</h2>
     <p>
-        Another matrix called the camera pose matrix describes the camera's current rotation and translation relative to the world. Knowing this matrix will allow you to do precise measurements with your camera! This matrix is also called the extrinsics parameters of the camera..
+        Another matrix called the camera pose matrix describes the camera's current rotation and translation relative to the world. Knowing this matrix will allow you to do precise measurements with your camera! This matrix is also called the extrinsics parameters of the camera.
     </p>
         <p>You can move and rotate the camera in the view above to see how the rotation and translation matrix is affected. </p>
     <h3>Translation</h3>
@@ -304,7 +304,36 @@
     <p class="well">
         To learn more about rotation matrices read this <a href="http://en.wikipedia.org/wiki/Rotation_matrix">article</a>.
     </p>
+    <h3>Applying Translation & Rotation Matrices to the Pose Matrix</h3>
+
+    <p>
+        Once the Translational & Rotation Matrices are determined. For example for 
+        <dl> 
+            <dt>Translation (0,0,10)</dt>
+            <dd>
+    		<span> <img src="/images/homo_translated.gif" /> </span>
+            </dd>
+            <dt>Rotation on X axis 30 degrees</dt>
+            <dd>
+            <span> <img src="/images/homo_rotational.gif" /> </span>
+            <div> Note that the rotation matrix is padded with 1 to meet the matrix dimensions of the rest of the transforms.</div>
+            </dd>
+        </dl>
+        Next they are multiplied to a 4x4 identity matrix.
+        <dl>
+        <dt>Identity Matrix</dt>
+            <dd><img src="/images/4x4_identity.gif" /></dd>
+        <dt>Multiply Homogenous Matrices of the transform</dt>
+            <dd><img src="/images/homo_RT.gif" /></dd>
+        <dt>The result matrix is the Pose</dt>
+            <dd><img src="/images/homo_RT_matrix.gif" /></dd>
+        </dl>
+    </p>
+
+    <p>Set the rotation and translation in the simulated environment above for the camera and compare the results!</p>
 </div>
+
+
 <div class="row">
 
   <form class="form-horizontal" action="/session/<%=$session->milestone%>" method="post">
@@ -324,19 +353,19 @@
                      { 
                         name => 'What does the principal point (Cx, Cy) describe?', 
                         answers => [ 
-                                        'The prinicipal point determines the bottom right of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
-                                        'The prinicipal point determines the bottom left of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
-                                        'The prinicipal point determines the center of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
-                                        'The prinicipal point determines the top left of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
-                                        'The prinicipal point determines the top right of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' 
+                                        'The principal point determines the bottom right of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The principal point determines the bottom left of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The principal point determines the center of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The principal point determines the top left of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' , 
+                                        'The principal point determines the top right of the final image as projected by the camera, such as (0,0) is at the center of the image plane.' 
                                    ] 
                     },
                     {
                         name => 'What happens when you change the focal lengths (Fx, Fy)?', 
                         answers => [ 
                                         'Increasing the focal lengths increases the angle of view, which makes objects appear farther.', 
-                                        'Increasing the focal lengths descreases the angle of view, which makes objects appear closer.', 
-                                        'Increasing the focal lengths descreases the angle of view, which makes objects appear farther.', 
+                                        'Increasing the focal lengths decreases the angle of view, which makes objects appear closer.', 
+                                        'Increasing the focal lengths decreases the angle of view, which makes objects appear farther.', 
                                         'Decreasing the focal lengths increases the angle of view, which makes objects appear farther.', 
                                         'Decreasing the focal lengths decreases the angle of view, which makes objects appear farther.' 
                                    ] 
@@ -344,21 +373,21 @@
                      {
                         name => 'How is the translation of the camera applied to the camera pose matrix?', 
                         answers => [ 
-                                        'The X, ', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
+                                        'The X, Y, Z position values are applied on the right most column on a 4x4 matrix, which is then added to the pose matrix', 
+                                        'The X, Y, Z position values are applied on the right most column on a 4x4 matrix, which is then multiplied to the current pose matrix', 
+                                        'The X, Y, Z position values are applied on the right most column on a 4x4 matrix, which is then cross produced to the pose matrix', 
+                                        'The X, Y, Z position values are applied on the right most column on a 4x4 matrix, which is then subtracted to the pose matrix', 
+                                        'The X, Y, Z position values are applied on the right most column on a 4x4 matrix, which is then divided to the pose matrix' 
                                    ] 
                     },
                      {
                         name => 'How is the rotation of the camera applied to the camera pose matrix?', 
                         answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
+                                        'The correct axis rotational matrix is selected. Then the rotational matrix is homogenzied and divided to the pose matrix.', 
+                                        'The correct axis rotational matrix is selected. Then the rotational matrix is homogenzied and crossed with the pose matrix.', 
+                                        'The correct axis rotational matrix is selected. Then the rotational matrix is homogenzied and subtracted ed to the pose matrix.', 
+                                        'The correct axis rotational matrix is selected. Then the rotational matrix is homogenzied and multiplied to the pose matrix.', 
+                                        'The correct axis rotational matrix is selected. Then the rotational matrix is homogenzied and added to the pose matrix.', 
                                    ] 
                     }
 

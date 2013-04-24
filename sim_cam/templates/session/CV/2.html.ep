@@ -76,55 +76,23 @@
 <%   
    my $questions = [ 
                     { 
-                        name => 'How is the camera described mathematically in the pinhole camera model?', 
+                        name => 'What does the radial distortion parameters describe?', 
                         answers => [ 
-                                        'A', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
+                                        '3 parameters that define the distortions along the radius from the center of the image', 
+                                        '3 parameters that define the distortions along the radius from the bottom of the image', 
+                                        '2 parameters that define the distortions along the radius from the top of the image', 
+                                        '3 parameters that define the distortions along the radius from the left of the image', 
+                                        '2 parameters that define the distortions along the radius from the right of the image', 
                                    ] 
                     },
                      { 
-                        name => 'What does the principal point (Cx, Cy) describe?', 
+                        name => 'What does tangential distortion parameters describe?', 
                         answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    },
-                    {
-                        name => 'What does the focal lengths (Fx, Fy) describe?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    },
-                     {
-                        name => 'How is the translation of the camera applied to the camera pose matrix?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    },
-                     {
-                        name => 'How is the rotation of the camera applied to the camera pose matrix?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    }
+                                        '3 parameters that define the distortions along the X or Y axis', 
+                                        '2 parameters that define the distortions along the radius', 
+                                        '2 parameters that define the distortions along the X or Y axis', 
+                                        '3 parameters that define the distortions along the radius'                                   ] 
+                     }
 
 
 
@@ -132,26 +100,7 @@
 
 %>
 
-<h2>Questions</h2>
-<% my $count = 0; %>
-<% foreach my $q ( @{$questions} ) {  $count++;  %> 
-<p> 1) <%= $q->{name} %> </p>
-<table class="table table-bordered">
-<tr>
-  <% my $cc = 0; %>
-  <% foreach my $answer ( @{ $q->{answers} } ) { %>
-      <td style="text-align:center; vertical-align:middle">
-      <input type="radio" name="<%=$count%>" value="<%= $cc++ %>" selected="true">
-      </td>
-    <td>
-   <%= $answer %>
-</td>
-  <% } %>
- </tr>
-
-</table>
-
-<% } %>
+<%= include 'session/CV/questions_widget', questions => $questions %>
 
      <input type="hidden" name="position" />
      <div class="control-group">
