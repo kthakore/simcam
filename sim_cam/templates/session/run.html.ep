@@ -36,6 +36,7 @@
 
 <% if($session->milestone > 0 ) { %>
 
+<!--
 <div id="webcam_modal" class="modal hide fade">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -49,29 +50,33 @@
   </div>
 </div>
 
-
+-->
 
 <script type="text/javascript">
 $(function(){
+     var questions = $('#questions_count').text();
 
+    if( questions > 0 ) {
+        $('form').on('submit' , function() {
 
-/*    var wmodal = $('#webcam_modal').modal();
+            for( var q=1; q <= questions; q++ ){
 
-    var webcam_iframe;
+                var val = $('[name="quiz_'+ q +'"]:checked').val();
+                console.log(val);
+                if( val === undefined ){
+                     $('html, body').animate({
+                     scrollTop: $('[name="quiz_'+ q +'"]').parents('table').offset().top - 150
+                     }, 2000);
+                    Messenger().post('You need to fill out each one of questions.');
+                    invalid = true;
+                    return false;
+                }
+            }
+            return true;
 
-    var wm = wmodal.find('iframe');
-    if( wm ) {
-    
-        wm.on('load', function() {
-            var content_window = wm[0].contentWindow;
-            content_window.init('<%= $user->id %>_<%=$session->milestone%>');
-            content_window.callback =  function( stat, errorID, errorMsg ) {
-                $('#webcam_modal').modal('hide');
-            };
         });
 
     }
-*/
 });
 </script>
 

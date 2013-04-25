@@ -122,27 +122,7 @@ The second one describing the distortion coefficients matrix (or vector):
 
 %>
 
-<h2>Questions</h2>
-<% my $count = 0; %>
-<% foreach my $q ( @{$questions} ) {  $count++;  %> 
-<p> 1) <%= $q->{name} %> </p>
-<table class="table table-bordered">
-<tr>
-  <% my $cc = 0; %>
-  <% foreach my $answer ( @{ $q->{answers} } ) { %>
-      <td style="text-align:center; vertical-align:middle">
-      <input type="radio" name="<%=$count%>" value="<%= $cc++ %>" selected="true">
-      </td>
-    <td>
-   <%= $answer %>
-</td>
-  <% } %>
- </tr>
-
-</table>
-
-<% } %>
-
+<%= include 'session/CV/questions_widget', questions => $questions %>
      <input type="hidden" name="position" />
      <div class="control-group">
           <!-- Button -->

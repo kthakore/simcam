@@ -1397,6 +1397,7 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
 
         that.element = options.element;
 
+
         that.models = {
             camera: new SimCam.Constructor.Model.Generic(options.camera),
             grid: new SimCam.Constructor.Model.Generic(),
@@ -1412,6 +1413,11 @@ SimCam.Constructor.Router.App = Backbone.Router.extend({
             });
 
         that.element.append(env_frame);
+        that.capture_mousewheel = false;
+        $(window).on('mousewheel', function(e) { if( that.capture_mousewheel ) { e.preventDefault(); } } ); 
+
+        env_frame.on('mouseenter', function(e) { that.capture_mousewheel = true;  } );
+        env_frame.on('mouseleave', function(e) { that.capture_mousewheel = false;  } );
 
         that.el.append(SimCam.Template.ResultsModal);
     

@@ -7,8 +7,8 @@
   <% foreach my $answer ( @{ $q->{answers} } ) { %>
 <tr>
 
-      <td style="text-align:center; vertical-align:middle">
-      <input type="radio" name="<%=$count%>" value="<%= $cc++ %>" selected="true">
+      <td style="text-align:center; vertical-align:middle" width="34">
+      <input type="radio" name="quiz_<%=$count%>" value="<%= $cc++ %>" class="validate" >
       </td>
     <td>
    <%= $answer %>
@@ -18,8 +18,7 @@
   <% } %>
 
 </table>
-
 <% } %>
-
+<div style="display:none" id="questions_count"><%= $count %></div>
 
 
