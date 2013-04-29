@@ -293,8 +293,8 @@ SimCam.Constructor.View.MainWebCamView = Backbone.View.extend({
             }, errBack);
         }
 
-        var ws_capture_url = 'ws://'+location.hostname+':8080/api/ws_check';
-        var ws_calibration_url = 'ws://'+location.hostname+':8080/api/ws_calibration';
+        var ws_capture_url = 'ws://'+location.hostname+'/api/ws_check';
+        var ws_calibration_url = 'ws://'+location.hostname+'/api/ws_calibration';
 
         var sidebar_viewer = options.view.side_bar_viewer;
 
