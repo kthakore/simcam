@@ -266,7 +266,7 @@ sub get_calibrate {
         `$run`
     };
 
-    if( $stderr ){
+    if( $stderr && $stderr !~ 'libdc1394' ){
         $self->app->log->error( "Api|get_calibrate error: $stderr" );
         return $self->render( text => 'Error calibrating image: '. $stderr, 
                               json => { message => 'Error calibrating images: '. $stderr }, 
