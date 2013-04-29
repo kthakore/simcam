@@ -122,8 +122,6 @@ SimCam.Template.SideMenu = {
     "calibration" : '<li class="nav-header">Calibration</li>' +
                 '<li><input type="button" name="capture" class="btn btn_primary calibration_sidemenu_input" value="Capture Image" /></li>' +
                 '<li class="nav-header"> </li>' +
-                '<li><input type="button" name="calibrate" class="btn btn_primary calibration_sidemenu_input" value="Calibrate" disabled="disabled" /></li>' +
-                '<li class="nav-header"> </li>' +
                 '<li><input type="button" name="results" class="btn btn_primary calibration_sidemenu_input" value="View Current Results" disabled="disabled" /></li>',
     "matrix" : '<h5>Apply Matrix</h5>' +
                 '<li><input type="button" class="btn btn-primary matrix_sidemenu_apply_btn" value="Apply" /></li>',
@@ -959,7 +957,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         'keyup .pinhole_sidemenu_input' : 'on_change_pinhole_sidemenu_input',
         'keyup .distortions_sidemenu_input' : 'on_change_distortions_sidemenu_input',
         'click [name="capture"]' : 'on_click_capture_btn',
-        'click [name="calibrate"]' : 'on_click_calibrate_btn',
+//        'click [name="calibrate"]' : 'on_click_calibrate_btn',
         'click [name="results"]' : 'on_click_results_btn'
     },
     render: function (mode) {
@@ -1041,7 +1039,7 @@ SimCam.Constructor.View.SideMenu = Backbone.View.extend({
         captures = that.app.models.calibration.get('captures');
         if (captures.length >= SimCam.captures_needed_for_calibration) {
             //enable the calibration button
-            that.$('[name="calibrate"]').removeAttr('disabled');
+//            that.$('[name="calibrate"]').removeAttr('disabled');
             that.on_click_calibrate_btn();
         }
     },
@@ -1468,7 +1466,7 @@ SimCam.initialize = function (options) {
 
         }
         
-        options.element.css({height: window.innerHeight * 0.99 + 'px' });
+        options.element.css({height: 640 + 'px' });
  
 
     });

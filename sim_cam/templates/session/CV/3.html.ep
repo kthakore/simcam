@@ -53,6 +53,25 @@ The second one describing the distortion coefficients matrix (or vector):
 
 <p>For the first calibration attempt 4 images need to be captured. As you capture each subsequent image, a calibration attempt is done. You can then click on view current results button to see your current camera matrix and distortion parameters, graphs showing changes in parameter values and finally the efficacy of each calibration attempt.</p>
 
+<div class="tabbable"> <!-- Only required for left/right tabs -->
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#image_captures_tab" data-toggle="tab">Example Image Captures</a></li>
+    <li><a href="#results_tab" data-toggle="tab">Example Results</a></li>
+    <li><a href="#converge_tab" data-toggle="tab">Convergence of Values</a></li>
+  </ul>
+  <div class="tab-content well">
+    <div class="tab-pane active" id="image_captures_tab">
+        <h4>Image Captures</h4>
+    </div>
+    <div class="tab-pane" id="results_tab">
+      <p>Howdy, I'm in Section 2.</p>
+    </div>
+    <div class="tab-pane" id="converge_tab">
+        <p>FOO</p>
+    </div>
+  </div>
+</div>
+
 <h3>Image captures for calibration</h3>
 <p>Selection of the calibration image captures is vital for a good calibration attempt. Generally good image captures involve providing the calibration algorithm with the most information about the optical behaviour of the camera. This means that the image captures are balanced and unique.</p>
 </div> 
@@ -145,13 +164,14 @@ The second one describing the distortion coefficients matrix (or vector):
     <!-- INSIDE SESSION 0 TEMPLATE -->
     <script type="text/javascript">
 
+            
             var get_random_float = function() {  return Math.random() - ( Math.random() /( Math.random() * 10 )) }
-            var simcam = SimCam.initialize({ element: $('#environment'), 
+            var setup = function () { SimCam.initialize({ element: $('#environment'), 
                                          mode: { 
                                                type: 'calibration' 
                                             },
                                          camera: {
-                                            r1: 10
+                                            r1: 2
 /*                                            r1 : get_random_float(),
                                             r2 : get_random_float(),
                                             r3 : get_random_float(),
@@ -166,6 +186,11 @@ The second one describing the distortion coefficients matrix (or vector):
                                          success: function(app) { window.simcam = app } 
 
                                        });
+            };
+
+            var reset = function () { window.simcam.destroy(); if(Backbone.history){ Backbone.history.stop(); } $('#environment').html(''); setup(); };
+
+            setup();
 
     </script>
 % end;
