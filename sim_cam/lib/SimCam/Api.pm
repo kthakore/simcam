@@ -141,7 +141,7 @@ sub get_diff {
 
     };
 
-    if( $merged ){
+    if( $merged && $merged !~ 'libdc1394' ){
         $self->app->log->error( "Api|get_diff error: $merged" ) if $merged;
         return $self->render( text => 'Error differencing images: '. $merged, 
                               json => { message => 'Error differencing images: '. $merged }, 
@@ -179,7 +179,7 @@ sub get_check {
        $result = system split(' ', $run);
     };
 
-    if( $merged ){
+    if( $merged && $merged !~ 'libdc1394' ){
         $self->app->log->error( "Api|get_check error: $merged" ) if $merged;
         return $self->render( text => 'Error checking image: '. $merged, 
                               json => { message => 'Error checking images: '. $merged }, 
@@ -470,7 +470,7 @@ sub run_calibration {
         `$run`
     };
 
-    if( $stderr ){
+    if( $stderr && $stderr !~ 'libdc1394' ){
         $self->app->log->error( "Api|get_calibrate error: $stderr" );
         return;       
     }
@@ -543,7 +543,7 @@ sub run_raw_check {
        $result = system split(' ', $run);
     };
 
-    if( $merged ){
+    if( $merged && $merged !~ 'libdc1394' ){
         $self->app->log->error( "Api|get_check error: $merged" ) if $merged;
         return;
         }
