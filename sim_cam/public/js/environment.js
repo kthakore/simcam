@@ -81,7 +81,7 @@ SimCam.Constructor.Collection.Captures = Backbone.Collection.extend({
 
 /*Templates*/
 
-SimCam.Template.ResultsModal = '<div id="results_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="results_modal_label" aria-hidden="true">' +
+SimCam.Template.ResultsModal = '<div id="results_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="results_modal_label" aria-hidden="true" style="height:auto;" >' +
 /*          '<div class="modal-header">' +
           '  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>' +
           '  <h3 id="results_modal_label">Results</h3>' +
@@ -1101,14 +1101,21 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
     },
     events : {
         'hidden' : 'on_hidden',
-        'a[href="#modal_nav_current_graph"] shown'  : 'on_graph_tab_shown'
+        'a[href="#modal_nav_current_graph"] shown'  : 'on_graph_tab_shown',
+        'a[href="#modal_nav_current_diff"] shown'  : 'on_other_tab'
+
+
+    },
+    on_other_tab : function () {
+        var that = this;
+           $('#results_modal').popover('destroy');
     },
     on_hidden : function () {
         "use strict";
         var that = this;
-        console.log('hidden');
         if (that.chart) {
             that.chart.destroy();
+            that.on_other_tab();    
             that.chart = null;
         }
     },
@@ -1144,8 +1151,8 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                         //When is chart ready?
                         }
                     },
-                    height : 400,
-                    width  : env.innerWidth() * 0.9
+                    height : 390,
+                    width  : env.innerWidth() * 0.8
                 },
                 legend : {
                     useHTML: true,
@@ -1167,9 +1174,11 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                 },
                 series: collection.distortions_series_parameters()
             });
-        
+       
+        $('#results_modal').popover({ placement: 'right', content: 'Click on the legend items to focus on parameters!', trigger: 'manual'});
+                $('#results_modal').popover('show');
+                $('.popover').attr('style', $('.popover').attr('style') + ' z-index:1041' );   
         };
-
         diff_grid = that.$('#difference_image_show');
 
         diff_grid.html('');

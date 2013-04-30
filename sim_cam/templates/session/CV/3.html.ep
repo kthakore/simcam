@@ -131,9 +131,9 @@ The second one describing the distortion coefficients matrix (or vector):
 <%   
    my $questions = [ 
                     { 
-                        name => 'How is the camera described mathematically in the pinhole camera model?', 
+                        name => 'What is determined by the calibration process?', 
                         answers => [ 
-                                        'A', 
+                                        'The camera matrix and the distortion coefficients', 
                                         'b', 
                                         'c', 
                                         'd' , 
