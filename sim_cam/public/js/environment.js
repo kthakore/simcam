@@ -1097,6 +1097,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
         that = this;
         that.options = options;
         that.app     = options.app;
+        
 //        that.$el.modal('hide');
     },
     events : {
@@ -1256,6 +1257,9 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
             options = that.set_up_calibration(options);
         } else if (options.type === 'capture') {
             that.$('.modal-body').html(_.template(SimCam.Template.Modal[options.type], options));
+        }
+        if( that.options.mode.type === 'webcam' ) {
+            that.$('a[href="#modal_nav_current_diff"]').hide();
         }
         that.$('#modal_tab a').click(function (e) { e.preventDefault(); $(this).tab('show'); });
 

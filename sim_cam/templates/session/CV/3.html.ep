@@ -87,7 +87,7 @@ The second one describing the distortion coefficients matrix (or vector):
        <div class="row-fluid"> 
         <img class="span5" src="/images/calibration/results.png" />
            <div class="offset5">
-              <p>As you capture images in the environment below the calibration software is run. The first calibration attempt starts at 4 images, and a new one is made for every subsequent valid image capture. Once a calibration is done you can see the results by clicking the "View Current Results" button in the side menu bar. The current parameters are shown in the 'Parameters' tab. <b>Note: That the cx and cy values are based with the origin in the bottom left of the image</b>. In the 'Graphs' tab you will see the values across calibration attempts. As you capture more images you will notice that the parameters converge (see the 'Parameter Values' above). Finally in the 'Efficacy' tab of the current results you will see 4 set of images for each calibration attempt, with the newest calibration attempt on the top. The four images are undistorted, distorted, corrected and the difference (of corrected versus the undistorted). The difference image quickly shows how well the distorted image has been corrected with the current calibration attempt. 
+              <p>As you capture images in the environment below the calibration software is run. The first calibration attempt starts at 4 images, and a new one is made for every subsequent valid image capture. Once a calibration is done you can see the results by clicking the "View Current Results" button in the side menu bar. The current parameters are shown in the 'Parameters' tab. <b>Note: That the cx and cy values are based with the origin in the bottom left of the image</b>. In the 'Graphs' tab you will see the values across calibration attempts. As you capture more images you will notice that the parameters converge (see the 'Parameter Values' above). Finally in the 'Efficacy' tab of the current results you will see 4 set of images for each calibration attempt, with the newest calibration attempt on the top. The four images are undistorted, distorted, corrected and the difference (of corrected versus the undistorted). The difference image quickly shows how well the distorted image has been corrected with the current calibration attempt. <b>Note: that this difference image cannot be calculated automatically for real cameras as we don't know the undistorted image</b>. 
               </p>
            </div>
         </div>
@@ -133,13 +133,35 @@ The second one describing the distortion coefficients matrix (or vector):
                     { 
                         name => 'What is determined by the calibration process?', 
                         answers => [ 
-                                        'The camera matrix and the distortion coefficients', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
+                                        'The camera matrix and the distortion coefficients, 4 parameters for the camera matrix and 6 for the distortion coefficients', 
+                                        'The camera matrix and the distortion coefficients, 9 parameters for the camera matrix and 6 for the distortion coefficients', 
+                                        'The camera matrix and the distortion coefficients, 4 parameters for the camera matrix and 5 for the distortion coefficients', 
+                                        'The camera matrix and the distortion coefficients, 9 parameters for the camera matrix and 5 for the distortion coefficients' 
                                    ] 
                     },
+                    { 
+                        name => "What are the inputs to Zhang's algorithm?", 
+                        answers => [ 
+                                        'Group of pair points and image size (w,h)', 
+                                        'Group of points and image size (w,h)' 
+                                   ] 
+                    },
+                     { 
+                        name => 'How are parameters determined in calibration?', 
+                        answers => [ 
+                                        'Image captures of a calibration grid are taken and the parameters are estimated.', 
+                                        'Image captures of a calibration grid are taken and the parameters are calculated.' 
+                                   ] 
+                    },
+                      { 
+                        name => 'Can the difference of the undistorted and corrected image be used as a tool for determining the efficacy of a calibration attempt with real cameras?', 
+                        answers => [ 
+                                        'Yes, because the undistorted image is always known.', 
+                                        'No, because the undistorted image is not known and has to be determined by hand.' 
+                                   ] 
+                    },
+
+
                ]; 
 
 %>
