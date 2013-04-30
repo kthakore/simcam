@@ -71,7 +71,7 @@ The second one describing the distortion coefficients matrix (or vector):
             <img class="span3" src="/images/calibration/<%=$image%>.png" />
             <div class="offset3"> 
                 <p><b>Image Capture #<%=$image%></b> </p>
-                <p>These are examples of a calibration grid captures. There are about 31 image captures taken for calibrating the camera below. The locations of the grids were selected to systematically cover the entire viewing area of the camera. Also note that severe rotations were used in the last two image captures, this is done to provide the OpenCV algorithm with knowledge of the focal lengths. After reviewing these images click on  </p>
+                <p>These are examples of a calibration grid captures. There are about 31 image captures taken for calibrating the camera below. The locations of the grids were selected to systematically cover the entire viewing area of the camera. Also note that severe rotations were used in the last two image captures, this is done to provide the OpenCV algorithm with knowledge of the focal lengths.  </p>
             </div>
       
         </div>
@@ -84,8 +84,12 @@ The second one describing the distortion coefficients matrix (or vector):
 </div>
     </div>
     <div class="tab-pane" id="results_tab">
-       <div class="row-fluid"> <img class="span5" src="/images/calibration/results.png" />
-      <p class="offset5"></p>
+       <div class="row-fluid"> 
+        <img class="span5" src="/images/calibration/results.png" />
+           <div class="offset5">
+              <p>As you capture images in the environment below the calibration software is run. The first calibration attempt starts at 4 images, and a new one is made for every subsequent valid image capture. Once a calibration is done you can see the results by clicking the "View Current Results" button in the side menu bar. The current parameters are shown in the 'Parameters' tab. <b>Note: That the cx and cy values are based with the origin in the bottom left of the image</b>. In the 'Graphs' tab you will see the values across calibration attempts. As you capture more images you will notice that the parameters converge (see the 'Parameter Values' above). Finally in the 'Efficacy' tab of the current results you will see 4 set of images for each calibration attempt, with the newest calibration attempt on the top. The four images are undistorted, distorted, corrected and the difference (of corrected versus the undistorted). The difference image quickly shows how well the distorted image has been corrected with the current calibration attempt. 
+              </p>
+           </div>
         </div>
     </div>
     <div class="tab-pane" id="converge_tab">
@@ -97,7 +101,12 @@ The second one describing the distortion coefficients matrix (or vector):
     <div class="item <%if( $image == 0 ) { %>active<% } %>">
         <div class="row-fluid">
             <img class="span5" src="/images/calibration/converge_center/center-<%=$image%>.png" />
-            <p class="offset5"> <b>Convergence of value: </b> </p>
+            <div class="offset5"> 
+                <p><b>Convergence of Values</b></p>
+                <p>
+                    With more images capture eventually the parameters begin to converge. This means that there is a point at which new capture images provide no more value to the calibration process. In some cases additional images will actually decrease final efficacy of the calibration.
+                </p>
+            </div>
         </div>
     </div>
     <% } %> </div>
