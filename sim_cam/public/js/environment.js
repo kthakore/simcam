@@ -1142,6 +1142,7 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
 
         that.after_shown = function () {
             var env = that.$('#calibration_chart_container');
+            $('#calibration_chart_container').css({ 'overflow-y': 'none' } );
             that.chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'calibration_chart_container',
@@ -1151,8 +1152,8 @@ SimCam.Constructor.View.ResultsModal = Backbone.View.extend({
                         //When is chart ready?
                         }
                     },
-                    height : 390,
-                    width  : env.innerWidth() * 0.8
+                    height : 340,
+                    width  : env.innerWidth() * 0.98
                 },
                 legend : {
                     useHTML: true,
