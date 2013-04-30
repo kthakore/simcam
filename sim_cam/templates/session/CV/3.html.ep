@@ -56,19 +56,56 @@ The second one describing the distortion coefficients matrix (or vector):
 <div class="tabbable"> <!-- Only required for left/right tabs -->
   <ul class="nav nav-tabs">
     <li class="active"><a href="#image_captures_tab" data-toggle="tab">Example Image Captures</a></li>
-    <li><a href="#results_tab" data-toggle="tab">Example Results</a></li>
-    <li><a href="#converge_tab" data-toggle="tab">Convergence of Values</a></li>
+    <li><a href="#results_tab" data-toggle="tab">Final Results</a></li>
+    <li><a href="#converge_tab" data-toggle="tab">Parameter Values</a></li>
   </ul>
   <div class="tab-content well">
     <div class="tab-pane active" id="image_captures_tab">
         <h4>Image Captures</h4>
+<div id="myCarousel" class="carousel slide">
+  <!-- Carousel items -->
+  <div class="carousel-inner">
+    <% foreach my $image ( 0...31) { %>
+    <div class="item <%if( $image == 0 ) { %>active<% } %>">
+        <div class="row-fluid" >
+            <img class="span3" src="/images/calibration/<%=$image%>.png" />
+            <div class="offset3"> 
+                <p><b>Image Capture #<%=$image%></b> </p>
+                <p>These are examples of a calibration grid captures. There are about 31 image captures taken for calibrating the camera below. The locations of the grids were selected to systematically cover the entire viewing area of the camera. Also note that severe rotations were used in the last two image captures, this is done to provide the OpenCV algorithm with knowledge of the focal lengths. After reviewing these images click on  </p>
+            </div>
+      
+        </div>
+    </div>
+    <% } %>
+  </div>
+  <!-- Carousel nav -->
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div>
     </div>
     <div class="tab-pane" id="results_tab">
-      <p>Howdy, I'm in Section 2.</p>
+       <div class="row-fluid"> <img class="span5" src="/images/calibration/results.png" />
+      <p class="offset5"></p>
+        </div>
     </div>
     <div class="tab-pane" id="converge_tab">
-        <p>FOO</p>
+<div id="myCarousel2" class="carousel slide">
+  <!-- Carousel items -->
+  <div class="carousel-inner">
+
+    <% foreach my $image ( 0..8 ) { %>
+    <div class="item <%if( $image == 0 ) { %>active<% } %>">
+        <div class="row-fluid">
+            <img class="span5" src="/images/calibration/converge_center/center-<%=$image%>.png" />
+            <p class="offset5"> <b>Convergence of value: </b> </p>
+        </div>
     </div>
+    <% } %> </div>
+  <!-- Carousel nav -->
+  <a class="carousel-control left" href="#myCarousel2" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel2" data-slide="next">&rsaquo;</a>
+</div>
+   </div>
   </div>
 </div>
 
@@ -94,50 +131,7 @@ The second one describing the distortion coefficients matrix (or vector):
                                         'e' 
                                    ] 
                     },
-                     { 
-                        name => 'What does the principal point (Cx, Cy) describe?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    },
-                    {
-                        name => 'What does the focal lengths (Fx, Fy) describe?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    },
-                     {
-                        name => 'How is the translation of the camera applied to the camera pose matrix?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    },
-                     {
-                        name => 'How is the rotation of the camera applied to the camera pose matrix?', 
-                        answers => [ 
-                                        'a', 
-                                        'b', 
-                                        'c', 
-                                        'd' , 
-                                        'e' 
-                                   ] 
-                    }
-
-
-
-                ]; 
+               ]; 
 
 %>
 
@@ -191,6 +185,13 @@ The second one describing the distortion coefficients matrix (or vector):
             var reset = function () { window.simcam.destroy(); if(Backbone.history){ Backbone.history.stop(); } $('#environment').html(''); setup(); };
 
             setup();
+
+    $(function() {
+
+    $('#myCarousel').carousel({interval:false})
+    $('#myCarousel2').carousel({interval:false})
+
+    });
 
     </script>
 % end;
