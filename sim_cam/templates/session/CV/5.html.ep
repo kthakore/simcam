@@ -265,8 +265,9 @@ Is the amount of simulation you were exposed to in the environment sufficient fo
        $('form').on( 'submit', function () {
             var invalid = false;
             _.every( inputs, function (finputs) {
+                if( finputs.length > 1 ) {
                var checked =  $(finputs+':checked').length;
-                
+                 
                 if (checked === 0){
                     $('html, body').animate({
                      scrollTop: $(finputs+':first').parents('table').offset().top
@@ -274,6 +275,18 @@ Is the amount of simulation you were exposed to in the environment sufficient fo
                     alert('You need to fill out each one of questions.');
                     invalid = true;
                     return false;
+                }  
+                } else {
+                    if( finputs.html().length === 0 )
+                    {
+                     $('html, body').animate({
+                     scrollTop: $(finputs).offset().top
+                     }, 2000);
+                    alert('You need to fill out each one of questions.');
+                    invalid = true;
+                    return false;
+                       
+                    }
                 }
             });
 
