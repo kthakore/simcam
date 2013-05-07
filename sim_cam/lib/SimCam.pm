@@ -13,7 +13,7 @@ has 'schema' =>
 sub startup {
   my $self = shift;
 
-#  $self->config(hypnotoad => {listen => ['http://*:80']});:
+  $self->config(hypnotoad => { workers => 16, clients => 500});
   $self->mode('production');
 
     $self->plugin(
