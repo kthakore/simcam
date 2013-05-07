@@ -17,13 +17,15 @@ procedure of camera calibration. We wish tO evaluate the content of this
 tutorial and simulator as an introductory material for students.</p>
 
 <h2>Instructions:</h2>
-<p>Please answer each question by selecting a radio button:</p>
+<p>Please answer each question:</p>
 
+<h2>Demographics:</h2>
 
+<div id="section-Demo-questions"></div>
 
 <h2>Section A:</h2>
 
-<p>All statements have a 1-5 scale (1 is strongly agree and 5 strongly disagreed)</p>
+<p>All statements have a 1-5 scale (1 is strongly agree and 5 strongly disagreed). Select the appropriate radio button:</p>
 
 
 <div id="section-A-questions"></div>
@@ -107,6 +109,23 @@ procedure? </b></p>
 </table>
 </script>
 
+<script type="text/template" id="questions_demo_template">
+<div class="row">
+<div class="span12"><span><b><<=count>>)</b> <<=question>></span>
+<br />
+<input type="text" name="demo_<<=count>>" /> 
+<br />
+</div>
+</div>
+
+</script>
+
+<script type="text/template" id="questions_demo">What is your area of study/program?
+How many hours have you been awake?
+What is your experience in number of years with computer vision/graphics?
+What is your experience in number of years with linear algebra?
+If you have done camera calibration in the past, about how many different times have you done it?</script>
+
 <script type="text/template" id="question_a_template">
 <span><b><<=count>>) </b><<=question>></span>
 
@@ -154,22 +173,21 @@ procedure? </b></p>
 Students should be provided with self-directed opportunities to learn camera calibration.
 The system that I have been exposed to is a good introduction to camera calibration.
 The system that I have been exposed to can be used to improve understanding of camera calibration.
-The system that I have been exposed to has enough fidelity to simulate the pin-hole camera model for training.
-The system that I have been exposed to has enough fidelity to simulate radial and tangential distortions for training.
-The simulation of grid placement has sufficient realism for training camera calibration.
-The real-time feedback of camera calibration parameters are valuable to understand the effects of the parameters. <br /> <center><img src="http://i.imgur.com/yFg2psb.png" /></center>
-The real-time feedback of camera calibration parameters graphs are valuable to understand the effects of the parameters. <br /> <center><img src="http://i.imgur.com/juChUtH.png" /></center>
-The real-time feedback of shown difference image between the corrected and undistorted image is valuable to gauge good calibration attempts.  <br /> <center><img src="http://i.imgur.com/UQ21Pay.png" /></center> 
-Allowing calibration of the user's webcam is valuable as a practical exercise of camera calibration knowledge to students learning calibration.
+The interactive simulation of the pin-hole camera model, camera matrix and pose matrix helps to improve understanding of camera calibration (<a href="#fig1">Figure 1</a> and <a href="#fig2"> Figure 2</a>).<div class="row" style="text-align:center"><img id="fig1" style="border:1px solid black;" src="/images/questionnaire/Figure1.png" /><br /><span style="text-align:center">Figure 1: Interface that allows user to adjust the camera matrix</span></div><div class="row" style="text-align:center"><img id="#fig2" style="border:1px solid black;" src="/images/questionnaire/Figure2.png" /><br /><span style="text-align:center">Figure 2:Interface that allows the user to adjust the pose matrix</span></div>
+The interactive simulation of the radial and tangential distortions improves understanding of camera distortions (<a href="#fig3">Figure 3</a>).<div class="row" style="text-align:center"><img id="fig3" style="border:1px solid black;" src="/images/questionnaire/Figure3.png" /><br /><span style="text-align:center">Figure 3: Interface that allows user to adjust distortion values</span></div>
+The interactive simulation of the calibration task improves understanding of camera calibration (<a href="#fig4">Figure 4</a>).<div class="row" style="text-align:center"><img id="fig4" style="border:1px solid black;" src="/images/questionnaire/Figure4.png" /><br /><span style="text-align:center">Figure 4: Interface that allows user to calibration distorted cameras</span></div>
+The line graphs of the camera calibration parameters v.s calibration attempts are valuable to understand the effect calibration gird placement on the parameters (and how the eventually converge) (<a href="#fig5"> Figure 5</a>).<div class="row" style="text-align:center"><img id="fig5" style="border:1px solid black;" src="/images/questionnaire/Figure5.png" /><br /><span style="text-align:center">Figure 5: Series of graphs that plot values of parameters v.s calibration attempts </span></div>
+The real-time feedback provided by showing the difference image which is computed by subtracting the corrected from the undistorted image, improves understanding of camera calibration (<a href="#fig6">Figure 6</a>).<div class="row" style="text-align:center"><img id="fig6" style="border:1px solid black;" src="/images/questionnaire/Figure6.png" /><br /><span style="text-align:center">Figure 6: Difference image between undistorted and corrected</span></div>
+Allowing calibration of the user's webcam is valuable as a practical exercise of camera calibration and improves understanding (<a href="#fig7">Figure 7</a>).<div class="row" style="text-align:center"><img id="fig7" style="border:1px solid black;" src="/images/questionnaire/Figure7.png" /><br /><span style="text-align:center">Figure 7: Interface where user can calibrate their webcam</span></div>
 I would recommend use of the system for training camera calibration to beginners.
-I would continue use of the system for training camera calibration to beginners if it were readily available.
 I would continue use of the system for training if it were readily available.
-Use of the visual simulation is a valuable part of learning how to set up cameras in medical imaging.</script>
+</script>
 
-<script type="text/template" id="questions_b">Is real time feedback when using the simulator important for training?
+<script type="text/template" id="questions_b">Is simulating aspects of the camera calibration task valuable for training?
 Is realistic simulation of various calibration software important for camera calibration training?
 Are pluggable software scripts for learning programming important for camera calibration training?
-Is simulating the pinhole camera model sufficient for an introduction to camera calibration?</script>
+Is the amount of simulation you were exposed to in the environment sufficient for an introduction to camera calibration?
+</script>
 
 
      <div class="control-group">
@@ -198,12 +216,28 @@ Is simulating the pinhole camera model sufficient for an introduction to camera 
 
         _.templateSettings = {evaluate: /<<([\s\S]+?)>>/g, interpolate: /<<=([\s\S]+?)>>/g, escape: /<<-([\s\S]+?)>>/g}
 
+        var section_demo = $('#section-Demo-questions');
+        
+        var questions_demo = $('#questions_demo').html().split('\n');
+        
+        var qdemo_template = $('#questions_demo_template').html();
+
+        var inputs = [];
+         for( var i = 1; i <= questions_demo.length; i++ ){
+            var question = questions_demo[i-1];
+            
+            var templated = _.template( qdemo_template, { count: i, question: question });
+            section_demo.append(templated);
+            inputs.push( '[name="a_'+i+'"]' );
+        }
+
+        
+
         var section_a = $('#section-A-questions');
 
         var questions_a = $('#questions_a').html().split('\n');
 
         var qa_template = $('#question_a_template').html();
-        var inputs = [];
         for( var i = 1; i <= questions_a.length; i++ ){
             var question = questions_a[i-1];
             
